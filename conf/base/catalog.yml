@@ -50,9 +50,6 @@ example_iris_data:
 projections:
   type: pandas.CSVDataSet
   filepath: data/01_raw/points_projections.csv
-
-pfr_data: 
-  type: pandas.CSVDataSet
   
 pfr_passing:
   type: phantasyfootballer.io.CSVRemoteDataSet
@@ -60,5 +57,16 @@ pfr_passing:
   date_range_type : "year"
   start_year : 2019
 
+pfr_rushing  :
+  type: phantasyfootballer.io.CSVRemoteDataSet
+  data_source : 'phantasyfootballer.data_import.pfr_data.fetch_rushing_data'
+  date_range_type : "year"
+  start_year : 2019
+
+pfr_receiving:
+  type: phantasyfootballer.io.CSVRemoteDataSet
+  data_source : 'phantasyfootballer.data_import.pfr_data.fetch_receiving_data'
+  date_range_type : "year"
+  start_year : 2019
 
 
