@@ -47,4 +47,8 @@ example_iris_data:
   type: pandas.CSVDataSet
   filepath: data/01_raw/iris.csv
 
+projections:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/points_projections.csv
+
 
