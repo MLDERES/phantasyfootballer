@@ -6,3 +6,24 @@ example_test_data_ratio: 0.2
 example_num_train_iter: 10000
 example_learning_rate: 0.01
 
+stat_providers:
+    fantasyfootballdatapros:
+        stat_map:
+            player: Player
+            team: Tm
+            position: Pos
+            pos_rank: Rk
+            pass_att: PassingAtt
+            pass_comp: Cmp
+            pass_yds: PassingYds
+            pass_tds: PassingTD
+            pass_int: Int
+            rush_att: RushingAtt
+            rush_yds: RushingYds
+            rush_tds: RushingTD
+            rcv_rec: Rec
+            rcv_tgt: Tgt
+            rcv_yds: ReceivingYds
+            rcv_tds: ReceivingTD
+            misc_fl: FL
+

@@ -32,47 +32,19 @@ PLEASE DELETE THIS FILE ONCE YOU START WORKING ON YOUR OWN PROJECT!
 """
 
 from typing import Any, Dict
-
+from phantasyfootballer.settings import *
 import pandas as pd
 
-
-def split_data(data: pd.DataFrame, example_test_data_ratio: float) -> Dict[str, Any]:
-    """Node for splitting the classical Iris data set into training and test
-    sets, each split into features and labels.
-    The split ratio parameter is taken from conf/project/parameters.yml.
-    The data and the parameters will be loaded and provided to your function
-    automatically when the pipeline is executed and it is time to run this node.
+def normalize_data_source(data : pd.DataFrame, stat_name: str, common_stats : Dict[str, any]) -> pd.DataFrame:
     """
-    data.columns = [
-        "sepal_length",
-        "sepal_width",
-        "petal_length",
-        "petal_width",
-        "target",
-    ]
-    classes = sorted(data["target"].unique())
-    # One-hot encoding for the target variable
-    data = pd.get_dummies(data, columns=["target"], prefix="", prefix_sep="")
+    This node will take a data source that is provided and adjust the stats so that they have 
+    a common stat column name.  Additionally, if there is a stat that is common to the entire dataset
+    (e.g. NFL week, NFL year, all qbs) that isn't already part of the file then this will be set as well.
 
-    # Shuffle all the data
-    data = data.sample(frac=1).reset_index(drop=True)
+    Say for instance, that the provider returns a file called 2019_passing_stats.  The column NFL Year is
+    not likley included, so you can have it included by specifying that in the common_stats dictionary.
 
-    # Split to training and testing data
-    n = data.shape[0]
-    n_test = int(n * example_test_data_ratio)
-    training_data = data.iloc[n_test:, :].reset_index(drop=True)
-    test_data = data.iloc[:n_test, :].reset_index(drop=True)
+    The mapping from a provider column name and the common name are taking from conf/project/parameters.yml
+    """
+    pass
 
-    # Split the data to features and labels
-    train_data_x = training_data.loc[:, "sepal_length":"petal_width"]
-    train_data_y = training_data[classes]
-    test_data_x = test_data.loc[:, "sepal_length":"petal_width"]
-    test_data_y = test_data[classes]
-
-    # When returning many variables, it is a good practice to give them names:
-    return dict(
-        train_x=train_data_x,
-        train_y=train_data_y,
-        test_x=test_data_x,
-        test_y=test_data_y,
-    )

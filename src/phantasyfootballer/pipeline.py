@@ -35,6 +35,9 @@ from kedro.pipeline import Pipeline
 
 from phantasyfootballer.pipelines import data_engineering as de
 from phantasyfootballer.pipelines import data_science as ds
+#from phantasyfootballer.pipelines import data_import as di
+import logging
+log = logging.getLogger(__name__)
 
 ###########################################################################
 # Here you can find an example pipeline, made of two modular pipelines.
@@ -54,7 +57,7 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
         A mapping from a pipeline name to a ``Pipeline`` object.
 
     """
-
+  #  data_import_pipeline = di.create_pipeline
     data_engineering_pipeline = de.create_pipeline()
     data_science_pipeline = ds.create_pipeline()
 

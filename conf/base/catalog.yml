@@ -51,4 +51,14 @@ projections:
   type: pandas.CSVDataSet
   filepath: data/01_raw/points_projections.csv
 
+pfr_data: 
+  type: pandas.CSVDataSet
+  
+pfr_passing:
+  type: phantasyfootballer.io.CSVRemoteDataSet
+  data_source : 'phantasyfootballer.data_import.pfr_data.fetch_passing_data'
+  date_range_type : "year"
+  start_year : 2019
+
+
 
