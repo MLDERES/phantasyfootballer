@@ -76,8 +76,8 @@ fp_fpecr_csv_raw:
     parse_dates: True
 
 fp_fpecr_local:
-  type: pandas.ParquetDataSet
-  filepath: data/02_intermediate/ecr_projections.parquet
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/dynasty_process_ecr.csv
 
 
 
