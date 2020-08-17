@@ -32,8 +32,24 @@ PLEASE DELETE THIS FILE ONCE YOU START WORKING ON YOUR OWN PROJECT!
 """
 
 from typing import Any, Dict
-
+from phantasyfootballer.settings import *
 import pandas as pd
+
+def normalize_data_source(data : pd.DataFrame, stat_name: str, common_stats : Dict[str, any]) -> pd.DataFrame:
+    """
+    This node will take a data source that is provided and adjust the stats so that they have 
+    a common stat column name.  Additionally, if there is a stat that is common to the entire dataset
+    (e.g. NFL week, NFL year, all qbs) that isn't already part of the file then this will be set as well.
+
+    Say for instance, that the provider returns a file called 2019_passing_stats.  The column NFL Year is
+    not likley included, so you can have it included by specifying that in the common_stats dictionary.
+
+    The mapping from a provider column name and the common name are taking from conf/project/parameters.yml
+    """
+    pass
+
+def calculate_position_baseline(data, pos):
+    pass
 
 
 def split_data(data: pd.DataFrame, example_test_data_ratio: float) -> Dict[str, Any]:
