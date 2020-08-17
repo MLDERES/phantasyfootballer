@@ -1,4 +1,4 @@
-.PHONY: clean docs package run
+.PHONY: clean docs package run clean_raw
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -15,9 +15,15 @@ PYTHON_INTERPRETER = python
 run: 
 	kedro run
 
+download_data: clean_raw
+	kedro run --pipeline 
 ## Transform all notebooks to scripts (use the path for 1 notebook)
 notebook_convert:
 	kedro jupyter convert --all
+
+## Clean up the raw data files
+clean_raw:
+	rm -fv data/01_raw/*
 
 ## Clean up the old files
 clean:
