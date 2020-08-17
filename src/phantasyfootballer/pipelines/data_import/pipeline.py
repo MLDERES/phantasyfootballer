@@ -1,10 +1,9 @@
 from kedro.pipeline import Pipeline, node
-
-def pass_thru(input_df):
-    return input_df
+from .nodes import pass_thru
 
 
-def create_pipeline(**kwargs):
+
+def create_fpecr_pipeline(**kwargs):
     return Pipeline(
         [
             node(
@@ -15,3 +14,13 @@ def create_pipeline(**kwargs):
         ]
     )
 
+def create_fp_proj_pipeline(**kwargs):
+    return Pipeline(
+        [
+            node(
+                pass_thru,
+                "fp_projections_remote",
+                'fp_projections_local'
+            )
+        ]
+    )

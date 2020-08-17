@@ -75,6 +75,15 @@ fp_fpecr_csv_raw:
   load_args:
     parse_dates: True
 
+fp_projections_remote:
+  type: phantasyfootballer.io.CSVRemoteDataSet
+  data_source: 'phantasyfootballer.data_import.fp_data.fetch_projections'
+  week: draft
+
+fp_projections_local:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/fantasy_pros_projection.csv
+
 fp_fpecr_local:
   type: pandas.CSVDataSet
   filepath: data/01_raw/dynasty_process_ecr.csv

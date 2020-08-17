@@ -61,12 +61,14 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
   #  data_import_pipeline = di.create_pipeline
     data_engineering_pipeline = de.create_pipeline()
     data_science_pipeline = ds.create_pipeline()
-    data_import_pipeline = di.create_pipeline()
+    fp_ecr_pipeline = di.create_fpecr_pipeline()
+    fp_proj_pipeline = di.create_fp_proj_pipeline()
 
     return {
-        'pi': data_import_pipeline, 
+        'fp_ecr': fp_ecr_pipeline, 
+        'fp_proj': fp_proj_pipeline,
         # "de": data_engineering_pipeline,
         # "ds": data_science_pipeline,
         # "__default__": data_import_pipeline + data_engineering_pipeline + data_science_pipeline,
-        "__default__": data_import_pipeline
+        "__default__": fp_ecr_pipeline + fp_proj_pipeline
     }
