@@ -57,7 +57,7 @@ pfr_passing:
   date_range_type : "year"
   start_year : 2019
 
-pfr_rushing  :
+pfr_rushing:
   type: phantasyfootballer.io.CSVRemoteDataSet
   data_source : 'phantasyfootballer.data_import.pfr_data.fetch_rushing_data'
   date_range_type : "year"
@@ -68,5 +68,16 @@ pfr_receiving:
   data_source : 'phantasyfootballer.data_import.pfr_data.fetch_receiving_data'
   date_range_type : "year"
   start_year : 2019
+
+fp_fpecr_csv_raw:
+  type: pandas.CSVDataSet
+  filepath: https://raw.githubusercontent.com/DynastyProcess/data/master/files/db_fpecr.csv
+  load_args:
+    parse_dates: True
+
+fp_fpecr_local:
+  type: pandas.ParquetDataSet
+  filepath: data/02_intermediate/ecr_projections.parquet
+
 
 

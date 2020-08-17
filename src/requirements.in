@@ -6,6 +6,7 @@ jupyter~=1.0
 jupyter_client~=5.1
 jupyterlab==0.31.1
 kedro[pandas.CSVDataSet]==0.16.4
+kedro[pandas.ParquetDataSet]
 nbstripout==0.3.3
 pytest-cov~=2.5
 pytest-mock>=1.7.1, <2.0
