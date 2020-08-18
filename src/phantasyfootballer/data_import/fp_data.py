@@ -39,6 +39,7 @@ def fetch_projections(week='draft'):
 
     # Make sure the the columns are correct and consistent
     df_qb.rename(columns=QB_COL_MAP, inplace=True)
+    df_qb[POSITION] = 'qb'
     df_flex.rename(columns=FLEX_COL_MAP, inplace=True)
     df_flex = _fixup_position(df_flex)
     
@@ -48,6 +49,7 @@ def fetch_projections(week='draft'):
     # Let's not keep the fantasy points around, that will just cause confusion
     df_all.drop(columns=['FPTS'], errors='ignore',inplace=True)
     df_all = _set_column_order(df_all)
+    df_all[SOURCE] = 'FantasyPros'
     return df_all
 
 def _fixup_position(df):
@@ -81,3 +83,4 @@ def _set_column_order(df):
 if __name__ == "__main__":
     df = fetch_projections()
     df.to_csv(DATA_DIR / 'fantasy_pros_projection.csv')
+    

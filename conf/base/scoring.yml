@@ -1,4 +1,6 @@
-default:
+# Represents the standard score to apply to each stat or projection
+# in order to add a scoring scheme, override only the stats required
+standard: &standard_scoring
     pass_comp: 0
     pass_yds: 0.04
     pass_tds: 4
@@ -16,22 +18,24 @@ default:
     dst_forced_fumble: 2
     dst_td: 6
     dst_sft: 2
+    # Defense, points against
+    # These are the value ranges, so that points against are
+    # less than each entry that's the number of points allowed
     dst_pa: 
-        0 : 10
-        6 : 7
-        13 : 4
-        20 : 1
-        27 : 0
-        34 : -1
-        35 : -4
+        7 : 10
+        14 : 7
+        21 : 4
+        28 : 1
+        35 : 0
+        42 : -1
+        120: -4 # Basically anything over 42 is -4 pts
     fumble_lost: -2
-
-standard:
-    rcv_rec: 0
-     
+   
 full_ppr:
+    <<: *standard_scoring
     rcv_rec: 1
     
 half_ppr:
+    <<: *standard_scoring
     rcv_rec: 0.5
     

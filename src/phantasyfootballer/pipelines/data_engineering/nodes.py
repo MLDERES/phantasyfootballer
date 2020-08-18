@@ -68,28 +68,37 @@ def establish_position_rank(data):
 
 def _craft_scoring_dict(scheme : str) -> Dict[str, Any]:
     '''
-    Look up the scoring system in the scoring.yml file and then merge the dictionary with the
-    standard
+    Look up the scoring system in the scoring.yml file 
     '''
     conf_paths = ['conf/base', 'conf/local']
     conf_loader = ConfigLoader(conf_paths)
     conf_scoring = conf_loader.get("scoring*")
+    return conf_scoring[scheme]
 
-    def_scoring = conf_scoring['default']
-    scheme_scoring = conf_scoring.get(scheme,{})
-    def_scoring.update(scheme_scoring)
-    return def_scoring
-    
+    # def_scoring = conf_scoring['standard']
+    # scheme_scoring = conf_scoring.get(scheme,{})
+    # def_scoring.update(scheme_scoring)
+    # return def_scoring
+
+def _fetch_scoring_schemes() -> List[str]:
+    conf_paths = ['conf/base', 'conf/local']
+    conf_loader = ConfigLoader(conf_paths)
+    conf_scoring = conf_loader.get("scoring*")
+    return list(conf_scoring.keys())
+
+
 def _calculate_projected_points(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
-    
-    scoring_types = get_list(scoring)
+    if scoring == 'all':
+        scoring_types = _fetch_scoring_schemes()
+    else:
+        scoring_types = get_list(scoring)
     for scoring_scheme in scoring_types:
         score_map = _craft_scoring_dict(scoring_scheme)
         df_pts = pd.DataFrame()
         for c in data.columns:
             if (m := score_map.get(c)):
                 df_pts[c+'_pts'] = data[c]*m
-        data[_pts_col(scoring_scheme)] = df_pts.sum(axis=1)
+        data[_pts_col(scoring_scheme)] = round(df_pts.sum(axis=1),2)
 
     return data
 
@@ -97,8 +106,19 @@ def calculate_projected_points(scoring: String_or_List) -> pd.DataFrame :
     return update_wrapper(partial(_calculate_projected_points, scoring), _calculate_projected_points)    
 
 def _calculate_position_rank(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
-    data[_pos_rank_col(scoring)] = data[_pts_col(scoring)].rank(na_option='bottom',ascending=False)
+    '''
+    Calculate the rank by scoring method for all positions
+    '''
+    if scoring == 'all':
+        scoring_types = _fetch_scoring_schemes()
+    else:
+        scoring_types = get_list(scoring)
+    
+    for scoring_scheme in scoring_types:
+        data[_pos_rank_col(scoring_scheme)] = data[_pts_col(scoring_scheme)].rank(na_option='bottom',ascending=False)
+
     return data
+
 
 def calculate_position_rank(scoring: String_or_List) -> pd.DataFrame:
     return update_wrapper( partial(_calculate_position_rank, scoring), 

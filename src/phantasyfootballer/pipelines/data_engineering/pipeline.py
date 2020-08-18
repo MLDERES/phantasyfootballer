@@ -1,33 +1,18 @@
 from kedro.pipeline import Pipeline, node
-from .nodes import calculate_projected_points
+from .nodes import calculate_projected_points, calculate_position_rank
 
 def create_pipeline(**kwargs):
     return Pipeline(
         [
            node (
-               calculate_projected_points(scoring='standard'),
+               calculate_projected_points(scoring='all'),
                'fp_projections_local',
-               'standard_scoring_model'
+               'scoring_model'
            ),
            node (
-               calculate_projected_points(scoring='full_ppr'),
-               'standard_scoring_model',
-               'ppr_scoring_model'
+               calculate_position_rank(scoring='all'),
+               'scoring_model',
+               'projections'
            ),
-           node (
-               calculate_projected_points(scoring='half_ppr'),
-               ['ppr_scoring_model'],
-               'projection'
-           ),  
-            # node(
-            #     split_data,
-            #     ["example_iris_data", "params:example_test_data_ratio"],
-            #     dict(
-            #         train_x="example_train_x",
-            #         train_y="example_train_y",
-            #         test_x="example_test_x",
-            #         test_y="example_test_y",
-            #     ),
-            # )
         ]
     )

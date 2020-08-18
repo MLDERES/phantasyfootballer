@@ -24,3 +24,14 @@ def create_fp_proj_pipeline(**kwargs):
             )
         ]
     )
+
+def create_cbs_proj_pipeline(**kwargs):
+    return Pipeline(
+        [
+            node(
+                pass_thru,
+                "cbs_projections_remote",
+                'cbs_projections_local'
+            )
+        ]
+    )
