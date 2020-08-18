@@ -31,11 +31,14 @@ just for illustrating basic Kedro features.
 PLEASE DELETE THIS FILE ONCE YOU START WORKING ON YOUR OWN PROJECT!
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, Union, List
 from phantasyfootballer.settings import *
 import pandas as pd
 from kedro.config import ConfigLoader
 from functools import reduce, partial, update_wrapper
+from pandas.core.dtypes.inference import is_list_like
+
+String_or_List = Union[str, List[str]]
 
 def _pts_col(scoring):
     return f'{scoring}_pts'
@@ -62,7 +65,7 @@ def establish_position_rank(data):
     '''
     pass
 
-def _craft_scoring_dict(scheme):
+def _craft_scoring_dict(scheme : str) -> Dict[str, Any]:
     '''
     Look up the scoring system in the scoring.yml file and then merge the dictionary with the
     standard
@@ -76,24 +79,25 @@ def _craft_scoring_dict(scheme):
     def_scoring.update(scheme_scoring)
     return def_scoring
     
-def _calculate_projected_points(scoring, data):
-    score_map = _craft_scoring_dict(scoring)
-    df_pts = pd.DataFrame()
-    for c in data.columns:
-        if (m := score_map.get(c)):
-            df_pts[c+'_pts'] = data[c]*m
-    data[_pts_col(scoring)] = df_pts.sum(axis=1)
+def _calculate_projected_points(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
+    for scoring_scheme in scoring:
+        score_map = _craft_scoring_dict(scoring)
+        df_pts = pd.DataFrame()
+        for c in data.columns:
+            if (m := score_map.get(c)):
+                df_pts[c+'_pts'] = data[c]*m
+        data[_pts_col(scoring)] = df_pts.sum(axis=1)
 
     return data
 
-def calculate_projected_points(scoring: str) -> pd.DataFrame :
+def calculate_projected_points(scoring: String_or_List) -> pd.DataFrame :
     return update_wrapper(partial(_calculate_projected_points, scoring), _calculate_projected_points)    
 
-def _calculate_position_rank(scoring, data):
-    data[_pos_rank_col(scoring)] = df_pos[_pts_col(scoring)].rank(na_option='bottom',ascending=False)
+def _calculate_position_rank(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
+    data[_pos_rank_col(scoring)] = data[_pts_col(scoring)].rank(na_option='bottom',ascending=False)
     return data
 
-def calculate_position_rank(scoring):
+def calculate_position_rank(scoring: String_or_List) -> pd.DataFrame:
     return update_wrapper( partial(_calculate_position_rank, scoring), 
         _calculate_position_rank)    
 
