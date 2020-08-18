@@ -12,8 +12,7 @@
 # template. Please feel free to remove it once you remove the example pipeline.
 _csv: &csv
   type: pandas.CSVDataSet
-  save_args:
-    #float_format: '%.3d'
+
 
 pfr_passing:
   type: phantasyfootballer.io.CSVRemoteDataSet
@@ -44,13 +43,25 @@ fp_projections_remote:
   data_source: 'phantasyfootballer.data_import.fp_data.fetch_projections'
   week: draft
 
+cbs_projections_remote:
+    type: phantasyfootballer.io.CSVRemoteDataSet
+    data_source: 'phantasyfootballer.data_import.cbs_data.fetch_projections'
+    year: 2020
+
 fp_projections_local:
   <<: *csv
   filepath: data/01_raw/fantasy_pros_projection.csv
+  #versioned: True
+
+cbs_projections_local:
+  <<: *csv
+  filepath: data/01_raw/cbs_sports_projection.csv
+  #versioned: True
 
 projection:
   <<: *csv
   filepath: data/02_intermediate/projections.csv
+  #versioned: True
 
 fp_fpecr_local:
   <<: *csv

@@ -22,7 +22,7 @@
             "name": "Python: Projections",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/src/phantasyfootballer/run.py --pipeline de",
+            "program": "${workspaceFolder}/src/phantasyfootballer/run.py --pipeline cbs_proj",
             "console": "integratedTerminal",
         }
     ]

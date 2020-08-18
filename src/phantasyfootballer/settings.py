@@ -34,6 +34,7 @@ MISC_FL = 'fumble_lost'
 FP_STD = 'fp_std'
 FP_HALF = 'fp_hppr'
 FP_FULL = 'fp_ppr'
+SOURCE = 'source'
 
 if __name__ == "__main__":
     print(BASE_DIR)
