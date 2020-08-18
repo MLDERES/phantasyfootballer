@@ -26,7 +26,7 @@ class CSVRemoteDataSet(AbstractDataSet):
         date_range_type: Optional[str] = None,
         **load_kwargs,
     ):
-        """Instantiate a JSONRemoteDataSet object.
+        """Instantiate a CSVRemote object.
 
         Params
         ------

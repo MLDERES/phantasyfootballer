@@ -2,39 +2,7 @@
 #
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/04_user_guide/04_data_catalog.html
-
 #
-# We support interacting with a variety of data stores including local file systems, cloud, network and HDFS
-#
-# An example data set definition can look as follows:
-#
-#bikes:
-#  type: pandas.CSVDataSet
-#  filepath: "data/01_raw/bikes.csv"
-#
-#weather:
-#  type: spark.SparkDataSet
-#  filepath: s3a://your_bucket/data/01_raw/weather*
-#  file_format: csv
-#  credentials: dev_s3
-#  load_args:
-#    header: True
-#    inferSchema: True
-#  save_args:
-#    sep: '|'
-#    header: True
-#
-#scooters:
-#  type: pandas.SQLTableDataSet
-#  credentials: scooters_credentials
-#  table_name: scooters
-#  load_args:
-#    index_col: ['name']
-#    columns: ['name', 'gear']
-#  save_args:
-#    if_exists: 'replace'
-#    # if_exists: 'fail'
-#    # if_exists: 'append'
 #
 # The Data Catalog supports being able to reference the same file using two different DataSet implementations
 # (transcoding), templating and a way to reuse arguments that are frequently repeated. See more here:
@@ -42,15 +10,10 @@
 #
 # This is a data set used by the "Hello World" example pipeline provided with the project
 # template. Please feel free to remove it once you remove the example pipeline.
-
-example_iris_data:
+_csv: &csv
   type: pandas.CSVDataSet
-  filepath: data/01_raw/iris.csv
 
-projections:
-  type: pandas.CSVDataSet
-  filepath: data/01_raw/points_projections.csv
-  
+
 pfr_passing:
   type: phantasyfootballer.io.CSVRemoteDataSet
   data_source : 'phantasyfootballer.data_import.pfr_data.fetch_passing_data'
@@ -80,12 +43,28 @@ fp_projections_remote:
   data_source: 'phantasyfootballer.data_import.fp_data.fetch_projections'
   week: draft
 
+cbs_projections_remote:
+    type: phantasyfootballer.io.CSVRemoteDataSet
+    data_source: 'phantasyfootballer.data_import.cbs_data.fetch_projections'
+    year: 2020
+
 fp_projections_local:
-  type: pandas.CSVDataSet
+  <<: *csv
   filepath: data/01_raw/fantasy_pros_projection.csv
+  #versioned: True
+
+cbs_projections_local:
+  <<: *csv
+  filepath: data/01_raw/cbs_sports_projection.csv
+  #versioned: True
+
+projection:
+  <<: *csv
+  filepath: data/02_intermediate/projections.csv
+  #versioned: True
 
 fp_fpecr_local:
-  type: pandas.CSVDataSet
+  <<: *csv
   filepath: data/01_raw/dynasty_process_ecr.csv
 
 

@@ -25,8 +25,8 @@ RCV_YDS = 'rcv_yds'
 RCV_TDS = 'rcv_tds'
 DST_SACK = 'dst_sack'
 DST_INT = 'dst_int'
-DST_FUM_REC = 'dst_fc'
-DST_FUM_FF = 'dst_ff'
+DST_FUM_REC = 'dst_fumble_rec'
+DST_FUM_FF = 'dst_force_fum'
 DST_TD = 'dst_td'
 DST_SAFE = 'dst_sft'
 DST_PA = 'dst_pa'
@@ -34,6 +34,7 @@ MISC_FL = 'fumble_lost'
 FP_STD = 'fp_std'
 FP_HALF = 'fp_hppr'
 FP_FULL = 'fp_ppr'
+SOURCE = 'source'
 
 if __name__ == "__main__":
     print(BASE_DIR)
