@@ -33,10 +33,11 @@ PLEASE DELETE THIS FILE ONCE YOU START WORKING ON YOUR OWN PROJECT!
 
 from typing import Any, Dict, Union, List
 from phantasyfootballer.settings import *
+from phantasyfootballer.common import *
 import pandas as pd
 from kedro.config import ConfigLoader
 from functools import reduce, partial, update_wrapper
-from pandas.core.dtypes.inference import is_list_like
+
 
 String_or_List = Union[str, List[str]]
 
@@ -80,13 +81,15 @@ def _craft_scoring_dict(scheme : str) -> Dict[str, Any]:
     return def_scoring
     
 def _calculate_projected_points(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
-    for scoring_scheme in scoring:
-        score_map = _craft_scoring_dict(scoring)
+    
+    scoring_types = get_list(scoring)
+    for scoring_scheme in scoring_types:
+        score_map = _craft_scoring_dict(scoring_scheme)
         df_pts = pd.DataFrame()
         for c in data.columns:
             if (m := score_map.get(c)):
                 df_pts[c+'_pts'] = data[c]*m
-        data[_pts_col(scoring)] = df_pts.sum(axis=1)
+        data[_pts_col(scoring_scheme)] = df_pts.sum(axis=1)
 
     return data
 
