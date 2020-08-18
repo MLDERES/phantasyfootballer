@@ -34,6 +34,14 @@ PLEASE DELETE THIS FILE ONCE YOU START WORKING ON YOUR OWN PROJECT!
 from typing import Any, Dict
 from phantasyfootballer.settings import *
 import pandas as pd
+from kedro.config import ConfigLoader
+from functools import reduce, partial, update_wrapper
+
+def _pts_col(scoring):
+    return f'{scoring}_pts'
+
+def _pos_rank_col(scoring):
+    return f'{scoring}_rank'
 
 def normalize_data_source(data : pd.DataFrame, stat_name: str, common_stats : Dict[str, any]) -> pd.DataFrame:
     """
@@ -48,47 +56,46 @@ def normalize_data_source(data : pd.DataFrame, stat_name: str, common_stats : Di
     """
     pass
 
-def calculate_position_baseline(data, pos):
+def establish_position_rank(data):
+    '''
+    This node will create a position rank based on projections
+    '''
     pass
 
+def _craft_scoring_dict(scheme):
+    '''
+    Look up the scoring system in the scoring.yml file and then merge the dictionary with the
+    standard
+    '''
+    conf_paths = ['conf/base', 'conf/local']
+    conf_loader = ConfigLoader(conf_paths)
+    conf_scoring = conf_loader.get("scoring*")
 
-def split_data(data: pd.DataFrame, example_test_data_ratio: float) -> Dict[str, Any]:
-    """Node for splitting the classical Iris data set into training and test
-    sets, each split into features and labels.
-    The split ratio parameter is taken from conf/project/parameters.yml.
-    The data and the parameters will be loaded and provided to your function
-    automatically when the pipeline is executed and it is time to run this node.
-    """
-    data.columns = [
-        "sepal_length",
-        "sepal_width",
-        "petal_length",
-        "petal_width",
-        "target",
-    ]
-    classes = sorted(data["target"].unique())
-    # One-hot encoding for the target variable
-    data = pd.get_dummies(data, columns=["target"], prefix="", prefix_sep="")
+    def_scoring = conf_scoring['default']
+    scheme_scoring = conf_scoring.get(scheme,{})
+    def_scoring.update(scheme_scoring)
+    return def_scoring
+    
+def _calculate_projected_points(scoring, data):
+    score_map = _craft_scoring_dict(scoring)
+    df_pts = pd.DataFrame()
+    for c in data.columns:
+        if (m := score_map.get(c)):
+            df_pts[c+'_pts'] = data[c]*m
+    data[_pts_col(scoring)] = df_pts.sum(axis=1)
 
-    # Shuffle all the data
-    data = data.sample(frac=1).reset_index(drop=True)
+    return data
 
-    # Split to training and testing data
-    n = data.shape[0]
-    n_test = int(n * example_test_data_ratio)
-    training_data = data.iloc[n_test:, :].reset_index(drop=True)
-    test_data = data.iloc[:n_test, :].reset_index(drop=True)
+def calculate_projected_points(scoring: str) -> pd.DataFrame :
+    return update_wrapper(partial(_calculate_projected_points, scoring), _calculate_projected_points)    
 
-    # Split the data to features and labels
-    train_data_x = training_data.loc[:, "sepal_length":"petal_width"]
-    train_data_y = training_data[classes]
-    test_data_x = test_data.loc[:, "sepal_length":"petal_width"]
-    test_data_y = test_data[classes]
+def _calculate_position_rank(scoring, data):
+    data[_pos_rank_col(scoring)] = df_pos[_pts_col(scoring)].rank(na_option='bottom',ascending=False)
+    return data
 
-    # When returning many variables, it is a good practice to give them names:
-    return dict(
-        train_x=train_data_x,
-        train_y=train_data_y,
-        test_x=test_data_x,
-        test_y=test_data_y,
-    )
+def calculate_position_rank(scoring):
+    return update_wrapper( partial(_calculate_position_rank, scoring), 
+        _calculate_position_rank)    
+
+    
+    

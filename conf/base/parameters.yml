@@ -26,4 +26,4 @@ stat_providers:
             rcv_yds: ReceivingYds
             rcv_tds: ReceivingTD
             misc_fl: FL
-
+    
