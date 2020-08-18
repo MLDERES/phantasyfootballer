@@ -33,7 +33,6 @@ FLEX_COL_MAP = {
             "Player": PLAYER_NAME
             }
 
-    
 def fetch_projections(week='draft'):
     df_qb = _get_projections('qb', week=week)
     df_flex = _get_projections('flex',week=week)

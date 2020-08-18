@@ -1,0 +1,37 @@
+default:
+    pass_comp: 0
+    pass_yds: 0.04
+    pass_tds: 4
+    pass_int: -1
+    rush_att: 0
+    rush_yds: 0.1
+    rush_tds: 6
+    rcv_targets: 0
+    rcv_rec: 0
+    rcv_yds: 0.1
+    rcv_tds: 6
+    dst_sack: 2
+    dst_int: 3
+    dst_fumble_rec: 2
+    dst_forced_fumble: 2
+    dst_td: 6
+    dst_sft: 2
+    dst_pa: 
+        0 : 10
+        6 : 7
+        13 : 4
+        20 : 1
+        27 : 0
+        34 : -1
+        35 : -4
+    fumble_lost: -2
+
+standard:
+    rcv_rec: 0
+     
+full_ppr:
+    rcv_rec: 1
+    
+half_ppr:
+    rcv_rec: 0.5
+    
