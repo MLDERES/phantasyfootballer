@@ -7,12 +7,12 @@
 # The Data Catalog supports being able to reference the same file using two different DataSet implementations
 # (transcoding), templating and a way to reuse arguments that are frequently repeated. See more here:
 # https://kedro.readthedocs.io/en/stable/04_user_guide/04_data_catalog.html
-#
-# This is a data set used by the "Hello World" example pipeline provided with the project
-# template. Please feel free to remove it once you remove the example pipeline.
 _csv: &csv
   type: pandas.CSVDataSet
 
+_remote: &remote_CSV
+  type: phantasyfootballer.io.CachedRemoteCSVDataSet
+  expiration: 24H
 
 pfr_passing:
   type: phantasyfootballer.io.CSVRemoteDataSet
@@ -32,28 +32,34 @@ pfr_receiving:
   date_range_type : "year"
   start_year : 2019
 
-fp_fpecr_csv_raw:
+fp_ecr_raw:
   type: pandas.CSVDataSet
   filepath: https://raw.githubusercontent.com/DynastyProcess/data/master/files/db_fpecr.csv
   load_args:
     parse_dates: True
 
-fp_fpecr_local:
+dp_ecr_local:
   <<: *csv
   filepath: data/01_raw/dynasty_process_ecr.csv
 
 fp_projections_remote:
   type: phantasyfootballer.io.CSVRemoteDataSet
   data_source: 'phantasyfootballer.data_providers.fantasy_pros.fetch_projections'
-  week: draft
+  local_filepath: data/01_raw/fantasy_pros_projection.csv
+  expiration_hrs: 24
 
 cbs_projections_remote:
-    type: phantasyfootballer.io.CSVRemoteDataSet
-    data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
-    year: 2020
+  type: phantasyfootballer.io.CSVRemoteDataSet
+  data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
+  year: 2020
 
-fp_projections_local:
+cbs_projections_remote_2:
+  <<: *remote_CSV
+  data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
+  local_filepath: data/01_raw/cbs_sports_projection.csv
+  year: 2020
 
+fp_projections:
   <<: *csv
   filepath: data/01_raw/fantasy_pros_projection.csv
   #versioned: True

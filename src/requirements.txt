@@ -45,7 +45,7 @@ jupyter-core==4.6.3       # via jupyter-client, nbconvert, nbformat, notebook, q
 jupyter==1.0.0            # via -r /workspaces/phantasyfootballer/src/requirements.in
 jupyterlab-launcher==0.10.5  # via jupyterlab
 jupyterlab==0.31.1        # via -r /workspaces/phantasyfootballer/src/requirements.in
-kedro[pandas.csvdataset]==0.16.4  # via -r /workspaces/phantasyfootballer/src/requirements.in
+kedro[pandas.parquetdataset]==0.16.4  # via -r /workspaces/phantasyfootballer/src/requirements.in
 lxml==4.5.2               # via -r /workspaces/phantasyfootballer/src/requirements.in
 markupsafe==1.1.1         # via jinja2
 mccabe==0.6.1             # via flake8

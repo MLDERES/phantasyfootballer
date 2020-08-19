@@ -3,7 +3,7 @@ from .nodes import pass_thru
 
 
 def create_fpecr_pipeline(**kwargs):
-    return Pipeline([node(pass_thru, "fp_fpecr_csv_raw", "fp_fpecr_local")])
+    return Pipeline([node(pass_thru, "fp_ecr_raw", "fp_fpecr_local")])
 
 
 def create_fp_proj_pipeline(**kwargs):
@@ -17,5 +17,8 @@ def create_cbs_proj_pipeline(**kwargs):
 
 
 def create_pipeline(**kwargs):
+    '''
+    the main data_import pipeline
+    '''
     return Pipeline([create_fp_proj_pipeline(), create_cbs_proj_pipeline()])
 
