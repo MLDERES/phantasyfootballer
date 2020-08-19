@@ -4,22 +4,19 @@ from kedro.io import AbstractDataSet
 import importlib
 
 DATE_RANGE_TYPE = {
-    'year': { 
-        'start_year': 2019
-        },
+    "year": {"start_year": 2019},
     # 'years' : {
-    #     'start_year': 2000, 
+    #     'start_year': 2000,
     #     'end_year': 2019
     #     },
     # 'weeks' : {
     #     'start_year' : 2019,
-    #}
+    # }
 }
 MODULE_SEPARATOR = "."
 
 
 class CSVRemoteDataSet(AbstractDataSet):
-    
     def __init__(
         self,
         data_source: Union[Callable, str],

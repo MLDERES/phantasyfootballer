@@ -1,6 +1,7 @@
 from pandas.core.dtypes.inference import is_list_like
 from typing import Union, Any, List
 
+
 def get_list(item: Union[Any, List[Any]], errors="ignore"):
     """
     Return a list from the item passed.

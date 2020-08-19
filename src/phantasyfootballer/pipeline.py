@@ -38,6 +38,7 @@ from phantasyfootballer.pipelines import data_science as ds
 from phantasyfootballer.pipelines import data_import as di
 
 import logging
+
 log = logging.getLogger(__name__)
 
 ###########################################################################
@@ -60,20 +61,22 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
     """
     data_import_pipeline = di.create_pipeline()
     data_engineering_pipeline = de.create_pipeline()
-    #data_science_pipeline = ds.create_pipeline()
+    # data_science_pipeline = ds.create_pipeline()
     fp_ecr_pipeline = di.create_fpecr_pipeline()
     fp_proj_pipeline = di.create_fp_proj_pipeline()
     cbs_proj_pipeline = di.create_cbs_proj_pipeline()
 
-
     return {
-        'fp_ecr': fp_ecr_pipeline, 
-        'fp_proj': fp_proj_pipeline,
-        'cbs_proj': cbs_proj_pipeline,
-        'data_import': fp_proj_pipeline + cbs_proj_pipeline,
+        "fp_ecr": fp_ecr_pipeline,
+        "fp_proj": fp_proj_pipeline,
+        "cbs_proj": cbs_proj_pipeline,
+        "data_import": fp_proj_pipeline + cbs_proj_pipeline,
         "de": data_engineering_pipeline,
-        'di': data_import_pipeline,
+        "di": data_import_pipeline,
         # "ds": data_science_pipeline,
         # "__default__": data_import_pipeline + data_engineering_pipeline + data_science_pipeline,
-        "__default__": fp_ecr_pipeline + fp_proj_pipeline + cbs_proj_pipeline + data_engineering_pipeline
+        "__default__": fp_ecr_pipeline
+        + fp_proj_pipeline
+        + cbs_proj_pipeline
+        + data_engineering_pipeline,
     }

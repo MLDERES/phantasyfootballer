@@ -140,8 +140,7 @@ def average_stats_by_player(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
     # Pull all the dataframes into a single one
     df_all = pd.concat(dataframes)
     # Get the mean keeping the columns that matter
-    df_all = df_all.groupby(['player','team','position']).mean().fillna(0)
+    df_all = df_all.groupby(["player", "team", "position"]).mean().fillna(0)
     # Drop all the players where they have 0 projections
     df_all = df_all[df_all.sum(axis=1) > 0].reset_index()
     return df_all
-
