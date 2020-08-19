@@ -16,19 +16,19 @@ _csv: &csv
 
 pfr_passing:
   type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_import.pfr_data.fetch_passing_data'
+  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_passing_data'
   date_range_type : "year"
   start_year : 2019
 
 pfr_rushing:
   type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_import.pfr_data.fetch_rushing_data'
+  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_rushing_data'
   date_range_type : "year"
   start_year : 2019
 
 pfr_receiving:
   type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_import.pfr_data.fetch_receiving_data'
+  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_receiving_data'
   date_range_type : "year"
   start_year : 2019
 
@@ -40,15 +40,16 @@ fp_fpecr_csv_raw:
 
 fp_projections_remote:
   type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source: 'phantasyfootballer.data_import.fp_data.fetch_projections'
+  data_source: 'phantasyfootballer.data_providers.fantasy_pros.fetch_projections'
   week: draft
 
 cbs_projections_remote:
     type: phantasyfootballer.io.CSVRemoteDataSet
-    data_source: 'phantasyfootballer.data_import.cbs_data.fetch_projections'
+    data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
     year: 2020
 
 fp_projections_local:
+
   <<: *csv
   filepath: data/01_raw/fantasy_pros_projection.csv
   #versioned: True
