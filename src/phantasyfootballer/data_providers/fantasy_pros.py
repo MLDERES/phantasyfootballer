@@ -39,7 +39,7 @@ def fetch_projections(week='draft'):
 
     # Make sure the the columns are correct and consistent
     df_qb.rename(columns=QB_COL_MAP, inplace=True)
-    df_qb[POSITION] = 'qb'
+    df_qb[POSITION] = 'QB'
     df_flex.rename(columns=FLEX_COL_MAP, inplace=True)
     df_flex = _fixup_position(df_flex)
     
@@ -54,7 +54,7 @@ def fetch_projections(week='draft'):
 
 def _fixup_position(df):
     df[POSITION] = df[POSITION].str.extract(r'([A-z]*)')
-    df[POSITION] = df[POSITION].str.lower()
+    df[POSITION] = df[POSITION].str.upper()
     return df
 
 def _fixup_playername(df):

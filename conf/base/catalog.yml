@@ -38,6 +38,10 @@ fp_fpecr_csv_raw:
   load_args:
     parse_dates: True
 
+fp_fpecr_local:
+  <<: *csv
+  filepath: data/01_raw/dynasty_process_ecr.csv
+
 fp_projections_remote:
   type: phantasyfootballer.io.CSVRemoteDataSet
   data_source: 'phantasyfootballer.data_providers.fantasy_pros.fetch_projections'
@@ -59,14 +63,12 @@ cbs_projections_local:
   filepath: data/01_raw/cbs_sports_projection.csv
   #versioned: True
 
-projection:
+projections:
   <<: *csv
   filepath: data/02_intermediate/projections.csv
   #versioned: True
 
-fp_fpecr_local:
-  <<: *csv
-  filepath: data/01_raw/dynasty_process_ecr.csv
+
 
 
 
