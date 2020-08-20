@@ -1,20 +1,12 @@
 from typing import Any, Dict, Union, List, Sequence
 from phantasyfootballer.settings import *
-from phantasyfootballer.common import *
+from phantasyfootballer.common import Stats, get_list
 import pandas as pd
 from kedro.config import ConfigLoader
 from functools import reduce, partial, update_wrapper
 
 
 String_or_List = Union[str, List[str]]
-
-
-def _pts_col(scoring):
-    return f"{scoring}_pts"
-
-
-def _pos_rank_col(scoring):
-    return f"{scoring}_rank"
 
 
 def normalize_data_source(
@@ -75,7 +67,7 @@ def _calculate_projected_points(
         for c in data.columns:
             if (m := score_map.get(c)) :
                 df_pts[c + "_pts"] = data[c] * m
-        data[_pts_col(scoring_scheme)] = round(df_pts.sum(axis=1), 2)
+        data[Stats.points(scoring_scheme)] = round(df_pts.sum(axis=1), 2)
 
     return data
 
@@ -98,7 +90,7 @@ def _calculate_position_rank(
         scoring_types = get_list(scoring)
 
     for scoring_scheme in scoring_types:
-        data[_pos_rank_col(scoring_scheme)] = data[_pts_col(scoring_scheme)].rank(
+        data[Stats.rank(scoring_scheme)] = data[Stats.points(scoring_scheme)].rank(
             na_option="bottom", ascending=False
         )
 
