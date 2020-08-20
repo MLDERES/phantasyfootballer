@@ -3,16 +3,6 @@ import pandas as pd
 from kedro.io import AbstractDataSet
 import importlib
 
-DATE_RANGE_TYPE = {
-    "year": {"start_year": 2019},
-    # 'years' : {
-    #     'start_year': 2000,
-    #     'end_year': 2019
-    #     },
-    # 'weeks' : {
-    #     'start_year' : 2019,
-    # }
-}
 MODULE_SEPARATOR = "."
 
 
@@ -20,21 +10,16 @@ class CSVRemoteDataSet(AbstractDataSet):
     def __init__(
         self,
         data_source: Union[Callable, str],
-        date_range_type: Optional[str] = None,
         **load_kwargs,
     ):
-        """Instantiate a CSVRemote object.
+        """
+        Instantiate a CSVRemote object.
 
         Params
         ------
         load_kwargs: Keyword arguments to pass to the data import function.
         """
-        self._validate_date_range_type(date_range_type)
-
-        self._date_range = (
-            {} if date_range_type is None else DATE_RANGE_TYPE[date_range_type]
-        )
-        self._data_source_kwargs = {**self._date_range, **load_kwargs}
+        self._data_source_kwargs = load_kwargs
 
         if callable(data_source):
             self.data_source = data_source
@@ -54,10 +39,3 @@ class CSVRemoteDataSet(AbstractDataSet):
 
     def _describe(self):
         return self._data_source_kwargs
-
-    @staticmethod
-    def _validate_date_range_type(date_range_type: Optional[str]) -> None:
-        assert date_range_type is None or date_range_type in DATE_RANGE_TYPE.keys(), (
-            "Argument date_range_type must be None or one of "
-            f"{DATE_RANGE_TYPE.keys()}, but {date_range_type} was received."
-        )

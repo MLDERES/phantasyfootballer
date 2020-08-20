@@ -10,16 +10,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-DATE_RANGE_TYPE = {
-    "year": {"start_year": 2019},
-    # 'years' : {
-    #     'start_year': 2000,
-    #     'end_year': 2019
-    #     },
-    # 'weeks' : {
-    #     'start_year' : 2019,
-    # }
-}
 MODULE_SEPARATOR = "."
 
 
@@ -55,12 +45,15 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
             self.data_source = getattr(module, function_name)
 
     def _load(self) -> List[Dict[str, Any]]:
+        '''
+        Load the dataset if the file is older than the max cache time
+        '''
         # check last time this file was updated
         # if it is past the expiration then do the callable
         # otherwise just load the file
         file_age = self._calculate_file_age(self._local_filepath)
         data_source = None
-        if file_age > self._expiration:
+        if (file_age < 0) or (file_age > self._expiration):
             logger.info(f"Cached CSV out of date {self._local_filepath}")
             data_source = self.data_source(**self._data_source_kwargs)
         else:
@@ -88,7 +81,20 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
     def _calculate_file_age(filepath: Path) -> int:
         """
         Returns the age of a file in days
+        
+        Parameters:
+        ----------
+        filepath : Path
+            The full path to the file to be checked
+
+        Returns:
+        -------
+        int 
+            the hours that have passed since the file was modified, -1 if the file doesn't exist
         """
-        today = datetime.datetime.today()
-        modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(filepath))
-        return (today - modified_date).days / 24
+        if (os.path.exists(filepath)):
+            today = datetime.datetime.today()
+            modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(filepath))
+            return (today - modified_date).days / 24
+        else:
+            return -1

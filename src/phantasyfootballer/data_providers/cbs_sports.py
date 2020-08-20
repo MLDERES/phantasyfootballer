@@ -2,37 +2,39 @@ import requests
 from urllib.parse import urljoin
 import pandas as pd
 from phantasyfootballer.settings import *
+from phantasyfootballer.common import Stats
 import logging
 
 BASE_URL = "https://www.cbssports.com/fantasy/football/stats/"
 
 QB_COL_MAP = {
     "Player": PLAYER_NAME,
-    "att  Pass Attempts": PASS_ATT,
-    "cmp  Pass Completions": PASS_COMP,
-    "yds  Passing Yards": PASS_YDS,
-    "td  Touchdowns Passes": PASS_TDS,
-    "int  Interceptions Thrown": PASS_INT,
-    "att  Rushing Attempts": RUSH_ATT,
-    "yds  Rushing Yards": RUSH_YDS,
-    "td  Rushing Touchdowns": RUSH_TDS,
-    "fl  Fumbles Lost": MISC_FL,
+    "att  Pass Attempts": Stats.PASS_ATT,
+    "cmp  Pass Completions": Stats.PASS_COMP,
+    "yds  Passing Yards": Stats.PASS_YDS,
+    "td  Touchdowns Passes": Stats.PASS_TDS,
+    "int  Interceptions Thrown": Stats.PASS_INT,
+    "att  Rushing Attempts": Stats.RUSH_ATT,
+    "yds  Rushing Yards": Stats.RUSH_YDS,
+    "td  Rushing Touchdowns": Stats.RUSH_TDS,
+    "fl  Fumbles Lost": Stats.MISC_FL,
 }
 FLEX_COL_MAP = {
-    "att  Rushing Attempts": RUSH_ATT,
-    "yds  Rushing Yards": RUSH_YDS,
-    "td  Rushing Touchdowns": RUSH_TDS,
-    "tgt  Targets": RCV_TGT,
-    "yds  Receiving Yards": RCV_YDS,
-    "td  Receiving Touchdowns": RCV_TDS,
-    "fl  Fumbles Lost": MISC_FL,
-    "rec  Receptions": RCV_REC,
+    "att  Rushing Attempts": Stats.RUSH_ATT,
+    "yds  Rushing Yards": Stats.RUSH_YDS,
+    "td  Rushing Touchdowns": Stats.RUSH_TDS,
+    "tgt  Targets": Stats.RCV_TGT,
+    "yds  Receiving Yards": Stats.RCV_YDS,
+    "td  Receiving Touchdowns": Stats.RCV_TDS,
+    "fl  Fumbles Lost": Stats.MISC_FL,
+    "rec  Receptions": Stats.RCV_REC,
     "Player": PLAYER_NAME,
 }
 
 
-def fetch_projections(year):
+def fetch_projections(**kwargs):
     # Case matters for some reason with this provider
+    year = kwargs['year']
     df_qb = _get_projections("QB", year)
     df_rb = _get_projections("RB", year)
     df_wr = _get_projections("WR", year)
@@ -47,13 +49,7 @@ def fetch_projections(year):
     df_all = _fixup_playername(df_all)
 
     # Let's not keep the fantasy points around, that will just cause confusion
-    df_all = df_all[
-        [PLAYER_NAME, TEAM, POSITION,]
-        + [PASS_ATT, PASS_COMP, PASS_INT, PASS_TDS, PASS_YDS]
-        + [RCV_REC, RCV_TDS, RCV_YDS]
-        + [RUSH_ATT, RUSH_YDS, RUSH_TDS]
-        + [MISC_FL]
-    ]
+    df_all = df_all[KEEPER_COLUMNS]
     df_all[SOURCE] = "cbs_sports"
     return df_all
 
