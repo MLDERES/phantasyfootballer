@@ -1,5 +1,5 @@
 from pathlib import Path
-from enum import Enum
+from .common import Stats
 
 BASE_DIR = Path(__file__).parents[2]
 DATA_DIR = BASE_DIR / "data"
@@ -10,31 +10,33 @@ PROJECTIONS = "fp_projection"
 PLAYER_NAME = "player"
 TEAM = "team"
 POSITION = "position"
-POS_RANK = "pos_rank"
-PASS_ATT = "pass_att"
-PASS_COMP = "pass_comp"
-PASS_YDS = "pass_yds"
-PASS_TDS = "pass_tds"
-PASS_INT = "pass_int"
-RUSH_ATT = "rush_att"
-RUSH_YDS = "rush_yds"
-RUSH_TDS = "rush_tds"
-RCV_TGT = "rcv_targets"
-RCV_REC = "rcv_rec"
-RCV_YDS = "rcv_yds"
-RCV_TDS = "rcv_tds"
-DST_SACK = "dst_sack"
-DST_INT = "dst_int"
-DST_FUM_REC = "dst_fumble_rec"
-DST_FUM_FF = "dst_force_fum"
-DST_TD = "dst_td"
-DST_SAFE = "dst_sft"
-DST_PA = "dst_pa"
-MISC_FL = "fumble_lost"
-FP_STD = "fp_std"
-FP_HALF = "fp_hppr"
-FP_FULL = "fp_ppr"
 SOURCE = "source"
+
+# Positions
+QB = "QB"
+TE = "TE"
+RB = "RB"
+WR = "WR"
+K = "K"
+DST = "DST"
+
+KEEPER_COLUMNS = [
+    PLAYER_NAME,
+    TEAM,
+    POSITION,
+    Stats.PASS_ATT,
+    Stats.PASS_COMP,
+    Stats.PASS_INT,
+    Stats.PASS_TDS,
+    Stats.PASS_YDS,
+    Stats.RCV_REC,
+    Stats.RCV_TDS,
+    Stats.RCV_YDS,
+    Stats.RUSH_ATT,
+    Stats.RUSH_YDS,
+    Stats.RUSH_TDS,
+    Stats.MISC_FL,
+]
 
 if __name__ == "__main__":
     print(BASE_DIR)
