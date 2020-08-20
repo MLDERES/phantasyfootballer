@@ -26,15 +26,15 @@ FLEX_COL_MAP = {
     "REC": Stats.RCV_REC,
     "YDS.1": Stats.RCV_YDS,
     "TDS.1": Stats.RCV_TDS,
-    "INTS":Stats. PASS_INT,
+    "INTS": Stats.PASS_INT,
     "FL": Stats.MISC_FL,
-    "REC":Stats.RCV_REC,
     "POS": POSITION,
     "Player": PLAYER_NAME,
 }
 
+
 def fetch_projections(**kwargs):
-    week = kwargs.get('week','draft')
+    week = kwargs.get("week", "draft")
     df_qb = _get_projections("qb", week=week)
     df_flex = _get_projections("flex", week=week)
 

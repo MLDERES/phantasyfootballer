@@ -8,9 +8,7 @@ MODULE_SEPARATOR = "."
 
 class CSVRemoteDataSet(AbstractDataSet):
     def __init__(
-        self,
-        data_source: Union[Callable, str],
-        **load_kwargs,
+        self, data_source: Union[Callable, str], **load_kwargs,
     ):
         """
         Instantiate a CSVRemote object.
