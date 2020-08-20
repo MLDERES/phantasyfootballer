@@ -15,3 +15,5 @@ wheel==0.32.2
 lxml
 html5lib
 BeautifulSoup4
+seaborn
+matplotlib
