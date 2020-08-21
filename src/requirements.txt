@@ -15,12 +15,13 @@ binaryornot==0.4.4        # via cookiecutter
 black==v19.10b0           # via -r /workspaces/phantasyfootballer/src/requirements.in
 bleach==3.1.5             # via nbconvert
 cachetools==4.1.1         # via kedro
-certifi==2020.6.20        # via requests
+certifi==2020.6.20        # via matplotlib, requests
 cffi==1.14.2              # via argon2-cffi
 chardet==3.0.4            # via binaryornot, requests
 click==7.1.2              # via black, cookiecutter, kedro, pip-tools
 cookiecutter==1.6.0       # via kedro
 coverage==5.2.1           # via pytest-cov
+cycler==0.10.0            # via matplotlib
 decorator==4.4.2          # via ipython, traitlets
 defusedxml==0.6.0         # via nbconvert
 entrypoints==0.3          # via nbconvert
@@ -46,8 +47,10 @@ jupyter==1.0.0            # via -r /workspaces/phantasyfootballer/src/requiremen
 jupyterlab-launcher==0.10.5  # via jupyterlab
 jupyterlab==0.31.1        # via -r /workspaces/phantasyfootballer/src/requirements.in
 kedro[pandas.parquetdataset]==0.16.4  # via -r /workspaces/phantasyfootballer/src/requirements.in
+kiwisolver==1.2.0         # via matplotlib
 lxml==4.5.2               # via -r /workspaces/phantasyfootballer/src/requirements.in
 markupsafe==1.1.1         # via jinja2
+matplotlib==3.3.1         # via -r /workspaces/phantasyfootballer/src/requirements.in, seaborn
 mccabe==0.6.1             # via flake8
 mistune==0.8.4            # via nbconvert
 more-itertools==8.4.0     # via pytest
@@ -55,14 +58,15 @@ nbconvert==5.6.1          # via jupyter, notebook
 nbformat==5.0.7           # via ipywidgets, nbconvert, nbstripout, notebook
 nbstripout==0.3.3         # via -r /workspaces/phantasyfootballer/src/requirements.in
 notebook==6.1.3           # via jupyter, jupyterlab, jupyterlab-launcher, widgetsnbextension
-numpy==1.19.1             # via pandas, pyarrow
+numpy==1.19.1             # via matplotlib, pandas, pyarrow, scipy, seaborn
 packaging==20.4           # via bleach, pytest
-pandas==1.0.3             # via kedro
+pandas==1.0.3             # via kedro, seaborn
 pandocfilters==1.4.2      # via nbconvert
 parso==0.7.1              # via jedi
 pathspec==0.8.0           # via black
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
+pillow==7.2.0             # via matplotlib
 pip-tools==5.3.1          # via kedro
 pluggy==0.13.1            # via kedro, pytest
 poyo==0.5.0               # via cookiecutter
@@ -75,12 +79,12 @@ pycodestyle==2.6.0        # via flake8
 pycparser==2.20           # via cffi
 pyflakes==2.2.0           # via flake8
 pygments==2.6.1           # via ipython, jupyter-console, nbconvert, qtconsole
-pyparsing==2.4.7          # via packaging
+pyparsing==2.4.7          # via matplotlib, packaging
 pyrsistent==0.16.0        # via jsonschema
 pytest-cov==2.10.1        # via -r /workspaces/phantasyfootballer/src/requirements.in
 pytest-mock==1.13.0       # via -r /workspaces/phantasyfootballer/src/requirements.in
 pytest==5.4.3             # via -r /workspaces/phantasyfootballer/src/requirements.in, pytest-cov, pytest-mock
-python-dateutil==2.8.1    # via arrow, jupyter-client, pandas
+python-dateutil==2.8.1    # via arrow, jupyter-client, matplotlib, pandas
 python-json-logger==0.1.11  # via kedro
 pytz==2020.1              # via pandas
 pyyaml==5.3.1             # via kedro
@@ -89,8 +93,10 @@ qtconsole==4.7.5          # via jupyter
 qtpy==1.9.0               # via qtconsole
 regex==2020.7.14          # via black
 requests==2.24.0          # via cookiecutter
+scipy==1.5.2              # via seaborn
+seaborn==0.10.1           # via -r /workspaces/phantasyfootballer/src/requirements.in
 send2trash==1.5.0         # via notebook
-six==1.15.0               # via argon2-cffi, bleach, html5lib, jsonschema, packaging, pip-tools, pyrsistent, python-dateutil, traitlets
+six==1.15.0               # via argon2-cffi, bleach, cycler, html5lib, jsonschema, packaging, pip-tools, pyrsistent, python-dateutil, traitlets
 soupsieve==2.0.1          # via beautifulsoup4
 terminado==0.8.3          # via notebook
 testpath==0.4.4           # via nbconvert

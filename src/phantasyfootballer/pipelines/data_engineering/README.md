@@ -1,10 +1,8 @@
 # Data Engineering pipeline
 
-> *Note:* This `README.md` was generated using `Kedro 0.16.4` for illustration purposes. Please modify it according to your pipeline structure and contents.
-
 ## Overview
 
-This modular pipeline splits the incoming data into the train and test subsets (`split_data` node)
+This pipeline takes care of several tasks related to cleaning data and adding in features.
 
 ## Pipeline inputs
 
