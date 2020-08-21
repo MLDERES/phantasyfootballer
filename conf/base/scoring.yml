@@ -39,3 +39,5 @@ half_ppr:
     <<: *standard_scoring
     rcv_rec: 0.5
     
+custom:
+    <<: *standard_scoring

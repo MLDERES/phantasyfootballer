@@ -58,6 +58,15 @@ score_std_pipeline = Pipeline(
         )
     ]
 )
+score_custom_pipeline = Pipeline(
+    [
+        node(
+            calculate_projected_points("custom"),
+            "average_stats_by_player_data",
+            "scored_custom_data",
+        )
+    ]
+)
 ranking_pipeline = Pipeline(
     [
         node(calculate_player_rank, "scored_data", "ranked_data", name="overall_rank_node"),
@@ -77,7 +86,8 @@ ranking_pipeline = Pipeline(
         ),
     ]
 )
-
+# Each of the following pipelines are here to do the ranking for each 
+#  scoring type
 full_ppr_pipeline = pipeline(
     ranking_pipeline,
     inputs={"scored_data": "scored_ppr_data"},
@@ -98,14 +108,21 @@ full_standard_pipeline = pipeline(
     outputs={"final_score_data": "scoring.standard"},
     namespace="std",
 )
-
+full_custom_pipeline = pipeline(
+    ranking_pipeline,
+    inputs={"scored_data": "scored_custom_data"},
+    outputs={"final_score_data": "scoring.custom"},
+    namespace="custom",
+)
 
 final_scoring_ranking_pipeline = (
     score_ppr_pipeline
     + score_half_ppr_pipeline
     + score_std_pipeline
+    + score_std_pipeline
     + full_ppr_pipeline
     + full_half_ppr_pipeline
+    + full_standard_pipeline
     + full_standard_pipeline
 )
 
