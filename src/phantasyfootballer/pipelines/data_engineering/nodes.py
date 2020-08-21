@@ -9,9 +9,7 @@ from functools import reduce, partial, update_wrapper
 String_or_List = Union[str, List[str]]
 
 
-def normalize_data_source(
-    data: pd.DataFrame, stat_name: str, common_stats: Dict[str, any]
-) -> pd.DataFrame:
+def normalize_data_source(data: pd.DataFrame, stat_name: str, common_stats: Dict[str, any]) -> pd.DataFrame:
     """
     This node will take a data source that is provided and adjust the stats so that they have 
     a common stat column name.  Additionally, if there is a stat that is common to the entire dataset
@@ -54,9 +52,7 @@ def _fetch_scoring_schemes() -> List[str]:
     return list(conf_scoring.keys())
 
 
-def _calculate_projected_points(
-    scoring: String_or_List, data: pd.DataFrame
-) -> pd.DataFrame:
+def _calculate_projected_points(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
     if scoring == "all":
         scoring_types = _fetch_scoring_schemes()
     else:
@@ -73,14 +69,10 @@ def _calculate_projected_points(
 
 
 def calculate_projected_points(scoring: String_or_List) -> pd.DataFrame:
-    return update_wrapper(
-        partial(_calculate_projected_points, scoring), _calculate_projected_points
-    )
+    return update_wrapper(partial(_calculate_projected_points, scoring), _calculate_projected_points)
 
 
-def _calculate_position_rank(
-    scoring: String_or_List, data: pd.DataFrame
-) -> pd.DataFrame:
+def _calculate_position_rank(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate the rank by scoring method for all positions
     """
@@ -90,9 +82,7 @@ def _calculate_position_rank(
         scoring_types = get_list(scoring)
 
     for scoring_scheme in scoring_types:
-        data[Stats.rank(scoring_scheme)] = data[Stats.points(scoring_scheme)].rank(
-            na_option="bottom", ascending=False
-        )
+        data[Stats.rank(scoring_scheme)] = data[Stats.points(scoring_scheme)].rank(na_option="bottom", ascending=False)
 
     return data
 
@@ -101,9 +91,7 @@ def calculate_position_rank(scoring: String_or_List) -> pd.DataFrame:
     """
 
     """
-    return update_wrapper(
-        partial(_calculate_position_rank, scoring), _calculate_position_rank
-    )
+    return update_wrapper(partial(_calculate_position_rank, scoring), _calculate_position_rank)
 
 
 def combine_data_vertically(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
@@ -136,3 +124,38 @@ def average_stats_by_player(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
     # Drop all the players where they have 0 projections
     df_all = df_all[df_all.sum(axis=1) > 0].reset_index()
     return df_all
+
+
+def percent_mean(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate the overall rank and position rank using the score provided
+
+    Args:
+        data (pd.DataFrame): the dataframe that has the players and a single scoring scheme
+
+    Returns:
+        pd.DataFrame: updated dataframe with two new columns, rank and position rank
+    """
+    return data
+
+
+def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate the points expected as a percentage of the median player in the position
+
+    Args:
+        data (pd.DataFrame): the dataframe that has the players and a single scoring scheme
+
+    Returns:
+        pd.DataFrame: updated dataframe with a column that has identified the value of a player 
+        relative to the typical player in his position
+    """
+    return data
+
+
+def combine_data_horizontal(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
+    return pd.concat(dataframes,axis=1)
+    
+
+
+
