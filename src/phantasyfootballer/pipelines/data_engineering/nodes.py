@@ -123,7 +123,7 @@ def percent_mean(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
+def percent_median(data: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate the points expected as a percentage of the median player in the position
 
@@ -140,7 +140,21 @@ def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
     data[Stats.PCT_MEDIAN_OVR] = data[Stats.FANTASY_POINTS]/(data[Stats.FANTASY_POINTS].median())
     return data
 
+# TODO: Need to calculate typical player.  Issue #21
+def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate the points expected as a percentage of the median player in the position
 
+    Args:
+        data (pd.DataFrame): the dataframe that has the players and a single scoring scheme
+
+    Returns:
+        pd.DataFrame: updated dataframe with a column that has identified the value of a player 
+        relative to the typical player in his position
+    """
+    data[Stats.PCT_TYPICAL_OVR] = 1
+    data[Stats.PCT_TYPICAL_POS] = 1
+    return data
 
     
 

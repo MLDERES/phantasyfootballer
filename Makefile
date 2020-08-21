@@ -1,4 +1,4 @@
-.PHONY: clean docs package run clean_raw
+.PHONY: clean docs package run clean_raw clean_de clean_features
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -24,6 +24,16 @@ notebook_convert:
 ## Clean up the raw data files
 clean_raw:
 	rm -fv data/01_raw/*
+
+## Clean up intermediate and primary data
+clean_de: clean_features
+	rm -fv data/02_projections/*
+	rm -fv data/03_primary/*
+
+## delete data features
+clean_features:
+	rm -fv data/04_feature/*
+
 
 ## Clean up the old files
 clean:

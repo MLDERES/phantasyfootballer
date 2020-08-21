@@ -39,7 +39,7 @@ def get_list(item: Union[Any, List[Any]], errors="ignore"):
     return retVal
 
 
-class Stats():
+class Stats:
     POS_RANK = "pos_rank"
     PASS_ATT = "pass_att"
     PASS_COMP = "pass_comp"
@@ -65,15 +65,15 @@ class Stats():
     FP_HALF = "fp_hppr"
     FP_FULL = "fp_ppr"
     FANTASY_POINTS = "fp"
-    RANK = 'overall_rank'
-    PCT_TYPICAL_POS = 'percent_typical_position'
-    PCT_MEAN_POS = 'percent_average_position'
-    PCT_MEDIAN_POS = 'percent_median_position'
-    PCT_TYPICAL_OVR = 'percent_typical_overall'
-    PCT_MEAN_OVR = 'percent_average_overall'
-    PCT_MEDIAN_OVR= 'percent_median_overall'
-   
-    ALL_STATS= [
+    RANK = "overall_rank"
+    PCT_TYPICAL_POS = "percent_typical_position"
+    PCT_MEAN_POS = "percent_average_position"
+    PCT_MEDIAN_POS = "percent_median_position"
+    PCT_TYPICAL_OVR = "percent_typical_overall"
+    PCT_MEAN_OVR = "percent_average_overall"
+    PCT_MEDIAN_OVR = "percent_median_overall"
+
+    ALL_STATS = [
         PASS_ATT,
         PASS_COMP,
         PASS_YDS,
@@ -102,7 +102,18 @@ class Stats():
         PCT_MEDIAN_POS,
         PCT_TYPICAL_OVR,
         PCT_MEAN_OVR,
-        PCT_MEDIAN_OVR 
+        PCT_MEDIAN_OVR,
+    ]
+
+    VALUE_STATS = [
+        POS_RANK,
+        FANTASY_POINTS,
+        PCT_TYPICAL_POS,
+        PCT_MEAN_POS,
+        PCT_MEDIAN_POS,
+        PCT_TYPICAL_OVR,
+        PCT_MEAN_OVR,
+        PCT_MEDIAN_OVR,
     ]
 
     @staticmethod

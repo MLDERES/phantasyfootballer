@@ -5,6 +5,7 @@ from .nodes import (
     average_stats_by_player,
     percent_mean,
     percent_typical,
+    percent_median,
     calculate_player_rank,
 )
 import phantasyfootballer.common as common
@@ -70,7 +71,7 @@ score_custom_pipeline = Pipeline(
 ranking_pipeline = Pipeline(
     [
         node(calculate_player_rank, "scored_data", "ranked_data", name="overall_rank_node"),
-        node(percent_mean, "ranked_data", "percent_mean_data", name="percent_mean_node",),
+        node(percent_mean, "ranked_data", "percent_mean_data", name="percent_mean_node"),
         node(
             # Calculate the rank by the 100th man
             percent_typical,
@@ -78,9 +79,10 @@ ranking_pipeline = Pipeline(
             "percent_typical_data",
             name="percent_typical_node",
         ),
+        node(percent_median, "ranked_data", "percent_median_data", name="percent_median_node",),
         node(
             common.combine_data_horizontal,
-            ["percent_mean_data", "percent_typical_data"],
+            ["percent_mean_data", "percent_typical_data", 'percent_median_data'],
             "final_score_data",
             name="final_scoring_node",
         ),
