@@ -5,8 +5,9 @@ from .nodes import (
     average_stats_by_player,
     percent_mean,
     percent_typical,
-    combine_data_horizontal,
+    calculate_player_rank,
 )
+import phantasyfootballer.common as common
 
 
 LOCAL_PROJECTIONS = ["fp_projections_local", "cbs_projections_local"]
@@ -31,7 +32,13 @@ Using the projections,
         Figure the value of the player using the 100th man algorithm
 """
 score_ppr_pipeline = Pipeline(
-    [node(calculate_projected_points("full_ppr"), "average_stats_by_player_data", "scored_ppr_data")]
+    [
+        node(
+            calculate_projected_points("full_ppr"),
+            "average_stats_by_player_data",
+            "scored_ppr_data",
+        )
+    ]
 )
 score_half_ppr_pipeline = Pipeline(
     [
@@ -51,9 +58,10 @@ score_std_pipeline = Pipeline(
         )
     ]
 )
-percentile_pipeline = Pipeline(
+ranking_pipeline = Pipeline(
     [
-        node(percent_mean, "scored_data", "percent_mean_data", name="percent_mean_node",),
+        node(calculate_player_rank, "scored_data", "ranked_data", name="overall_rank_node"),
+        node(percent_mean, "ranked_data", "percent_mean_data", name="percent_mean_node",),
         node(
             # Calculate the rank by the 100th man
             percent_typical,
@@ -62,7 +70,7 @@ percentile_pipeline = Pipeline(
             name="percent_typical_node",
         ),
         node(
-            combine_data_horizontal,
+            common.combine_data_horizontal,
             ["percent_mean_data", "percent_typical_data"],
             "final_score_data",
             name="final_scoring_node",
@@ -71,21 +79,21 @@ percentile_pipeline = Pipeline(
 )
 
 full_ppr_pipeline = pipeline(
-    percentile_pipeline,
+    ranking_pipeline,
     inputs={"scored_data": "scored_ppr_data"},
     outputs={"final_score_data": "scoring.ppr"},
     namespace="ppr",
 )
 
 full_half_ppr_pipeline = pipeline(
-    percentile_pipeline,
+    ranking_pipeline,
     inputs={"scored_data": "scored_half_ppr_data"},
     outputs={"final_score_data": "scoring.half_ppr"},
     namespace="hppr",
 )
 
 full_standard_pipeline = pipeline(
-    percentile_pipeline,
+    ranking_pipeline,
     inputs={"scored_data": "scored_standard_data"},
     outputs={"final_score_data": "scoring.standard"},
     namespace="std",

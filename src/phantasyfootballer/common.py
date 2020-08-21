@@ -1,5 +1,6 @@
 from pandas.core.dtypes.inference import is_list_like
-from typing import Union, Any, List
+from typing import Union, Any, List, Sequence
+import pandas as pd
 
 
 def get_list(item: Union[Any, List[Any]], errors="ignore"):
@@ -29,8 +30,7 @@ def get_list(item: Union[Any, List[Any]], errors="ignore"):
             retVal = []
         elif errors == "raise":
             raise ValueError(
-                f"Value of item was {item} expected either "
-                f"a single value or list-like"
+                f"Value of item was {item} expected either " f"a single value or list-like"
             )
     elif is_list_like(item):
         retVal = list(item)
@@ -38,8 +38,8 @@ def get_list(item: Union[Any, List[Any]], errors="ignore"):
         retVal = [item]
     return retVal
 
-class Stats():
 
+class Stats():
     POS_RANK = "pos_rank"
     PASS_ATT = "pass_att"
     PASS_COMP = "pass_comp"
@@ -64,6 +64,7 @@ class Stats():
     FP_STD = "fp_std"
     FP_HALF = "fp_hppr"
     FP_FULL = "fp_ppr"
+    FANTASY_POINTS = "fp"
 
     ALL_STATS = [
         PASS_ATT,
@@ -86,19 +87,48 @@ class Stats():
         DST_SAFE,
         DST_PA,
         MISC_FL,
+        FANTASY_POINTS
     ]
 
     @staticmethod
-    def points(scheme : str) -> str:
-        '''
+    def points(scheme: str) -> str:
+        """
         Create a column name representing points for a given scheme
-        '''
-        return f'pts_{scheme}'
-    
+        """
+        return f"pts_{scheme}"
+
     @staticmethod
     def rank(scheme: str) -> str:
-        '''
+        """
         Create a column name representing rank for a given points scheme
-        '''
-        return f'rank_{scheme}'
-        
+        """
+        return f"rank_{scheme}"
+
+
+def combine_data_horizontal(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
+    """
+    Put together multiple datasets, adding in the unique columns
+
+    Returns:
+        pd.DataFrame: [description]
+    """
+    joined_dataframes = pd.concat(dataframes, axis=1)
+    duplicated_columns = joined_dataframes.columns.duplicated(keep="first")
+    combined_dataframes = joined_dataframes.loc[:, ~duplicated_columns]
+    return combined_dataframes
+
+
+def combine_data_vertically(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
+    """
+    Combine any sequence of datasets
+    the reason I'm using *datasets is that they will likely be passed in as *args
+    rather than truly a list of datasets
+    """
+    if len(dataframes) == 1:
+        return dataframes[0]
+
+    combined_dataframes = pd.DataFrame()
+    for d in dataframes:
+        combined_dataframes = pd.concat([combined_dataframes, d])
+
+    return combined_dataframes

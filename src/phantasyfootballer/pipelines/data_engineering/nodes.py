@@ -23,12 +23,6 @@ def normalize_data_source(data: pd.DataFrame, stat_name: str, common_stats: Dict
     pass
 
 
-def establish_position_rank(data):
-    """
-    This node will create a position rank based on projections
-    """
-    pass
-
 
 def _craft_scoring_dict(scheme: str) -> Dict[str, Any]:
     """
@@ -63,7 +57,7 @@ def _calculate_projected_points(scoring: String_or_List, data: pd.DataFrame) -> 
         for c in data.columns:
             if (m := score_map.get(c)) :
                 df_pts[c + "_pts"] = data[c] * m
-        data[Stats.points(scoring_scheme)] = round(df_pts.sum(axis=1), 2)
+        data[FANTASY_POINTS] = round(df_pts.sum(axis=1), 2)
 
     return data
 
@@ -94,21 +88,6 @@ def calculate_position_rank(scoring: String_or_List) -> pd.DataFrame:
     return update_wrapper(partial(_calculate_position_rank, scoring), _calculate_position_rank)
 
 
-def combine_data_vertically(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
-    """
-    Combine any sequence of datasets
-    the reason I'm using *datasets is that they will likely be passed in as *args
-    rather than truly a list of datasets
-    """
-    if len(dataframes) == 1:
-        return dataframes[0]
-
-    combined_dataframes = pd.DataFrame()
-    for d in dataframes:
-        combined_dataframes = pd.concat([combined_dataframes, d])
-
-    return combined_dataframes
-
 
 def average_stats_by_player(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
     """
@@ -125,6 +104,8 @@ def average_stats_by_player(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
     df_all = df_all[df_all.sum(axis=1) > 0].reset_index()
     return df_all
 
+def calculate_player_rank(data: pd.DataFrame) -> pd.DataFrame:
+    return data
 
 def percent_mean(data: pd.DataFrame) -> pd.DataFrame:
     """
@@ -153,8 +134,7 @@ def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def combine_data_horizontal(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
-    return pd.concat(dataframes,axis=1)
+
     
 
 
