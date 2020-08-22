@@ -35,10 +35,23 @@ in the official documentation:
 https://docs.pytest.org/en/latest/getting-started.html
 """
 import os
-from unittest import TestCase, skip
+import pytest
 from datetime import date, timedelta
+import pandas as pd
+from pathlib import Path
+from kedro.framework.context import load_context
+from phantasyfootballer.settings import *
+from phantasyfootballer.common import Stats
 
-class TestDataEngineering(TestCase):
+@pytest.fixture
+def catalog():
+    current_dir = Path.cwd()  # this points to 'tests/' folder
+    proj_path = current_dir.parent.parent.parent # point back to the root of the project
+    context = load_context(proj_path)
+    catalog = context.catalog
+    return catalog
 
-    def test_combine_
 
+def test_filter(catalog):
+    df_ppr = catalog.load('scoring.ppr')
+    assert len(df_ppr) > 10

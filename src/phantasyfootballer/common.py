@@ -72,6 +72,8 @@ class Stats:
     PCT_TYPICAL_OVR = "percent_typical_overall"
     PCT_MEAN_OVR = "percent_average_overall"
     PCT_MEDIAN_OVR = "percent_median_overall"
+    # Only the top players are used in the evaluation of value
+    TOP_PLAYER = "is_top_player"
 
     ALL_STATS = [
         PASS_ATT,

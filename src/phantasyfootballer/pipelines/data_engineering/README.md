@@ -22,30 +22,11 @@ This pipeline takes care of several tasks related to cleaning data and adding in
 
 ## Pipeline outputs
 
-### `example_train_x`
+### ``
 
 |      |                    |
 | ---- | ------------------ |
 | Type | `pandas.DataFrame` |
 | Description | DataFrame containing train set features |
 
-### `example_train_y`
 
-|      |                    |
-| ---- | ------------------ |
-| Type | `pandas.DataFrame` |
-| Description | DataFrame containing train set one-hot encoded target variable |
-
-### `example_test_x`
-
-|      |                    |
-| ---- | ------------------ |
-| Type | `pandas.DataFrame` |
-| Description | DataFrame containing test set features |
-
-### `example_test_y`
-
-|      |                    |
-| ---- | ------------------ |
-| Type | `pandas.DataFrame` |
-| Description | DataFrame containing test set one-hot encoded target variable |
