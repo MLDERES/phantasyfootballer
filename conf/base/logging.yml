@@ -13,6 +13,18 @@ handlers:
         level: INFO
         formatter: simple
         stream: ext://sys.stdout
+    
+    console2:
+        class: kedro.extras.logging.ColorHandler
+        level: DEBUG
+        formatter: simple
+        stream: ext://sys.stdout
+        # defining colors is optional
+        colors:
+            debug: magenta
+            info: green
+            warning: yellow
+            error: red
 
     info_file_handler:
         class: logging.handlers.RotatingFileHandler
@@ -61,6 +73,12 @@ loggers:
         handlers: [journal_file_handler]
         propagate: no
 
+    data_engineering.node:
+        level: DEBUG
+        handlers: [console2]
+        propagate: no
+
 root:
-    level: INFO
-    handlers: [console, info_file_handler, error_file_handler]
+    level: DEBUG
+    #handlers: [console, info_file_handler, error_file_handler]
+    handlers: [console]
