@@ -26,9 +26,12 @@ clean_raw:
 	rm -fv data/01_raw/*
 
 ## Clean up intermediate and primary data
-clean_de: clean_features
-	rm -fv data/02_projections/*
+clean_de: clean_intermediate clean_features
 	rm -fv data/03_primary/*
+
+## Clean intermediate files
+clean_intermediate:
+	rm -fv data/02_intermediate/*
 
 ## delete data features
 clean_features:
