@@ -87,7 +87,19 @@ scoring.standard:
 scoring_custom:
   <<: *csv
   filepath: data/03_primary/scoring_custom.csv
-  
+
+# ppr.percent_mean_data:
+#   <<: *csv
+#   filepath: data/02_intermediate/ppr.mean.csv
+
+# ppr.percent_typical_data:
+#   <<: *csv
+#   filepath: data/02_intermediate/ppr.typical.csv
+
+# ppr.filtered_player_data:
+#   <<: *csv
+#   filepath: data/02_intermediate/ppr.filtered.csv
+
 
 
 

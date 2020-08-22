@@ -21,4 +21,23 @@ stat_providers:
             rcv_yds: ReceivingYds
             rcv_tds: ReceivingTD
             misc_fl: FL
-    
+
+# Minimum number of projected points
+#  and maximum number of players by position
+# Order of precedence is minimum points then maximum players
+player_filter:
+    _all_positions: &all_positions
+        min_fp: 10
+        max_players: 100
+    QB:
+        <<: *all_positions
+        max_players: 40
+    RB: 
+        <<: *all_positions
+        min_fp: 50
+    WR: 
+        min_fp: 50
+        max_players: 100
+    TE: 
+        max_players: 40
+        min_fp: 30

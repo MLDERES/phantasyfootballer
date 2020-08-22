@@ -5,7 +5,9 @@ from .nodes import (
     average_stats_by_player,
     percent_mean,
     percent_typical,
+    percent_median,
     calculate_player_rank,
+    filter_by_position,
 )
 import phantasyfootballer.common as common
 
@@ -70,9 +72,17 @@ score_custom_pipeline = Pipeline(
 ranking_pipeline = Pipeline(
     [
         node(calculate_player_rank, "scored_data", "ranked_data", name="overall_rank_node"),
-        node(percent_mean, "ranked_data", "percent_mean_data", name="percent_mean_node",),
         node(
-            # Calculate the rank by the 100th man
+            filter_by_position,
+            ["ranked_data", "params:player_filter"],
+            "filtered_player_data",
+            name="filter_players",
+        ),
+        # For median and mean values, I want to be sure we are limiting to the players that are filtered
+        node(percent_median, "filtered_player_data", "percent_median_data", name="percent_median_node",),
+        node(percent_mean, "filtered_player_data", "percent_mean_data", name="percent_mean_node"),
+        node(
+            # Calculate the rank by the 100th man - no need to filter!
             percent_typical,
             "scored_data",
             "percent_typical_data",
@@ -80,13 +90,13 @@ ranking_pipeline = Pipeline(
         ),
         node(
             common.combine_data_horizontal,
-            ["percent_mean_data", "percent_typical_data"],
+            ["percent_mean_data", "percent_typical_data", "percent_median_data"],
             "final_score_data",
             name="final_scoring_node",
         ),
     ]
 )
-# Each of the following pipelines are here to do the ranking for each 
+# Each of the following pipelines are here to do the ranking for each
 #  scoring type
 full_ppr_pipeline = pipeline(
     ranking_pipeline,

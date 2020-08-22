@@ -50,9 +50,6 @@ class ProjectContext(KedroContext):
     def _get_pipelines(self) -> Dict[str, Pipeline]:
         return create_pipelines()
 
-    def _setup_logging(self) -> None:
-        log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        logging.basicConfig(level=logging.INFO, format=log_fmt)
 
 
 def run_package():
