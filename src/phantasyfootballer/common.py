@@ -1,43 +1,26 @@
 from pandas.core.dtypes.inference import is_list_like
 from typing import Union, Any, List, Sequence
 import pandas as pd
+from pathlib import Path
 
+BASE_DIR = Path(__file__).parents[2]
+DATA_DIR = BASE_DIR / "data"
 
-def get_list(item: Union[Any, List[Any]], errors="ignore"):
-    """
-    Return a list from the item passed.
-    If the item passed is a string, put it in a list.
-    If the item is list like, then return it as a list.    
-    
-    Parameters
-    ----------
-    item: str or list-like
-        the thing or list to ensure is a list
-    errors: {‘ignore’, ‘raise’, 'coerce}, default ‘ignore’
-        If the item is None, then the return depends on the errors state
-        If errors = 'raise' then raise an error if the list is empty
-        If errors = 'ignore' then return None
-        If errors = 'coerce' then return an empty list if possible
-    
-    Returns
-    ------
-    list
-        the created list
-    """
-    retVal = None
-    if item is None:
-        if errors == "coerce":
-            retVal = []
-        elif errors == "raise":
-            raise ValueError(
-                f"Value of item was {item} expected either " f"a single value or list-like"
-            )
-    elif is_list_like(item):
-        retVal = list(item)
-    else:
-        retVal = [item]
-    return retVal
+RANKINGS = "fp_rank"
+PROJECTIONS = "fp_projection"
 
+PLAYER_NAME = "player"
+TEAM = "team"
+POSITION = "position"
+SOURCE = "source"
+
+# Positions
+QB = "QB"
+TE = "TE"
+RB = "RB"
+WR = "WR"
+K = "K"
+DST = "DST"
 
 class Stats:
     POS_RANK = "pos_rank"
@@ -133,6 +116,24 @@ class Stats:
         return f"rank_{scheme}"
 
 
+KEEPER_COLUMNS = [
+    PLAYER_NAME,
+    TEAM,
+    POSITION,
+    Stats.PASS_ATT,
+    Stats.PASS_COMP,
+    Stats.PASS_INT,
+    Stats.PASS_TDS,
+    Stats.PASS_YDS,
+    Stats.RCV_REC,
+    Stats.RCV_TDS,
+    Stats.RCV_YDS,
+    Stats.RUSH_ATT,
+    Stats.RUSH_YDS,
+    Stats.RUSH_TDS,
+    Stats.MISC_FL,
+]
+
 def combine_data_horizontal(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
     """
     Put together multiple datasets, adding in the unique columns
@@ -160,3 +161,38 @@ def combine_data_vertically(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
         combined_dataframes = pd.concat([combined_dataframes, d])
 
     return combined_dataframes
+
+def get_list(item: Union[Any, List[Any]], errors="ignore"):
+    """
+    Return a list from the item passed.
+    If the item passed is a string, put it in a list.
+    If the item is list like, then return it as a list.    
+    
+    Parameters
+    ----------
+    item: str or list-like
+        the thing or list to ensure is a list
+    errors: {‘ignore’, ‘raise’, 'coerce}, default ‘ignore’
+        If the item is None, then the return depends on the errors state
+        If errors = 'raise' then raise an error if the list is empty
+        If errors = 'ignore' then return None
+        If errors = 'coerce' then return an empty list if possible
+    
+    Returns
+    ------
+    list
+        the created list
+    """
+    retVal = None
+    if item is None:
+        if errors == "coerce":
+            retVal = []
+        elif errors == "raise":
+            raise ValueError(
+                f"Value of item was {item} expected either " f"a single value or list-like"
+            )
+    elif is_list_like(item):
+        retVal = list(item)
+    else:
+        retVal = [item]
+    return retVal

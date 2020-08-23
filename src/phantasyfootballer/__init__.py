@@ -29,4 +29,4 @@
 """
 
 __version__ = "0.1"
-from .settings import *
+from .common import *

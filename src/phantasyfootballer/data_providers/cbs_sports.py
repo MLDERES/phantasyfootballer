@@ -1,8 +1,7 @@
 import requests
 from urllib.parse import urljoin
 import pandas as pd
-from phantasyfootballer.settings import *
-from phantasyfootballer.common import Stats
+from phantasyfootballer.common import Stats, PLAYER_NAME, POSITION
 import logging
 
 BASE_URL = "https://www.cbssports.com/fantasy/football/stats/"

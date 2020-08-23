@@ -1,10 +1,9 @@
 from typing import Any, Dict, Union, List, Sequence
-from phantasyfootballer.settings import *
-from phantasyfootballer.common import Stats, get_list
-import pandas as pd
+from phantasyfootballer.common import Stats, get_list, PLAYER_NAME, POSITION, TEAM, QB, RB, WR, TE
 from kedro.config import ConfigLoader
 from functools import reduce, partial, update_wrapper
 import logging
+import pandas as pd
 
 logger = logging.getLogger("data_engineering.node")
 
