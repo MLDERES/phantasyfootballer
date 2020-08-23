@@ -57,6 +57,12 @@ class Stats:
     PCT_MEDIAN_OVR = "percent_median_overall"
     # Only the top players are used in the evaluation of value
     TOP_PLAYER = "is_top_player"
+    POS_VALUE = 'positional_value'
+    POS_VALUE_REM = 'pos_value_left'
+    # The percent of points that will be scored by all players in the league
+    OVR_VALUE = 'overall_value'
+    # The percent points left after this player is taken
+    OVR_VALUE_REM = 'overall_value_left'
 
     ALL_STATS = [
         PASS_ATT,

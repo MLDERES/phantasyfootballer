@@ -8,6 +8,7 @@ from .nodes import (
     percent_median,
     calculate_player_rank,
     filter_by_position,
+    remaining_positional_value,
 )
 import phantasyfootballer.common as common
 
@@ -79,7 +80,12 @@ ranking_pipeline = Pipeline(
             name="filter_players",
         ),
         # For median and mean values, I want to be sure we are limiting to the players that are filtered
-        node(percent_median, "filtered_player_data", "percent_median_data", name="percent_median_node",),
+        node(
+            percent_median,
+            "filtered_player_data",
+            "percent_median_data",
+            name="percent_median_node",
+        ),
         node(percent_mean, "filtered_player_data", "percent_mean_data", name="percent_mean_node"),
         node(
             # Calculate the rank by the 100th man - no need to filter!
@@ -89,8 +95,19 @@ ranking_pipeline = Pipeline(
             name="percent_typical_node",
         ),
         node(
+            remaining_positional_value,
+            "filtered_player_data",
+            "positional_val_data",
+            name="remaining_val_node",
+        ),
+        node(
             common.combine_data_horizontal,
-            ["percent_mean_data", "percent_typical_data", "percent_median_data"],
+            [
+                "percent_mean_data",
+                "percent_typical_data",
+                "percent_median_data",
+                "positional_val_data",
+            ],
             "final_score_data",
             name="final_scoring_node",
         ),
@@ -139,21 +156,3 @@ final_scoring_ranking_pipeline = (
 
 def create_pipeline():
     return Pipeline([average_stats_pipeline, final_scoring_ranking_pipeline])
-
-
-# def create_pipeline(**kwargs):
-#     return Pipeline(
-#         [
-#             # node ( func = combine_data_vertically,
-#             #       inputs = PROJECTIONS,
-#             #       outputs='combined_projection'
-#             #       ),
-#             node(func=average_stats_by_player, inputs=LOCAL_PROJECTIONS, outputs="average_stats_by_player",),
-#             node(
-#                 func=calculate_projected_points(scoring="full_ppr"),
-#                 inputs="average_stats_by_player",
-#                 outputs="scoring_model",
-#             ),
-#             node(func=calculate_position_rank(scoring="all"), inputs="scoring_model", outputs="projections",),
-#         ]
-#     )

@@ -26,6 +26,7 @@ stat_providers:
 #  and maximum number of players by position
 # Order of precedence is minimum points then maximum players
 player_filter:
+    remove: True
     _all_positions: &all_positions
         min_fp: 10
         max_players: 100
