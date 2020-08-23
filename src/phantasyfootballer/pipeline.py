@@ -34,7 +34,8 @@ from typing import Dict
 from kedro.pipeline import Pipeline
 
 from phantasyfootballer.pipelines import data_engineering as de
-from phantasyfootballer.pipelines import data_science as ds
+
+# from phantasyfootballer.pipelines import data_science as ds
 from phantasyfootballer.pipelines import data_import as di
 
 import logging
@@ -73,5 +74,8 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
         "data_import": fp_proj_pipeline + cbs_proj_pipeline,
         "de": data_engineering_pipeline,
         "di": data_import_pipeline,
-        "__default__": fp_ecr_pipeline + fp_proj_pipeline + cbs_proj_pipeline + data_engineering_pipeline,
+        "__default__": fp_ecr_pipeline
+        + fp_proj_pipeline
+        + cbs_proj_pipeline
+        + data_engineering_pipeline,
     }

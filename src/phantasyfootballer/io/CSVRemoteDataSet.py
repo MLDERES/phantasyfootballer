@@ -1,4 +1,4 @@
-from typing import Any, List, Dict, Callable, Union, Optional
+from typing import Any, List, Dict, Callable, Union
 import pandas as pd
 from kedro.io import AbstractDataSet
 import importlib

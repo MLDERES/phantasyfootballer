@@ -21,7 +21,7 @@ standard: &standard_scoring
     # Defense, points against
     # These are the value ranges, so that points against are
     # less than each entry that's the number of points allowed
-    dst_pa: 
+    dst_pa:
         7 : 10
         14 : 7
         21 : 4
@@ -30,14 +30,14 @@ standard: &standard_scoring
         42 : -1
         120: -4 # Basically anything over 42 is -4 pts
     fumble_lost: -2
-   
+
 full_ppr:
     <<: *standard_scoring
     rcv_rec: 1
-    
+
 half_ppr:
     <<: *standard_scoring
     rcv_rec: 0.5
-    
+
 custom:
     <<: *standard_scoring

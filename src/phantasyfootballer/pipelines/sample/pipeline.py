@@ -31,7 +31,7 @@ This is a boilerplate pipeline 'sample'
 generated using Kedro 0.16.4
 """
 
-from kedro.pipeline import Pipeline, node
+from kedro.pipeline import Pipeline
 
 
 def create_pipeline(**kwargs):

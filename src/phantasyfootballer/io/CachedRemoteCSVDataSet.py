@@ -1,4 +1,4 @@
-from typing import Any, List, Dict, Callable, Union, Optional
+from typing import Any, List, Dict, Callable, Union
 import pandas as pd
 from kedro.io import AbstractDataSet, DataSetError
 import importlib
@@ -45,9 +45,9 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
             self.data_source = getattr(module, function_name)
 
     def _load(self) -> List[Dict[str, Any]]:
-        '''
+        """
         Load the dataset if the file is older than the max cache time
-        '''
+        """
         # check last time this file was updated
         # if it is past the expiration then do the callable
         # otherwise just load the file
@@ -72,7 +72,7 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
         regex = r"(\d*)\s*([H|M|D]?)"
         try:
             num, letter = re.findall(regex, "8 H")[0]
-        except:
+        except ValueError:
             DataSetError("Invalid expiration")
         conversion = {"H": 1, "D": 24, "M": 1 / 60}
         return int(num * conversion.get(letter, 24))
@@ -81,7 +81,7 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
     def _calculate_file_age(filepath: Path) -> int:
         """
         Returns the age of a file in days
-        
+
         Parameters:
         ----------
         filepath : Path
@@ -89,10 +89,10 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
 
         Returns:
         -------
-        int 
+        int
             the hours that have passed since the file was modified, -1 if the file doesn't exist
         """
-        if (os.path.exists(filepath)):
+        if os.path.exists(filepath):
             today = datetime.datetime.today()
             modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(filepath))
             return (today - modified_date).days / 24

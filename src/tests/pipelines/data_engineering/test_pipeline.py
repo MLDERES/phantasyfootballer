@@ -34,23 +34,22 @@ Kedro recommends using `pytest` framework, more info about it can be found
 in the official documentation:
 https://docs.pytest.org/en/latest/getting-started.html
 """
-import os
 import pytest
-from datetime import date, timedelta
-import pandas as pd
 from pathlib import Path
 from kedro.framework.context import load_context
-from phantasyfootballer.common import Stats
+
 
 @pytest.fixture
 def catalog():
     current_dir = Path.cwd()  # this points to 'tests/' folder
-    proj_path = current_dir.parent.parent.parent # point back to the root of the project
+    proj_path = (
+        current_dir.parent.parent.parent
+    )  # point back to the root of the project
     context = load_context(proj_path)
     catalog = context.catalog
     return catalog
 
 
 def test_filter(catalog):
-    df_ppr = catalog.load('scoring.ppr')
+    df_ppr = catalog.load("scoring.ppr")
     assert len(df_ppr) > 10

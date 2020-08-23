@@ -1,7 +1,15 @@
 import requests
 from urllib.parse import urljoin
 import pandas as pd
-from phantasyfootballer.common import Stats, PLAYER_NAME, POSITION
+from phantasyfootballer.common import (
+    Stats,
+    PLAYER_NAME,
+    POSITION,
+    KEEPER_COLUMNS,
+    SOURCE,
+    TEAM,
+    DATA_DIR,
+)
 import logging
 
 BASE_URL = "https://www.cbssports.com/fantasy/football/stats/"
@@ -33,7 +41,7 @@ FLEX_COL_MAP = {
 
 def fetch_projections(**kwargs):
     # Case matters for some reason with this provider
-    year = kwargs['year']
+    year = kwargs["year"]
     df_qb = _get_projections("QB", year)
     df_rb = _get_projections("RB", year)
     df_wr = _get_projections("WR", year)

@@ -34,7 +34,6 @@ from kedro.framework.context import KedroContext, load_package_context
 from kedro.pipeline import Pipeline
 
 from phantasyfootballer.pipeline import create_pipelines
-import logging
 
 
 class ProjectContext(KedroContext):
@@ -49,7 +48,6 @@ class ProjectContext(KedroContext):
 
     def _get_pipelines(self) -> Dict[str, Pipeline]:
         return create_pipelines()
-
 
 
 def run_package():

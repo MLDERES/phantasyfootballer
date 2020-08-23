@@ -33,12 +33,12 @@ player_filter:
     QB:
         <<: *all_positions
         max_players: 40
-    RB: 
+    RB:
         <<: *all_positions
         min_fp: 50
-    WR: 
+    WR:
         min_fp: 50
         max_players: 100
-    TE: 
+    TE:
         max_players: 40
         min_fp: 30

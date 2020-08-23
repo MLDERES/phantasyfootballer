@@ -28,5 +28,3 @@ This pipeline takes care of several tasks related to cleaning data and adding in
 | ---- | ------------------ |
 | Type | `pandas.DataFrame` |
 | Description | DataFrame containing train set features |
-
-

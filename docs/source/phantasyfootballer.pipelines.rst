@@ -13,4 +13,3 @@ Subpackages
 
     phantasyfootballer.pipelines.data_engineering
     phantasyfootballer.pipelines.data_science
-

@@ -12,11 +12,11 @@ PROJECT_NAME = phantasyfootballer
 PYTHON_INTERPRETER = python
 
 ## Execute the kedro run command
-run: 
+run:
 	kedro run
 
 download_data: clean_raw
-	kedro run --pipeline 
+	kedro run --pipeline
 ## Transform all notebooks to scripts (use the path for 1 notebook)
 notebook_convert:
 	kedro jupyter convert --all
@@ -51,7 +51,7 @@ docs:
 	kedro build-docs
 
 ## Install Python Dependencies
-requirements: 
+requirements:
 	kedro build-reqs
 
 ## Start jupyter
