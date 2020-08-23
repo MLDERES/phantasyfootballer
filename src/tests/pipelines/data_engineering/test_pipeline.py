@@ -40,7 +40,6 @@ from datetime import date, timedelta
 import pandas as pd
 from pathlib import Path
 from kedro.framework.context import load_context
-from phantasyfootballer.settings import *
 from phantasyfootballer.common import Stats
 
 @pytest.fixture

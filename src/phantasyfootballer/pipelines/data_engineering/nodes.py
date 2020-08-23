@@ -1,12 +1,12 @@
 from typing import Any, Dict, Union, List, Sequence
-from phantasyfootballer.settings import *
-from phantasyfootballer.common import Stats, get_list
-import pandas as pd
+from phantasyfootballer.common import Stats, get_list, PLAYER_NAME, POSITION, TEAM, QB, RB, WR, TE
 from kedro.config import ConfigLoader
 from functools import reduce, partial, update_wrapper
 import logging
+import pandas as pd
 
 logger = logging.getLogger("data_engineering.node")
+DEBUG = logger.debug
 
 String_or_List = Union[str, List[str]]
 
@@ -182,12 +182,12 @@ def filter_by_position(data, player_filter) -> pd.DataFrame:
     Filter the dataset by ensuring players meet the bar for usefulness
     """
     keepers = pd.Series()
-    logger.debug(f"player_filter settings: {player_filter}")
+    DEBUG(f"player_filter settings: {player_filter}")
     for filter in [QB, RB, TE, WR]:
         df = _get_position_slice(data, filter)
         min_pts = player_filter[filter]["min_fp"]
         max_players = player_filter[filter]["max_players"]
-        logger.debug(f"min_fp {min_pts} max_players {max_players}")
+        DEBUG(f"min_fp {min_pts} max_players {max_players}")
         # Here we are going to query out all the players meet the filter criteria
         df_keepers = df.query(f"{Stats.FANTASY_POINTS} >= @min_pts").sort_values(
             Stats.FANTASY_POINTS, ascending=False
@@ -196,5 +196,27 @@ def filter_by_position(data, player_filter) -> pd.DataFrame:
         data.loc[keeper_mask, Stats.TOP_PLAYER] = True
 
     data[Stats.TOP_PLAYER] = data[Stats.TOP_PLAYER].fillna(False)
+    if player_filter.get('remove') == True:
+        DEBUG(f'Removing players from the field based on parameters')
+        data = data[data[Stats.TOP_PLAYER]]
+        data.drop(columns=Stats.TOP_PLAYER)
+    return data
+
+
+def remaining_positional_value(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Determine the value of a player by the pct of points that he would have of all the players
+    that are in that position.  In other words, if all the players in the position would score
+    100 points on the season and this player would be 30 of them, then his value is 30% and 
+    the remaining value, once picked, would be 70%.
+    """
+    # Determine the percent of points a player brings to a position
+    PV = Stats.POS_VALUE
+    FP = Stats.FANTASY_POINTS
+    POS_REMAIN = Stats.POS_VALUE_REM
+    data[PV] = data.groupby(POSITION)[FP].transform(lambda x: x / x.sum())
+    data[POS_REMAIN] = (
+        1 - data[[POSITION, PV]].sort_values(PV, ascending=False).groupby(POSITION).cumsum()
+    )
     return data
 
