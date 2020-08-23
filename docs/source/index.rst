@@ -3,7 +3,7 @@
    contain the root `toctree` directive.
 
 Welcome to project's phantasyfootballer API docs!
-=============================================
+=================================================
 
 .. toctree::
    :maxdepth: 4

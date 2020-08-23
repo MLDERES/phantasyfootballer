@@ -26,9 +26,9 @@ average_stats_pipeline = Pipeline(
     ]
 )
 """
-TODO: This pipeline needs to do the following
+    TODO: This pipeline needs to do the following
 
-Using the projections,
+    Using the projections,
     Figure the score, using the scheme supplied in the parameters
     Then rank the players by that scoring scheme
         Figure the value of that player using the mean player in that position
