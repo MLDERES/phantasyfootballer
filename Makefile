@@ -1,4 +1,4 @@
-.PHONY: clean docs package run clean_raw clean_de clean_features
+.PHONY: clean docs package run clean_raw clean_de clean_features start_jupyter
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -54,7 +54,11 @@ docs:
 requirements: 
 	kedro build-reqs
 
-
+## Start jupyter
+start_jupyter:
+	jupyter notebook --ip=0.0.0.0 \
+		--port=7999 --allow-root --no-browser \
+		--notebook-dir /workspaces/phantasyfootballer/notebooks --autoreload
 
 #################################################################################
 # Self Documenting Commands                                                     #
