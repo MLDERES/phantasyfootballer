@@ -100,7 +100,7 @@ ranking_pipeline = Pipeline(
         node(
             # Calculate the rank by the 100th man - no need to filter!
             percent_typical,
-            "scored_data",
+            "filtered_player_data",
             "percent_typical_data",
             name="percent_typical_node",
         ),
