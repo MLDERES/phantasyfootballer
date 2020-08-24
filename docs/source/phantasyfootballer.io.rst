@@ -24,5 +24,3 @@ phantasyfootballer.io.CachedRemoteCSVDataSet module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

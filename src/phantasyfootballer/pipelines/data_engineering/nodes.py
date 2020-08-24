@@ -1,7 +1,17 @@
 from typing import Any, Dict, Union, List, Sequence
-from phantasyfootballer.common import Stats, get_list, PLAYER_NAME, POSITION, TEAM, QB, RB, WR, TE
+from phantasyfootballer.common import (
+    Stats,
+    get_list,
+    PLAYER_NAME,
+    POSITION,
+    TEAM,
+    QB,
+    RB,
+    WR,
+    TE,
+)
 from kedro.config import ConfigLoader
-from functools import reduce, partial, update_wrapper
+from functools import partial, update_wrapper
 import logging
 import pandas as pd
 
@@ -13,7 +23,7 @@ String_or_List = Union[str, List[str]]
 
 def _craft_scoring_dict(scheme: str) -> Dict[str, Any]:
     """
-    Look up the scoring system in the scoring.yml file 
+    Look up the scoring system in the scoring.yml file
     """
     conf_paths = ["conf/base", "conf/local"]
     conf_loader = ConfigLoader(conf_paths)
@@ -33,7 +43,9 @@ def _fetch_scoring_schemes() -> List[str]:
     return list(conf_scoring.keys())
 
 
-def _calculate_projected_points(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
+def _calculate_projected_points(
+    scoring: String_or_List, data: pd.DataFrame
+) -> pd.DataFrame:
     if scoring == "all":
         scoring_types = _fetch_scoring_schemes()
     else:
@@ -55,7 +67,9 @@ def calculate_projected_points(scoring: String_or_List) -> pd.DataFrame:
     )
 
 
-def _calculate_position_rank(scoring: String_or_List, data: pd.DataFrame) -> pd.DataFrame:
+def _calculate_position_rank(
+    scoring: String_or_List, data: pd.DataFrame
+) -> pd.DataFrame:
     """
     Calculate the rank by scoring method for all positions
     """
@@ -76,12 +90,14 @@ def calculate_position_rank(scoring: String_or_List) -> pd.DataFrame:
     """
 
     """
-    return update_wrapper(partial(_calculate_position_rank, scoring), _calculate_position_rank)
+    return update_wrapper(
+        partial(_calculate_position_rank, scoring), _calculate_position_rank
+    )
 
 
 def average_stats_by_player(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
     """
-    Given multiple dataframes, average the value of the stats provided into a new dataframe  
+    Given multiple dataframes, average the value of the stats provided into a new dataframe
     """
     if len(dataframes) == 1:
         return dataframes[0]
@@ -93,7 +109,9 @@ def average_stats_by_player(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
     # Drop all the players where they have 0 projections
     df_all = df_all[df_all.sum(axis=1) > 0].reset_index()
     # Drop positions we don't care about
-    df_all = df_all.query('position in ["QB","RB","TE","WR","DST"]').reset_index(drop=True)
+    df_all = df_all.query('position in ["QB","RB","TE","WR","DST"]').reset_index(
+        drop=True
+    )
     return df_all
 
 
@@ -108,7 +126,9 @@ def calculate_player_rank(data: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: same dataframe with additional columns for player rank (overall) and by position
     """
     # Calculate overall rank by points
-    data[Stats.RANK] = data[Stats.FANTASY_POINTS].rank(na_option="bottom", ascending=False)
+    data[Stats.RANK] = data[Stats.FANTASY_POINTS].rank(
+        na_option="bottom", ascending=False
+    )
     # Calculate rank by position
     data[Stats.POS_RANK] = data.groupby(POSITION)[Stats.FANTASY_POINTS].rank(
         na_option="bottom", ascending=False
@@ -118,7 +138,7 @@ def calculate_player_rank(data: pd.DataFrame) -> pd.DataFrame:
 
 def percent_mean(data: pd.DataFrame) -> pd.DataFrame:
     """
-    Calculate the mean points for the player position, then determine how much more value this player has than 
+    Calculate the mean points for the player position, then determine how much more value this player has than
     other players in the same position
 
     Args:
@@ -127,11 +147,17 @@ def percent_mean(data: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: updated with percentage
     """
-    filtered = data.query(Stats.TOP_PLAYER) if (Stats.TOP_PLAYER in data.columns) else data
+    filtered = (
+        data.query(Stats.TOP_PLAYER) if (Stats.TOP_PLAYER in data.columns) else data
+    )
     position_data = filtered.groupby(POSITION)[Stats.FANTASY_POINTS].mean()
     joined = data.join(position_data, on=POSITION, rsuffix="_avg")
-    data[Stats.PCT_MEAN_POS] = joined[Stats.FANTASY_POINTS] / joined[f"{Stats.FANTASY_POINTS}_avg"]
-    data[Stats.PCT_MEAN_OVR] = data[Stats.FANTASY_POINTS] / (filtered[Stats.FANTASY_POINTS].mean())
+    data[Stats.PCT_MEAN_POS] = (
+        joined[Stats.FANTASY_POINTS] / joined[f"{Stats.FANTASY_POINTS}_avg"]
+    )
+    data[Stats.PCT_MEAN_OVR] = data[Stats.FANTASY_POINTS] / (
+        filtered[Stats.FANTASY_POINTS].mean()
+    )
     return data
 
 
@@ -143,10 +169,12 @@ def percent_median(data: pd.DataFrame) -> pd.DataFrame:
         data (pd.DataFrame): the dataframe that has the players and a single scoring scheme
 
     Returns:
-        pd.DataFrame: updated dataframe with a column that has identified the value of a player 
+        pd.DataFrame: updated dataframe with a column that has identified the value of a player
         relative to the typical player in his position
     """
-    filtered = data.query(Stats.TOP_PLAYER) if (Stats.TOP_PLAYER in data.columns) else data
+    filtered = (
+        data.query(Stats.TOP_PLAYER) if (Stats.TOP_PLAYER in data.columns) else data
+    )
     pos_data = filtered.groupby(POSITION)[Stats.FANTASY_POINTS].median()
     joined = data.join(pos_data, on=POSITION, rsuffix="_med")
     data[Stats.PCT_MEDIAN_POS] = joined[Stats.FANTASY_POINTS] / joined["fp_med"]
@@ -165,7 +193,7 @@ def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
         data (pd.DataFrame): the dataframe that has the players and a single scoring scheme
 
     Returns:
-        pd.DataFrame: updated dataframe with a column that has identified the value of a player 
+        pd.DataFrame: updated dataframe with a column that has identified the value of a player
         relative to the typical player in his position
     """
     data[Stats.PCT_TYPICAL_OVR] = 1
@@ -181,7 +209,6 @@ def filter_by_position(data, player_filter) -> pd.DataFrame:
     """
     Filter the dataset by ensuring players meet the bar for usefulness
     """
-    keepers = pd.Series()
     DEBUG(f"player_filter settings: {player_filter}")
     for filter in [QB, RB, TE, WR]:
         df = _get_position_slice(data, filter)
@@ -196,8 +223,8 @@ def filter_by_position(data, player_filter) -> pd.DataFrame:
         data.loc[keeper_mask, Stats.TOP_PLAYER] = True
 
     data[Stats.TOP_PLAYER] = data[Stats.TOP_PLAYER].fillna(False)
-    if player_filter.get('remove') == True:
-        DEBUG(f'Removing players from the field based on parameters')
+    if player_filter.get("remove"):
+        DEBUG("Removing players from the field based on parameters")
         data = data[data[Stats.TOP_PLAYER]]
         data.drop(columns=Stats.TOP_PLAYER)
     return data
@@ -207,7 +234,7 @@ def remaining_positional_value(data: pd.DataFrame) -> pd.DataFrame:
     """
     Determine the value of a player by the pct of points that he would have of all the players
     that are in that position.  In other words, if all the players in the position would score
-    100 points on the season and this player would be 30 of them, then his value is 30% and 
+    100 points on the season and this player would be 30 of them, then his value is 30% and
     the remaining value, once picked, would be 70%.
     """
     # Determine the percent of points a player brings to a position
@@ -216,7 +243,10 @@ def remaining_positional_value(data: pd.DataFrame) -> pd.DataFrame:
     POS_REMAIN = Stats.POS_VALUE_REM
     data[PV] = data.groupby(POSITION)[FP].transform(lambda x: x / x.sum())
     data[POS_REMAIN] = (
-        1 - data[[POSITION, PV]].sort_values(PV, ascending=False).groupby(POSITION).cumsum()
+        1
+        - data[[POSITION, PV]]
+        .sort_values(PV, ascending=False)
+        .groupby(POSITION)
+        .cumsum()
     )
     return data
-

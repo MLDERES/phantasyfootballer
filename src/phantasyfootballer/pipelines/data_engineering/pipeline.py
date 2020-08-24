@@ -1,7 +1,7 @@
 from kedro.pipeline import Pipeline, node, pipeline
 from .nodes import (
     calculate_projected_points,
-    calculate_position_rank,
+    # calculate_position_rank,
     average_stats_by_player,
     percent_mean,
     percent_typical,
@@ -26,9 +26,9 @@ average_stats_pipeline = Pipeline(
     ]
 )
 """
-TODO: This pipeline needs to do the following
+    TODO: This pipeline needs to do the following
 
-Using the projections, 
+    Using the projections,
     Figure the score, using the scheme supplied in the parameters
     Then rank the players by that scoring scheme
         Figure the value of that player using the mean player in that position
@@ -72,7 +72,12 @@ score_custom_pipeline = Pipeline(
 )
 ranking_pipeline = Pipeline(
     [
-        node(calculate_player_rank, "scored_data", "ranked_data", name="overall_rank_node"),
+        node(
+            calculate_player_rank,
+            "scored_data",
+            "ranked_data",
+            name="overall_rank_node",
+        ),
         node(
             filter_by_position,
             ["ranked_data", "params:player_filter"],
@@ -86,7 +91,12 @@ ranking_pipeline = Pipeline(
             "percent_median_data",
             name="percent_median_node",
         ),
-        node(percent_mean, "filtered_player_data", "percent_mean_data", name="percent_mean_node"),
+        node(
+            percent_mean,
+            "filtered_player_data",
+            "percent_mean_data",
+            name="percent_mean_node",
+        ),
         node(
             # Calculate the rank by the 100th man - no need to filter!
             percent_typical,

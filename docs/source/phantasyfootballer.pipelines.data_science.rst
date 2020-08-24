@@ -24,5 +24,3 @@ phantasyfootballer.pipelines.data\_science.pipeline module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

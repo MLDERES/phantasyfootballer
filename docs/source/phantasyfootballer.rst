@@ -31,5 +31,3 @@ phantasyfootballer.run module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

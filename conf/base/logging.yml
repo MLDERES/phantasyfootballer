@@ -13,7 +13,7 @@ handlers:
         level: INFO
         formatter: simple
         stream: ext://sys.stdout
-    
+
     console2:
         class: kedro.extras.logging.ColorHandler
         level: DEBUG

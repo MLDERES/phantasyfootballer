@@ -22,6 +22,7 @@ WR = "WR"
 K = "K"
 DST = "DST"
 
+
 class Stats:
     POS_RANK = "pos_rank"
     PASS_ATT = "pass_att"
@@ -57,12 +58,12 @@ class Stats:
     PCT_MEDIAN_OVR = "percent_median_overall"
     # Only the top players are used in the evaluation of value
     TOP_PLAYER = "is_top_player"
-    POS_VALUE = 'positional_value'
-    POS_VALUE_REM = 'pos_value_left'
+    POS_VALUE = "positional_value"
+    POS_VALUE_REM = "pos_value_left"
     # The percent of points that will be scored by all players in the league
-    OVR_VALUE = 'overall_value'
+    OVR_VALUE = "overall_value"
     # The percent points left after this player is taken
-    OVR_VALUE_REM = 'overall_value_left'
+    OVR_VALUE_REM = "overall_value_left"
 
     ALL_STATS = [
         PASS_ATT,
@@ -140,6 +141,7 @@ KEEPER_COLUMNS = [
     Stats.MISC_FL,
 ]
 
+
 def combine_data_horizontal(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
     """
     Put together multiple datasets, adding in the unique columns
@@ -168,12 +170,13 @@ def combine_data_vertically(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
 
     return combined_dataframes
 
+
 def get_list(item: Union[Any, List[Any]], errors="ignore"):
     """
     Return a list from the item passed.
     If the item passed is a string, put it in a list.
-    If the item is list like, then return it as a list.    
-    
+    If the item is list like, then return it as a list.
+
     Parameters
     ----------
     item: str or list-like
@@ -183,7 +186,7 @@ def get_list(item: Union[Any, List[Any]], errors="ignore"):
         If errors = 'raise' then raise an error if the list is empty
         If errors = 'ignore' then return None
         If errors = 'coerce' then return an empty list if possible
-    
+
     Returns
     ------
     list
@@ -195,7 +198,8 @@ def get_list(item: Union[Any, List[Any]], errors="ignore"):
             retVal = []
         elif errors == "raise":
             raise ValueError(
-                f"Value of item was {item} expected either " f"a single value or list-like"
+                f"Value of item was {item} expected either "
+                f"a single value or list-like"
             )
     elif is_list_like(item):
         retVal = list(item)
