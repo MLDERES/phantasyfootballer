@@ -95,6 +95,8 @@ class Stats:
         PCT_TYPICAL_OVR,
         PCT_MEAN_OVR,
         PCT_MEDIAN_OVR,
+        POS_VALUE,
+        POS_VALUE_REM,
     ]
 
     VALUE_STATS = [
@@ -106,6 +108,8 @@ class Stats:
         PCT_TYPICAL_OVR,
         PCT_MEAN_OVR,
         PCT_MEDIAN_OVR,
+        POS_VALUE,
+        POS_VALUE_REM,
     ]
 
     @staticmethod
@@ -124,6 +128,7 @@ class Stats:
 
 
 KEEPER_COLUMNS = [
+    ## These are used by the providers to know which fields are required and which can be ignored
     PLAYER_NAME,
     TEAM,
     POSITION,
