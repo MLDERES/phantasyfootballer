@@ -47,7 +47,7 @@
 #
 import re
 
-from kedro.framework.cli.utils import find_stylesheets
+# from kedro.framework.cli.utils import find_stylesheets
 from recommonmark.transform import AutoStructify
 
 from phantasyfootballer import __version__ as release
@@ -179,7 +179,7 @@ latex_documents = [
         master_doc,
         "phantasyfootballer.tex",
         "phantasyfootballer Documentation",
-        "QuantumBlack",
+        # "QuantumBlack",
         "manual",
     )
 ]
@@ -244,8 +244,8 @@ def setup(app):
     app.connect("autodoc-process-docstring", autodoc_process_docstring)
     app.connect("autodoc-skip-member", skip)
     # add Kedro stylesheets
-    for stylesheet in find_stylesheets():
-        app.add_stylesheet(stylesheet)
+    # for stylesheet in find_stylesheets():
+    #     app.add_stylesheet(stylesheet)
     # enable rendering RST tables in Markdown
     app.add_config_value("recommonmark_config", {"enable_eval_rst": True}, True)
     app.add_transform(AutoStructify)
