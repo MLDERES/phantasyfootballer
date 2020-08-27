@@ -2,10 +2,16 @@
 ARG VARIANT="3"
 FROM mcr.microsoft.com/vscode/devcontainers/python:0-${VARIANT}
 
+# Install the jupyter_contrib_nbextensions
+RUN pip3 install jupyter_contrib_nbextensions \
+    && pip3 install jupyter_nbextensions_configurator \
+    && jupyter contrib nbextension install --system
+
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 COPY src/requirements.txt /tmp/pip-tmp/
 RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
     && rm -rf /tmp/pip-tmp
+
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update \
