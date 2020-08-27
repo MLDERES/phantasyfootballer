@@ -1,19 +1,20 @@
-from typing import Any, Dict, Union, List, Sequence
+import logging
+from functools import partial, update_wrapper
+from typing import Any, Dict, List, Sequence, Union
+
+import pandas as pd
+from kedro.config import ConfigLoader
 from phantasyfootballer.common import (
-    Stats,
-    get_list,
     PLAYER_NAME,
     POSITION,
-    TEAM,
     QB,
     RB,
-    WR,
     TE,
+    TEAM,
+    WR,
+    Stats,
+    get_list,
 )
-from kedro.config import ConfigLoader
-from functools import partial, update_wrapper
-import logging
-import pandas as pd
 
 logger = logging.getLogger("data_engineering.node")
 DEBUG = logger.debug
@@ -184,10 +185,9 @@ def percent_median(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-# TODO: Need to calculate typical player.  Issue #21
 def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
     """
-    Calculate the points expected as a percentage of the median player in the position
+    Calculate the percent improvement this player provides over the 'typical'
 
     Args:
         data (pd.DataFrame): the dataframe that has the players and a single scoring scheme
@@ -195,9 +195,28 @@ def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: updated dataframe with a column that has identified the value of a player
         relative to the typical player in his position
+
+    Notes:
+    Typical player is the player in the same position who is at least ranked 100.
+    So, the idea is to find player ranked 100 and then find the next player at the same position
+    as the player we have identified.
     """
-    data[Stats.PCT_TYPICAL_OVR] = 1
-    data[Stats.PCT_TYPICAL_POS] = 1
+    # Find all players in the given position group
+    # Filter out players that are ranked 100 or wosse
+    # Take the top player, this is the value
+    FP = Stats.FANTASY_POINTS
+    for p in [QB, RB, TE, WR]:
+        typ_pos_fp = float(
+            data.query(f'position == "{p}" and overall_rank >= 100')
+            .sort_values("overall_rank")
+            .iloc[:1]["fp"]
+        )
+        data[Stats.PCT_TYPICAL_POS] = data.groupby(POSITION)[FP].transform(
+            lambda x: x / typ_pos_fp
+        )
+
+    typ_player_fp = data.loc[data[Stats.RANK] == 100, FP]
+    data[Stats.PCT_TYPICAL_OVR] = data[FP].apply(lambda x: x / typ_player_fp)
     return data
 
 

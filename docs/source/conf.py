@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 # Copyright 2020 QuantumBlack Visual Analytics Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,10 +44,9 @@
 #
 import re
 
-# from kedro.framework.cli.utils import find_stylesheets
-from recommonmark.transform import AutoStructify
-
+from kedro.framework.cli.utils import find_stylesheets  # noqa: F401
 from phantasyfootballer import __version__ as release
+from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 

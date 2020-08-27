@@ -18,3 +18,4 @@ BeautifulSoup4
 seaborn
 matplotlib
 pre-commit
+bump2version

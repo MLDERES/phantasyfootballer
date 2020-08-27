@@ -1,12 +1,13 @@
-from typing import Any, List, Dict, Callable, Union
+import datetime
+import importlib
+import logging
+import os
+import re
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Union
+
 import pandas as pd
 from kedro.io import AbstractDataSet, DataSetError
-import importlib
-from pathlib import Path
-import os
-import datetime
-import re
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
         return int(num * conversion.get(letter, 24))
 
     @staticmethod
-    def _calculate_file_age(filepath: Path) -> int:
+    def _calculate_file_age(filepath: Path) -> float:
         """
         Returns the age of a file in days
 

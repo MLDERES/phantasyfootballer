@@ -1,27 +1,39 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
+- repo: local
+  hooks:
+    -   id: black
+        name: black
+        stages: [commit]
+        language: system
+        entry: black
+        types: [python]
+    -   id: flake8
+        name: flake8
+        stages: [commit]
+        language: system
+        entry: flake8
+        types: [python]
+        exclude: setup.py
+    -   id: mypy
+        name: mypy
+        stages: [commit]
+        language: system
+        entry: mypy
+        types: [python]
+        pass_filenames: false
+
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
     hooks:
     -   id: trailing-whitespace
     -   id: check-ast
-    -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: check-added-large-files
-    -   id: detect-private-key
+#     -   id: end-of-file-fixer
+#     -   id: check-yaml
+#     -   id: check-added-large-files
+#     -   id: detect-private-key
 -   repo: https://github.com/kynan/nbstripout
     rev: 0.3.9
     hooks:
     -   id: nbstripout
-
--   repo: https://github.com/psf/black
-    # Replace by any tag/version: https://github.com/psf/black/tags
-    rev: 19.10b0
-    hooks:
-    - id: black
-
--   repo: https://gitlab.com/PyCQA/flake8
-    rev: 3.8.3
-    hooks:
-    -   id: flake8
