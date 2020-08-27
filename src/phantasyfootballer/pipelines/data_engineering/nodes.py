@@ -185,7 +185,6 @@ def percent_median(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-# TODO: Need to calculate typical player.  Issue #21
 def percent_typical(data: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate the percent improvement this player provides over the 'typical'
