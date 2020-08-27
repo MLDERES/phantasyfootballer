@@ -29,16 +29,14 @@
 """Construction of the master pipeline.
 """
 
+import logging
 from typing import Dict
 
 from kedro.pipeline import Pipeline
-
 from phantasyfootballer.pipelines import data_engineering as de
-
-# from phantasyfootballer.pipelines import data_science as ds
 from phantasyfootballer.pipelines import data_import as di
 
-import logging
+# from phantasyfootballer.pipelines import data_science as ds
 
 log = logging.getLogger(__name__)
 
@@ -66,6 +64,7 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
     fp_ecr_pipeline = di.create_fpecr_pipeline()
     fp_proj_pipeline = di.create_fp_proj_pipeline()
     cbs_proj_pipeline = di.create_cbs_proj_pipeline()
+    # ds_pipeline = ds.create_pipeline()
 
     return {
         "fp_ecr": fp_ecr_pipeline,

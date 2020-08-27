@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 PRO_FOOTBALL_URL = "https://www.pro-football-reference.com/"
 
 

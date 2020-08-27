@@ -1,7 +1,8 @@
-from pandas.core.dtypes.inference import is_list_like
-from typing import Union, Any, List, Sequence
-import pandas as pd
 from pathlib import Path
+from typing import Any, List, Sequence, Union
+
+import pandas as pd
+from pandas.core.dtypes.inference import is_list_like
 
 BASE_DIR = Path(__file__).parents[2]
 DATA_DIR = BASE_DIR / "data"

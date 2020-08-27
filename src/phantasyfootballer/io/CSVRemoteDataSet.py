@@ -1,7 +1,8 @@
-from typing import Any, List, Dict, Callable, Union
+import importlib
+from typing import Any, Callable, Dict, List, Union
+
 import pandas as pd
 from kedro.io import AbstractDataSet
-import importlib
 
 MODULE_SEPARATOR = "."
 

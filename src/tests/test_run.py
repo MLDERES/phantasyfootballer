@@ -38,7 +38,6 @@ To run the tests, run ``kedro test``.
 from pathlib import Path
 
 import pytest
-
 from phantasyfootballer.run import ProjectContext
 
 
