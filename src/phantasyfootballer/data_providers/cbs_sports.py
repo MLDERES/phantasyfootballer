@@ -28,6 +28,7 @@ QB_COL_MAP = {
     "fl  Fumbles Lost": Stats.MISC_FL,
 }
 FLEX_COL_MAP = {
+    "Player": PLAYER_NAME,
     "att  Rushing Attempts": Stats.RUSH_ATT,
     "yds  Rushing Yards": Stats.RUSH_YDS,
     "td  Rushing Touchdowns": Stats.RUSH_TDS,
@@ -36,7 +37,6 @@ FLEX_COL_MAP = {
     "td  Receiving Touchdowns": Stats.RCV_TDS,
     "fl  Fumbles Lost": Stats.MISC_FL,
     "rec  Receptions": Stats.RCV_REC,
-    "Player": PLAYER_NAME,
 }
 
 
@@ -98,5 +98,5 @@ def _get_projections(position, year):
 
 
 if __name__ == "__main__":
-    df = fetch_projections(2020)
+    df = fetch_projections(year=2020)
     df.to_csv(DATA_DIR / "cbs_sports.csv")

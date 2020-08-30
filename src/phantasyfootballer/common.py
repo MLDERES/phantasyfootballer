@@ -1,7 +1,8 @@
 from pathlib import Path
-from typing import Any, List, Sequence, Union
+from typing import Any, Dict, List, Sequence, Union, Optional
 
 import pandas as pd
+from kedro.config import TemplatedConfigLoader
 from pandas.core.dtypes.inference import is_list_like
 
 BASE_DIR = Path(__file__).parents[2]
@@ -60,7 +61,8 @@ class Stats:
     # Only the top players are used in the evaluation of value
     TOP_PLAYER = "is_top_player"
     POS_VALUE = "positional_value"
-    POS_VALUE_REM = "pos_value_left"
+    POS_VALUE_REM = "pos_value_remaining"
+    DIFF_POS_VALUE_REM = "pos_value_remaining_diff"
     # The percent of points that will be scored by all players in the league
     OVR_VALUE = "overall_value"
     # The percent points left after this player is taken
@@ -212,3 +214,13 @@ def get_list(item: Union[Any, List[Any]], errors="ignore"):
     else:
         retVal = [item]
     return retVal
+
+
+def get_config(
+    file_glob: str, globals_dict: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    conf_paths = [str(BASE_DIR / "conf/base"), str(BASE_DIR / "conf/local")]
+    config_loader = TemplatedConfigLoader(
+        conf_paths, globals_pattern="*globals.yml", globals_dict=globals_dict
+    )
+    return config_loader.get(file_glob)

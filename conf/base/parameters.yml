@@ -42,3 +42,9 @@ player_filter:
     TE:
         max_players: 40
         min_fp: 30
+
+player_name_alias:
+    Mitchell Trubisky:
+        - Mitch Trubisky
+    Gardner Minshew:
+        - Gardner Minshew II

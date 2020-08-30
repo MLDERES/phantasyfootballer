@@ -38,14 +38,16 @@ from pathlib import Path
 
 import pytest
 from kedro.framework.context import load_context
+from phantasyfootballer.common import Stats
+from phantasyfootballer.pipelines.data_engineering.nodes import (
+    _craft_scoring_dict,
+    _fetch_scoring_schemes,
+)
 
 
 @pytest.fixture
 def catalog():
-    current_dir = Path.cwd()  # this points to 'tests/' folder
-    proj_path = (
-        current_dir.parent.parent.parent
-    )  # point back to the root of the project
+    proj_path = Path.cwd()  # point back to the root of the project
     context = load_context(proj_path)
     catalog = context.catalog
     return catalog
@@ -54,3 +56,13 @@ def catalog():
 def test_filter(catalog):
     df_ppr = catalog.load("scoring.ppr")
     assert len(df_ppr) > 10
+
+
+def test_craft_scoring_scheme():
+    ppr_dict = _craft_scoring_dict("full_ppr")
+    assert ppr_dict[Stats.RCV_REC] == 1
+
+
+def test_fetch_scoring_schemes():
+    result = _fetch_scoring_schemes()
+    assert "standard" in result

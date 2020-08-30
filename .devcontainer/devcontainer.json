@@ -28,7 +28,8 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"ms-python.python"
+		"ms-python.python",
+		"2gua.rainbow-brackets"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

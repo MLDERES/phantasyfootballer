@@ -22,21 +22,26 @@ notebook_convert:
 	kedro jupyter convert --all
 
 ## Clean up the raw data files
-clean_raw:
+clean-raw:
 	rm -fv data/01_raw/*
 
-## Clean up intermediate and primary data
-clean_de: clean_intermediate clean_features
-	rm -fv data/03_primary/*
-
 ## Clean intermediate files
-clean_intermediate:
+clean-intermediate:
 	rm -fv data/02_intermediate/*
 
+## Clean primary data
+clean-primary:
+	rm -fv data/03_primary/*
+
+## Remove files associated with data engineering
+clean-de: clean-primary clean-intermediate
+
 ## delete data features
-clean_features:
+clean-features:
 	rm -fv data/04_feature/*
 
+## delete all generated data
+clean-data: clean-features clean-primary clean-intermediate clean-raw
 
 ## Clean up the old files
 clean:
@@ -45,6 +50,24 @@ clean:
 ## Package the Python code in to an .egg and .wheel
 package: clean
 	kedro package
+
+## Do all the pre-checks
+pre-check:
+	black .
+	flake8
+	mypy
+
+## Update version for a patch (these get pulled into the repo)
+patch: pre-check
+	bump2version --tag --commit patch
+
+## Update version on each commit
+build: pre-check
+	bump2version build
+
+## Update version that will be released (takes off the dev tag)
+release: pre-check
+	bump2version release
 
 ## Build api odx using Sphinx
 docs:

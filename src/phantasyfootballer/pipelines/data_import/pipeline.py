@@ -1,6 +1,6 @@
 from kedro.pipeline import Pipeline, node
 
-from .nodes import pass_thru
+from .nodes import fixup_player_names, pass_thru
 
 
 def create_fpecr_pipeline(**kwargs):
@@ -8,12 +8,14 @@ def create_fpecr_pipeline(**kwargs):
 
 
 def create_fp_proj_pipeline(**kwargs):
-    return Pipeline([node(pass_thru, "fp_projections_remote", "fp_projections_local")])
+    return Pipeline(
+        [node(fixup_player_names, "fp_projections_remote", "fp_projections_local")]
+    )
 
 
 def create_cbs_proj_pipeline(**kwargs):
     return Pipeline(
-        [node(pass_thru, "cbs_projections_remote", "cbs_projections_local")]
+        [node(fixup_player_names, "cbs_projections_remote", "cbs_projections_local")]
     )
 
 

@@ -3,7 +3,6 @@ from functools import partial, update_wrapper
 from typing import Any, Dict, List, Sequence, Union
 
 import pandas as pd
-from kedro.config import ConfigLoader
 from phantasyfootballer.common import (
     PLAYER_NAME,
     POSITION,
@@ -13,6 +12,7 @@ from phantasyfootballer.common import (
     TEAM,
     WR,
     Stats,
+    get_config,
     get_list,
 )
 
@@ -26,21 +26,17 @@ def _craft_scoring_dict(scheme: str) -> Dict[str, Any]:
     """
     Look up the scoring system in the scoring.yml file
     """
-    conf_paths = ["conf/base", "conf/local"]
-    conf_loader = ConfigLoader(conf_paths)
-    conf_scoring = conf_loader.get("scoring*")
+    # conf_paths = [BASE_DIR/"conf/base", BASE_DIR/"conf/local"]
+    # conf_loader = ConfigLoader(conf_paths)
+    # conf_scoring = conf_loader.get("scoring*")
+    conf_scoring = get_config("scoring*")
     return conf_scoring[scheme]
-
-    # def_scoring = conf_scoring['standard']
-    # scheme_scoring = conf_scoring.get(scheme,{})
-    # def_scoring.update(scheme_scoring)
-    # return def_scoring
 
 
 def _fetch_scoring_schemes() -> List[str]:
-    conf_paths = ["conf/base", "conf/local"]
-    conf_loader = ConfigLoader(conf_paths)
-    conf_scoring = conf_loader.get("scoring*")
+    # conf_paths = ["conf/base", "conf/local"]
+    # conf_loader = ConfigLoader(conf_paths)
+    conf_scoring = get_config("scoring*")
     return list(conf_scoring.keys())
 
 
@@ -224,7 +220,7 @@ def _get_position_slice(data: pd.DataFrame, position) -> pd.DataFrame:
     return data.query(f'{POSITION} == "{position}"')
 
 
-def filter_by_position(data, player_filter) -> pd.DataFrame:
+def filter_by_position(data: pd.DataFrame, player_filter: Dict) -> pd.DataFrame:
     """
     Filter the dataset by ensuring players meet the bar for usefulness
     """
@@ -268,4 +264,5 @@ def remaining_positional_value(data: pd.DataFrame) -> pd.DataFrame:
         .groupby(POSITION)
         .cumsum()
     )
+    # data[Stats.DIFF_POS_VALUE_REM] =
     return data

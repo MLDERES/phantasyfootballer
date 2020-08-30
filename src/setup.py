@@ -14,22 +14,13 @@
 # ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF, OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# The QuantumBlack Visual Analytics Limited ("QuantumBlack") name and logo
-# (either separately or in combination, "QuantumBlack Trademarks") are
-# trademarks of QuantumBlack. The License does not grant you any right or
-# license to the QuantumBlack Trademarks. You may not use the QuantumBlack
-# Trademarks or any confusingly similar mark as a trademark for your product,
-# or use the QuantumBlack Trademarks in any other manner that might cause
-# confusion in the marketplace, including but not limited to in advertising,
-# on websites, or on software.
-#
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 from setuptools import find_packages, setup
 
 entry_point = "phantasyfootballer = phantasyfootballer.run:run_package"
-
+VERSION = "0.3.1-dev0"
 
 # get the dependencies and installs
 with open("requirements.txt", "r", encoding="utf-8") as f:
@@ -44,7 +35,7 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 
 setup(
     name="phantasyfootballer",
-    version="0.1",
+    version=VERSION,
     packages=find_packages(exclude=["tests"]),
     entry_points={"console_scripts": [entry_point]},
     install_requires=requires,
