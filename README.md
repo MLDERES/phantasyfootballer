@@ -3,23 +3,10 @@
 
 ## Overview
 
-This is your new Kedro project, which was generated using `Kedro 0.16.4` by running:
+This is project dedicated to gathering and analyzing data for the purposes of crushing my leagues in fantasy football.
 
-```
-kedro new
-```
-
-Take a look at the [documentation](https://kedro.readthedocs.io) to get started.
-
-## Rules and guidelines
-
-In order to get the best out of the template:
-
- * Please don't remove any lines from the `.gitignore` file we provide
- * Make sure your results can be reproduced by following a data engineering convention, e.g. the one we suggest [here](https://kedro.readthedocs.io/en/stable/06_resources/01_faq.html#what-is-data-engineering-convention)
- * Don't commit any data to your repository
- * Don't commit any credentials or local configuration to your repository
- * Keep all credentials or local configuration in `conf/local/`
+This was a project generated with [Kedro](https://kedro.readthedocs.io), which helps to enforce good data engineering
+[convention](https://kedro.readthedocs.io/en/stable/06_resources/01_faq.html#what-is-data-engineering-convention)
 
 ## Installing dependencies
 
