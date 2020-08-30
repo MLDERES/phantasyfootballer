@@ -69,6 +69,7 @@ version = re.match(r"^([0-9]+\.[0-9]+).*", release).group(1)
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.automodule",
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
     "sphinx.ext.doctest",
