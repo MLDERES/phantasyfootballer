@@ -9,7 +9,7 @@ Welcome to project's phantasyfootballer API docs!
    :maxdepth: 4
 
    modules
-
+   How kedro is used in this project <kedro/*>
 
 Indices and tables
 ==================
