@@ -1,7 +1,3 @@
-.. phantasyfootballer documentation master file, created by sphinx-quickstart.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to project's phantasyfootballer API docs!
 =================================================
 
@@ -9,7 +5,7 @@ Welcome to project's phantasyfootballer API docs!
    :maxdepth: 4
 
    modules
-   How kedro is used in this project <kedro/*>
+   How kedro is used in this project <kedro/usingkedro.rst>
 
 Indices and tables
 ==================

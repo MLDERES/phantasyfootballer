@@ -15,6 +15,16 @@ MODULE_SEPARATOR = "."
 
 
 class CachedRemoteCSVDataSet(AbstractDataSet):
+    """
+    Provides a local CSV file that is gathered from an external source.
+
+    NOTES:
+    ------
+    DataSets of this type are likely collected from another source, but save a local copy once the data is
+    collected.  Prior to making the call to get the external data again, the age of the file is checked,
+    if the file age is less than the expiration threshold, the local file is used instead.
+    """
+
     def __init__(
         self,
         data_source: Union[Callable, str],
@@ -26,6 +36,12 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
 
         Params
         ------
+        data_source: Callable or str
+            Should be a function that is used to get the latest version of the file from a remote source
+
+        expiration: str
+            a string representing the maximum age of a file prior to being re-downloaded.
+            The format of this string is
         load_kwargs: Keyword arguments to pass to the data import function.
         """
         self._expiration = (
@@ -70,13 +86,35 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
 
     @staticmethod
     def _calculate_expiration_hours(expiration: Union[str, int]) -> int:
+        """
+        Determine the number of hours that is meant by a string or int
+
+        Parameters:
+        ----------
+        expiration: str or int
+            if this value is an int, it is assumed to be the number of hours
+            if this value is a string, then it can be represented as a number followed by
+            the units (H)ours, (D)ays, (M)inutes
+
+        Returns:
+        --------
+        int
+            number of hours represented by the string interpretation
+        """
         regex = r"(\d*)\s*([H|M|D]?)"
-        try:
-            num, letter = re.findall(regex, "8 H")[0]
-        except ValueError:
-            DataSetError("Invalid expiration")
-        conversion = {"H": 1, "D": 24, "M": 1 / 60}
-        return int(num * conversion.get(letter, 24))
+        result, isint = intTryParse(expiration)
+        # What was passed in wasn't just an int as a string
+        if not isint:
+            try:
+                expression = str(expiration)
+                num, letter = re.findall(regex, expression, re.IGNORECASE)[0]
+                num = int(num)
+                conversion = {"H": 1, "D": 24, "M": 1 / 60}
+                result = int(num * conversion.get(letter.upper(), 24))
+            except ValueError:
+                DataSetError("Invalid expiration")
+
+        return result
 
     @staticmethod
     def _calculate_file_age(filepath: Path) -> float:
@@ -99,3 +137,10 @@ class CachedRemoteCSVDataSet(AbstractDataSet):
             return (today - modified_date).days / 24
         else:
             return -1
+
+
+def intTryParse(value):
+    try:
+        return int(value), True
+    except ValueError:
+        return value, False

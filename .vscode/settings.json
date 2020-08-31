@@ -6,5 +6,8 @@
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
-    "[python]": {"editor.formatOnPaste": false}
+    "[python]": {
+        "editor.formatOnPaste": false
+    },
+    "restructuredtext.confPath": "${workspaceFolder}/docs/source"
 }
