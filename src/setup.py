@@ -20,7 +20,7 @@
 from setuptools import find_packages, setup
 
 entry_point = "phantasyfootballer = phantasyfootballer.run:run_package"
-VERSION = "0.3.2-dev0"
+VERSION = "0.3.3-dev0"
 
 # get the dependencies and installs
 with open("requirements.txt", "r", encoding="utf-8") as f:
