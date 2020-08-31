@@ -1,9 +1,10 @@
 # phantasyfootballer
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![license: Apache](https://img.shields.io/github/license/MLDERES/phantasyfootballer)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[forks](https://img.shields.io/github/forks/MLDERES/phantasyfootballer)
-[stars](https://img.shields.io/github/stars/MLDERES/phantasyfootballer)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![forks](https://img.shields.io/github/forks/MLDERES/phantasyfootballer)
+![stars](https://img.shields.io/github/stars/MLDERES/phantasyfootballer)
+
 
 ## Overview
 
