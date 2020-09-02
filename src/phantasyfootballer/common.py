@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Sequence, Union, Optional
+from typing import Any, Dict, List, Sequence, Union, Optional, Callable
 
 import pandas as pd
 from kedro.config import TemplatedConfigLoader
@@ -67,40 +67,11 @@ class Stats:
     OVR_VALUE = "overall_value"
     # The percent points left after this player is taken
     OVR_VALUE_REM = "overall_value_left"
-
-    ALL_STATS = [
-        PASS_ATT,
-        PASS_COMP,
-        PASS_YDS,
-        PASS_TDS,
-        PASS_INT,
-        RUSH_ATT,
-        RUSH_YDS,
-        RUSH_TDS,
-        RCV_TGT,
-        RCV_REC,
-        RCV_YDS,
-        RCV_TDS,
-        DST_SACK,
-        DST_INT,
-        DST_FUM_REC,
-        DST_FUM_FF,
-        DST_TD,
-        DST_SAFE,
-        DST_PA,
-        MISC_FL,
-        RANK,
-        POS_RANK,
-        FANTASY_POINTS,
-        PCT_TYPICAL_POS,
-        PCT_MEAN_POS,
-        PCT_MEDIAN_POS,
-        PCT_TYPICAL_OVR,
-        PCT_MEAN_OVR,
-        PCT_MEDIAN_OVR,
-        POS_VALUE,
-        POS_VALUE_REM,
-    ]
+    YEAR = "year"  # for historical data
+    NFL_WEEK = "nfl_week"  # a given nfl week
+    AGE = "age"  # player age
+    GAMES = "games"  # number of games played
+    GAMES_STARTED = "gs"  # number of games a player started
 
     VALUE_STATS = [
         POS_RANK,
@@ -147,6 +118,12 @@ KEEPER_COLUMNS = [
     Stats.RUSH_YDS,
     Stats.RUSH_TDS,
     Stats.MISC_FL,
+    Stats.YEAR,
+    Stats.AGE,
+    Stats.GAMES,
+    Stats.GAMES_STARTED,
+    Stats.YEAR,
+    Stats.NFL_WEEK,
 ]
 
 
@@ -161,6 +138,26 @@ def combine_data_horizontal(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
     duplicated_columns = joined_dataframes.columns.duplicated(keep="first")
     combined_dataframes = joined_dataframes.loc[:, ~duplicated_columns]
     return combined_dataframes
+
+
+def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.DataFrame:
+    """Concatenate input partitions into one pandas DataFrame.
+
+    Args:
+        partitioned_input: A dictionary with partition ids as keys and load functions as values.
+
+    Returns:
+        Pandas DataFrame representing a concatenation of all loaded partitions.
+    """
+    result = pd.DataFrame()
+
+    for partition_key, partition_load_func in sorted(partitioned_input.items()):
+        partition_data = partition_load_func()  # load the actual partition data
+        partition_data[Stats.YEAR] = partition_key
+        # concat with existing result
+        result = pd.concat([result, partition_data], ignore_index=True, sort=True)
+
+    return result
 
 
 def combine_data_vertically(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
@@ -224,3 +221,23 @@ def get_config(
         conf_paths, globals_pattern="*globals.yml", globals_dict=globals_dict
     )
     return config_loader.get(file_glob)
+
+
+def map_data_columns(data: pd.DataFrame, column_map: Dict[str, str]) -> pd.DataFrame:
+    """
+    For raw stats in particular, rename the columns to be constant, and drop out the ones that we don't need not interested in
+
+    Parameters:
+    -----------
+    data : pd.DataFrame
+        the raw dataframe with the original column names
+    column_map: Dict[str, str]
+        a dictionary of the original column names and the new common name
+
+    Returns:
+    --------
+    pd.DataFrame
+        the modified dataframe with the columns renamed and the other field dropped
+    """
+    data.rename(columns=column_map, inplace=True)
+    return data.drop(columns=set(data.columns) - set(KEEPER_COLUMNS))

@@ -4,13 +4,13 @@ import pandas as pd
 import requests
 from phantasyfootballer.common import (
     DATA_DIR,
-    KEEPER_COLUMNS,
     PLAYER_NAME,
     POSITION,
     QB,
     SOURCE,
     TEAM,
     Stats,
+    map_data_columns,
 )
 
 FP_URL = "https://www.fantasypros.com/nfl/projections/"
@@ -48,16 +48,15 @@ def fetch_projections(**kwargs):
     df_flex = _get_projections("flex", week=week)
 
     # Make sure the the columns are correct and consistent
-    df_qb.rename(columns=QB_COL_MAP, inplace=True)
+    df_qb = map_data_columns(df_qb, QB_COL_MAP)
     df_qb[POSITION] = QB
-    df_flex.rename(columns=FLEX_COL_MAP, inplace=True)
+    df_flex = map_data_columns(df_flex, FLEX_COL_MAP)
     df_flex = _fixup_position(df_flex)
 
     df_all = df_flex.append(df_qb, sort=True)
     df_all = _fixup_playername(df_all)
 
     # Let's not keep the fantasy points around, that will just cause confusion
-    df_all = df_all[KEEPER_COLUMNS]
     df_all[SOURCE] = "FantasyPros"
     return df_all
 

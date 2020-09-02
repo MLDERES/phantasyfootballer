@@ -95,3 +95,13 @@ scoring_custom:
   filepath: data/03_primary/scoring_custom.csv
   load_args:
     index_col: player
+
+historical_yearly_ext:
+  type: "PartitionedDataSet"
+  dataset: "pandas.CSVDataSet"
+  path: data/00_external/yearly/
+  filename_suffix: ".csv"
+
+historical_yearly_raw:
+  <<: *csv
+  filepath: data/01_raw/historical.csv

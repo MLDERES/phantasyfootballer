@@ -5,12 +5,12 @@ import pandas as pd
 import requests
 from phantasyfootballer.common import (
     DATA_DIR,
-    KEEPER_COLUMNS,
     PLAYER_NAME,
     POSITION,
     SOURCE,
     TEAM,
     Stats,
+    map_data_columns,
 )
 
 BASE_URL = "https://www.cbssports.com/fantasy/football/stats/"
@@ -50,14 +50,13 @@ def fetch_projections(**kwargs):
     df_flex = pd.concat([df_rb, df_wr, df_te])
 
     # Make sure the the columns are correct and consistent
-    df_qb.rename(columns=QB_COL_MAP, inplace=True)
-    df_flex.rename(columns=FLEX_COL_MAP, inplace=True)
+    df_qb = map_data_columns(df_qb, QB_COL_MAP)
+    df_flex = map_data_columns(df_flex, FLEX_COL_MAP)
 
     df_all = df_flex.append(df_qb, sort=True)
     df_all = _fixup_playername(df_all)
 
     # Let's not keep the fantasy points around, that will just cause confusion
-    df_all = df_all[KEEPER_COLUMNS]
     df_all[SOURCE] = "cbs_sports"
     return df_all
 

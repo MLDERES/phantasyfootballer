@@ -15,32 +15,35 @@ PYTHON_INTERPRETER = python
 run:
 	kedro run
 
+## Run the data import pipeline
 download_data: clean_raw
-	kedro run --pipeline
+	kedro run --pipeline di
+
 ## Transform all notebooks to scripts (use the path for 1 notebook)
 notebook_convert:
 	kedro jupyter convert --all
 
-## Clean up the raw data files
+## Clean up the raw data files - delete all files in 01_raw
+## (data will need to be re-downloaded)
 clean-raw:
 	rm -fv data/01_raw/*
 
-## Clean intermediate files
+## Clean intermediate files - delete all files in 02_intermediate
 clean-intermediate:
 	rm -fv data/02_intermediate/*
 
-## Clean primary data
+## Clean primary data - delete all files in 03_primary
 clean-primary:
 	rm -fv data/03_primary/*
 
-## Remove files associated with data engineering
+## Remove files associated with data engineering (primary/intermediate)
 clean-de: clean-primary clean-intermediate
 
-## delete data features
+## delete data features - delete all files in 04_feature
 clean-features:
 	rm -fv data/04_feature/*
 
-## delete all generated data
+## delete all generated data (features, primary, intermediate, raw)
 clean-data: clean-features clean-primary clean-intermediate clean-raw
 
 ## Clean up the old files
