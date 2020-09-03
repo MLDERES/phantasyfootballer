@@ -264,5 +264,4 @@ def remaining_positional_value(data: pd.DataFrame) -> pd.DataFrame:
         .groupby(POSITION)
         .cumsum()
     )
-    # data[Stats.DIFF_POS_VALUE_REM] =
     return data

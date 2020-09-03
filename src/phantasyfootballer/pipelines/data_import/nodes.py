@@ -1,7 +1,7 @@
 from typing import Dict
-
 import pandas as pd
-from phantasyfootballer.common import PLAYER_NAME, get_config
+from phantasyfootballer.common import PLAYER_NAME, get_config, MERGE_NAME
+import string
 
 
 def pass_thru(input_df: pd.DataFrame) -> pd.DataFrame:
@@ -9,9 +9,6 @@ def pass_thru(input_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _get_player_names() -> Dict[str, str]:
-    # conf_paths = [,BASE_DIR/"conf/base", BASE_DIR/"conf/local"]
-    # conf_loader = ConfigLoader(conf_paths)
-    # params = conf_loader.get("param*")
     params = get_config("param*")
     player_names = params["player_name_alias"]
     name_map = {}
@@ -24,8 +21,16 @@ def _get_player_names() -> Dict[str, str]:
 _player_names = _get_player_names()
 
 
-def _replace_player_name(name):
+def _replace_player_name(name: str) -> str:
     return _player_names.get(name, name).rstrip(" Jr.").rstrip(" III").rstrip(" ")
+
+
+def _create_player_merge_name(name: str) -> str:
+    """
+    Create a common name for merging on
+    """
+    return "".join([_ for _ in name.lower() if _ in string.ascii_lowercase])
+    # return _player_names.get(name, name).rstrip(" Jr.").rstrip(" III").rstrip(" ")
 
 
 def fixup_player_names(data: pd.DataFrame) -> pd.DataFrame:
@@ -46,4 +51,5 @@ def fixup_player_names(data: pd.DataFrame) -> pd.DataFrame:
     the updated dataset
     """
     data[PLAYER_NAME] = data[PLAYER_NAME].apply(_replace_player_name)
+    data[MERGE_NAME] = data[PLAYER_NAME].apply(_create_player_merge_name)
     return data

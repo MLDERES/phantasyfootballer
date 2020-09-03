@@ -55,22 +55,26 @@ package: clean
 	kedro package
 
 ## Do all the pre-checks
-pre-check:
+pre-check: unittest
 	black .
 	flake8
 	mypy
 
-## Update version for a patch (these get pulled into the repo)
+## Update version for a patch (do this before pushing)
 patch: pre-check
-	bump2version --tag --commit patch
+	bump2version --allow-dirty --verbose patch
 
 ## Update version on each commit
 build: pre-check
-	bump2version build
+	bump2version --allow-dirty --verbose build
 
 ## Update version that will be released (takes off the dev tag)
 release: pre-check
-	bump2version release
+	bump2version --verbose --commit --tag release
+
+## Print the current version
+current-version:
+	@bump2version -n --allow-dirty --list release | awk 'BEGIN {FS="="}; /current_version=/ {print $2}'
 
 ## Build api odx using Sphinx
 docs:
@@ -85,6 +89,10 @@ start_jupyter:
 	jupyter notebook --ip=0.0.0.0 \
 		--port=7999 --allow-root --no-browser \
 		--notebook-dir /workspaces/phantasyfootballer/notebooks --autoreload
+
+## Run unit tests
+unittest:
+	pytest
 
 #################################################################################
 # Self Documenting Commands                                                     #

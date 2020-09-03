@@ -90,7 +90,7 @@ scoring.standard:
   load_args:
     index_col: player
 
-scoring_custom:
+scoring.custom:
   <<: *csv
   filepath: data/03_primary/scoring_custom.csv
   load_args:
@@ -105,3 +105,28 @@ historical_yearly_ext:
 historical_yearly_raw:
   <<: *csv
   filepath: data/01_raw/historical.csv
+
+scoring.historical.half_ppr:
+  <<: *csv
+  filepath: data/03_primary/hist_scoring_half_ppr.csv
+  load_args:
+    index_col: player
+
+scoring.historical.ppr:
+  <<: *csv
+  filepath: data/03_primary/hist_scoring_ppr.csv
+  load_args:
+    index_col: player
+
+scoring.historical.standard:
+  <<: *csv
+  filepath: data/03_primary/hist_scoring_std.csv
+  load_args:
+    index_col: player
+
+scoring.historical.custom:
+  <<: *csv
+  filepath: data/03_primary/hist_scoring_custom.csv
+  load_args:
+    index_col: player
+

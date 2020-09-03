@@ -1,7 +1,7 @@
 import phantasyfootballer.common as common
 from kedro.pipeline import Pipeline, node, pipeline
 
-from .nodes import (  # calculate_position_rank,
+from .nodes import (
     average_stats_by_player,
     calculate_player_rank,
     calculate_projected_points,
@@ -25,7 +25,7 @@ average_stats_pipeline = Pipeline(
     ]
 )
 """
-    TODO: This pipeline needs to do the following
+    This pipeline needs to do the following
 
     Using the projections,
     Figure the score, using the scheme supplied in the parameters

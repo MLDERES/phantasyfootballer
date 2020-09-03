@@ -15,6 +15,7 @@ PLAYER_NAME = "player"
 TEAM = "team"
 POSITION = "position"
 SOURCE = "source"
+MERGE_NAME = "pname_merge"
 
 # Positions
 QB = "QB"
