@@ -6,7 +6,6 @@
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 DATA_DIR := $(realpath data)
-BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
 PROJECT_NAME = phantasyfootballer
 PYTHON_INTERPRETER = python
@@ -59,22 +58,21 @@ pre-check: unittest
 	black .
 	flake8
 	mypy
-
-## Update version for a patch (do this before pushing)
-patch: pre-check
+## Update version for a patch (do this after pulling)
+patch: 
 	bump2version --allow-dirty --verbose patch
 
 ## Update version on each commit
 build: pre-check
 	bump2version --allow-dirty --verbose build
 
-## Update version that will be released (takes off the dev tag)
-release: pre-check
-	bump2version --verbose --commit --tag release
+## Update version that will be released (takes off the dev tag, do this before pushing)
+release: 
+	bump2version --allow-dirty --verbose --tag release
 
 ## Print the current version
 current-version:
-	@bump2version -n --allow-dirty --list release | awk 'BEGIN {FS="="}; /current_version=/ {print $2}'
+	@bump2version -n --allow-dirty --list patch | awk 'BEGIN {FS="="}; /current_version=/ {print $2}'
 
 ## Build api odx using Sphinx
 docs:
