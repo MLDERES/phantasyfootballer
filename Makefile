@@ -56,7 +56,7 @@ clean-logs:
 	mv -f logs/errors_2.log logs/errors.log
 	tail -100 logs/info.log > logs/info_2.log
 	mv -f logs/info_2.log logs/info.log
-	rm -f journals/*.log
+	rm -f logs/journals/*.log
 
 ## Package the Python code in to an .egg and .wheel
 package: clean
