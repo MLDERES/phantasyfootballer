@@ -49,6 +49,15 @@ clean-data: clean-features clean-primary clean-intermediate clean-raw
 clean:
 	rm -fv src/dist/.
 
+## Clean up journals and trim logs
+clean-logs:
+	touch logs/errors_2.log logs/info_2.log logs/info.log logs/errors.log
+	tail -100 logs/errors.log > logs/errors_2.log 
+	mv -f logs/errors_2.log logs/errors.log
+	tail -100 logs/info.log > logs/info_2.log
+	mv -f logs/info_2.log logs/info.log
+	rm -f journals/*.log
+
 ## Package the Python code in to an .egg and .wheel
 package: clean
 	kedro package
