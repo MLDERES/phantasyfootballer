@@ -2,11 +2,13 @@ import pytest
 
 import pandas as pd
 import pandas.testing as pdt
-from phantasyfootballer.common import PLAYER_NAME, MERGE_NAME
+from phantasyfootballer.common import PLAYER_NAME, MERGE_NAME, Stats, NFL_WEEK_ALL
 from phantasyfootballer.pipelines.data_import.nodes import (
     _replace_player_name,
     fixup_player_names,
     _create_player_merge_name,
+    split_year_from_week,
+    average_stats_by_player,
 )
 
 
@@ -57,5 +59,33 @@ def test_player_mergename(test_input, expected):
     assert result == expected
 
 
+def test_split_year_from_week():
+    test_frame = pd.DataFrame(
+        {
+            Stats.YEAR: ["1999/week1", "2010/week10"],
+            Stats.NFL_WEEK: [NFL_WEEK_ALL, NFL_WEEK_ALL],
+        }
+    )
+    result = split_year_from_week(test_frame)
+    expected_frame = pd.DataFrame(
+        {Stats.YEAR: ["1999", "2010"], Stats.NFL_WEEK: [1, 10]}
+    )
+    pdt.assert_frame_equal(result, expected_frame)
+
+
+@pytest.fixture
+def partitioned_data_pandas():
+    keys = ("p1/data1.csv", "p2.csv", "p1/data2.csv", "p3", "_p4")
+    return {
+        k: pd.DataFrame({"part": k, "counter": list(range(counter))})
+        for counter, k in enumerate(keys, 1)
+    }
+
+
+def test_create_partitions(partitioned_data_pandas):
+    average_stats_by_player(partitioned_data_pandas)
+    pass
+
+
 if __name__ == "__main__":
-    test_fixup_player_name()
+    test_split_year_from_week()

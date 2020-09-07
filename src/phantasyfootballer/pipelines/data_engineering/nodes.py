@@ -1,25 +1,48 @@
 import logging
 from functools import partial, update_wrapper
-from typing import Any, Dict, List, Sequence, Union
+from typing import Any, Dict, List, Union
 
 import pandas as pd
 from phantasyfootballer.common import (
-    PLAYER_NAME,
     POSITION,
     QB,
     RB,
     TE,
-    TEAM,
     WR,
     Stats,
     get_config,
     get_list,
+    TEAM,
+    PLAYER_NAME,
 )
 
-logger = logging.getLogger("data_engineering.node")
+logger = logging.getLogger("phantasyfootballer.data_engineering")
 DEBUG = logger.debug
+INFO = logger.info
+WARN = logger.warn
 
 String_or_List = Union[str, List[str]]
+
+
+def average_stats_by_player(*dataframes: pd.DataFrame) -> pd.DataFrame:
+    """
+    Given multiple dataframes, average the value of the stats provided into a new dataframe
+    """
+    DEBUG("average_stat_by_player()")
+    if len(dataframes) == 1:
+        return dataframes[0]
+
+    # Pull all the dataframes into a single one
+    df_all = pd.concat(dataframes)
+    # Get the mean keeping the columns that matter
+    df_all = df_all.groupby([PLAYER_NAME, TEAM, POSITION]).mean().fillna(0)
+    # Drop all the players where they have 0 projections
+    df_all = df_all[df_all.sum(axis=1) > 0].reset_index()
+    # Drop positions we don't care about
+    df_all = df_all.query('position in ["QB","RB","TE","WR","DST"]').reset_index(
+        drop=True
+    )
+    return df_all
 
 
 def _craft_scoring_dict(scheme: str) -> Dict[str, Any]:
@@ -90,26 +113,6 @@ def calculate_position_rank(scoring: String_or_List) -> pd.DataFrame:
     return update_wrapper(
         partial(_calculate_position_rank, scoring), _calculate_position_rank
     )
-
-
-def average_stats_by_player(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
-    """
-    Given multiple dataframes, average the value of the stats provided into a new dataframe
-    """
-    if len(dataframes) == 1:
-        return dataframes[0]
-
-    # Pull all the dataframes into a single one
-    df_all = pd.concat(dataframes)
-    # Get the mean keeping the columns that matter
-    df_all = df_all.groupby([PLAYER_NAME, TEAM, POSITION]).mean().fillna(0)
-    # Drop all the players where they have 0 projections
-    df_all = df_all[df_all.sum(axis=1) > 0].reset_index()
-    # Drop positions we don't care about
-    df_all = df_all.query('position in ["QB","RB","TE","WR","DST"]').reset_index(
-        drop=True
-    )
-    return df_all
 
 
 def calculate_player_rank(data: pd.DataFrame) -> pd.DataFrame:

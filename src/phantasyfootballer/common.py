@@ -4,6 +4,11 @@ from typing import Any, Dict, List, Sequence, Union, Optional, Callable
 import pandas as pd
 from kedro.config import TemplatedConfigLoader
 from pandas.core.dtypes.inference import is_list_like
+import logging
+
+logger = logging.getLogger("phantasyfootballer")
+DEBUG = logger.debug
+INFO = logger.info
 
 BASE_DIR = Path(__file__).parents[2]
 DATA_DIR = BASE_DIR / "data"
@@ -16,6 +21,9 @@ TEAM = "team"
 POSITION = "position"
 SOURCE = "source"
 MERGE_NAME = "pname_merge"
+
+# When this value is the NFL week, that means it's for the entire year
+NFL_WEEK_ALL = 99
 
 # Positions
 QB = "QB"
@@ -144,21 +152,41 @@ def combine_data_horizontal(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame
 def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.DataFrame:
     """Concatenate input partitions into one pandas DataFrame.
 
-    Args:
-        partitioned_input: A dictionary with partition ids as keys and load functions as values.
+    Parameters
+    ----------
+        partitioned_input - dict(str, function)
+            A dictionary with partition ids as keys and load functions as values.
+        nfl_year: int, None
+            If specified, the year will be populated with this value and the partition key will be assumed to be the week
+            If not specified (None), it will be assumed that the partition key is actually the year
 
-    Returns:
+    Returns
+    -------
         Pandas DataFrame representing a concatenation of all loaded partitions.
     """
     result = pd.DataFrame()
 
     for partition_key, partition_load_func in sorted(partitioned_input.items()):
         partition_data = partition_load_func()  # load the actual partition data
+        # BUG: Assuming that the partition key is on year, though we know this may not be the case:
         partition_data[Stats.YEAR] = partition_key
+        partition_data[Stats.NFL_WEEK] = NFL_WEEK_ALL
         # concat with existing result
         result = pd.concat([result, partition_data], ignore_index=True, sort=True)
-
     return result
+
+
+def load_partitions(
+    partitioned_input: Dict[str, Callable[[], Any]]
+) -> Sequence[pd.DataFrame]:
+    """
+    Load up all the different data partitions into a single list of dataframes
+    """
+    data = []
+    for _, partition_load_func in sorted(partitioned_input.items()):
+        partition_data = partition_load_func()  # load the actual partition data
+        data.append(partition_data)
+    return data
 
 
 def combine_data_vertically(*dataframes: Sequence[pd.DataFrame]) -> pd.DataFrame:
@@ -241,4 +269,41 @@ def map_data_columns(data: pd.DataFrame, column_map: Dict[str, str]) -> pd.DataF
         the modified dataframe with the columns renamed and the other field dropped
     """
     data.rename(columns=column_map, inplace=True)
-    return data.drop(columns=set(data.columns) - set(KEEPER_COLUMNS))
+    data = data.drop(columns=set(data.columns) - set(KEEPER_COLUMNS))
+    return _reorder_columns(data, [PLAYER_NAME, TEAM, Stats.YEAR, Stats.NFL_WEEK])
+
+
+def _reorder_columns(
+    data: pd.DataFrame, fixed_columns: Union[str, Any]
+) -> pd.DataFrame:
+    columns_to_drop = data.columns.drop(fixed_columns, errors="ignore").tolist()
+    new_col_order = (
+        list(set(data.columns).intersection(fixed_columns)) + columns_to_drop
+    )
+    DEBUG(f"_reorder_columns {new_col_order=}")
+    return data[new_col_order]
+
+
+def create_partitions(
+    partition_keys: Union[Sequence[str], Any], *data_frames: pd.DataFrame
+) -> Dict[Any, pd.DataFrame]:
+    """
+    Create a set of output partitions defined by the partition names
+
+    Args:
+        partitions (Sequence[str]): the names of the partitions
+        data_frames (Sequence[pd.DataFrame]): the dataframes that make up each partition
+
+    Returns:
+        Dict[str, pd.DataFrame]: a dictionary appropriate for handing off to kedro to write to disk
+    Notes:
+    ------
+    The names of the partitions need to be appropriate.  In other words, if the `filename_suffix` is specified in the config, then the :param partitions: names shouldn't have an extension
+    """
+    partitions = {}
+    DEBUG(f"create_partitions: {len(data_frames)=} {type(data_frames)=}")
+    if len(data_frames) == 1:
+        partitions = {str(partition_keys): data_frames}
+    else:
+        partitions = {str(p): d for p, d in zip(partition_keys, data_frames)}
+    return partitions
