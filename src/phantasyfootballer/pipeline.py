@@ -35,13 +35,10 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
         "fp_ecr": fp_ecr_pipeline,
         "fp_proj": fp_proj_pipeline,
         "cbs_proj": cbs_proj_pipeline,
-        "data_import": fp_proj_pipeline + cbs_proj_pipeline,
+        "data_import": data_import_pipeline,
         "de": data_engineering_pipeline,
         "di": data_import_pipeline,
-        "__default__": fp_ecr_pipeline
-        + fp_proj_pipeline
-        + cbs_proj_pipeline
-        + data_engineering_pipeline,
+        "__default__": Pipeline([]),
     }
 
 

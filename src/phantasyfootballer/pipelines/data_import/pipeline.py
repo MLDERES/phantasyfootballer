@@ -1,8 +1,10 @@
 from kedro.pipeline import Pipeline, node
 
-from .nodes import fixup_player_names, pass_thru
+from .nodes import fixup_player_names, pass_thru, average_stats_by_player
 import phantasyfootballer.common as common
 import phantasyfootballer.data_providers.nfl_hist as nfl_hist
+
+LOCAL_PROJECTIONS = ["projections.annual.fp-local", "projections.annual.cbs-local"]
 
 
 def create_fpecr_pipeline(**kwargs):
@@ -52,5 +54,17 @@ def create_pipeline(**kwargs):
             create_historical_yearly_pipeline(),
             create_fp_proj_pipeline(),
             create_cbs_proj_pipeline(),
+            average_stats_pipeline,
         ]
     )
+
+
+average_stats_pipeline = Pipeline(
+    [
+        node(
+            func=average_stats_by_player,
+            inputs=LOCAL_PROJECTIONS,
+            outputs="projections.annual",
+        ),
+    ]
+)

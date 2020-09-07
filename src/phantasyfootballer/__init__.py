@@ -28,5 +28,5 @@
 """phantasyfootballer
 """
 
-__version__ = "0.3.6-dev0"
+__version__ = "0.3.6-dev1"
 from .common import *

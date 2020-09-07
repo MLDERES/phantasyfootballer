@@ -56,7 +56,6 @@ projections.annual.fp-local:
   filepath: data/01_raw/projected.annual/sources/fantasy_pros.csv
   #versioned: True
 
-
 projections.annual.cbs-remote:
   <<: *remote_CSV
   data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
@@ -67,9 +66,9 @@ projections.annual.cbs-local:
   filepath: data/01_raw/projected.annual/sources/cbs.csv
   #versioned: True
 
-projections:
+projections.annual:
   <<: *csv
-  filepath: data/02_intermediate/projections.csv
+  filepath: data/01_raw/projected.annual/2020_projections.csv
   #versioned: True
 
 scoring.ppr:

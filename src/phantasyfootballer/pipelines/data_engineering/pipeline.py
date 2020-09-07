@@ -2,7 +2,6 @@ import phantasyfootballer.common as common
 from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes import (
-    average_stats_by_player,
     calculate_player_rank,
     calculate_projected_points,
     filter_by_position,
@@ -12,18 +11,7 @@ from .nodes import (
     remaining_positional_value,
 )
 
-LOCAL_PROJECTIONS = ["projections.annual.fp-local", "projections.annual.cbs-local"]
 
-
-average_stats_pipeline = Pipeline(
-    [
-        node(
-            func=average_stats_by_player,
-            inputs=LOCAL_PROJECTIONS,
-            outputs="average_stats_by_player_data",
-        ),
-    ]
-)
 """
     This pipeline needs to do the following
 
@@ -37,7 +25,7 @@ score_ppr_pipeline = Pipeline(
     [
         node(
             calculate_projected_points("full_ppr"),
-            "average_stats_by_player_data",
+            "projections.annual",
             "scored_ppr_data",
         )
     ]
@@ -46,7 +34,7 @@ score_half_ppr_pipeline = Pipeline(
     [
         node(
             calculate_projected_points("half_ppr"),
-            "average_stats_by_player_data",
+            "projections.annual",
             "scored_half_ppr_data",
         )
     ]
@@ -55,7 +43,7 @@ score_std_pipeline = Pipeline(
     [
         node(
             calculate_projected_points("standard"),
-            "average_stats_by_player_data",
+            "projections.annual",
             "scored_standard_data",
         )
     ]
@@ -64,7 +52,7 @@ score_custom_pipeline = Pipeline(
     [
         node(
             calculate_projected_points("custom"),
-            "average_stats_by_player_data",
+            "projections.annual",
             "scored_custom_data",
         )
     ]
@@ -164,4 +152,4 @@ final_scoring_ranking_pipeline = (
 
 
 def create_pipeline():
-    return Pipeline([average_stats_pipeline, final_scoring_ranking_pipeline])
+    return Pipeline([final_scoring_ranking_pipeline])
