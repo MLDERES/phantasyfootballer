@@ -25,20 +25,18 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
     """
     data_import_pipeline = di.create_pipeline()
     data_engineering_pipeline = de.create_pipeline()
+    annual_results_import_pipeline = di.create_annual_results_pipeline()
+    annual_projections_import_pipeline = di.create_annual_projections_pipeline()
     # data_science_pipeline = ds.create_pipeline()
-    fp_ecr_pipeline = di.create_fpecr_pipeline()
-    fp_proj_pipeline = di.create_fp_proj_pipeline()
-    cbs_proj_pipeline = di.create_cbs_proj_pipeline()
     # ds_pipeline = ds.create_pipeline()
 
     return {
-        "fp_ecr": fp_ecr_pipeline,
-        "fp_proj": fp_proj_pipeline,
-        "cbs_proj": cbs_proj_pipeline,
         "data_import": data_import_pipeline,
+        "results.annual": annual_results_import_pipeline,
+        "projections.annual": annual_projections_import_pipeline,
         "de": data_engineering_pipeline,
         "di": data_import_pipeline,
-        "__default__": Pipeline([]),
+        "__default__": Pipeline([data_import_pipeline + data_engineering_pipeline]),
     }
 
 

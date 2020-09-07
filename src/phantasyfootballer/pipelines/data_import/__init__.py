@@ -1,6 +1,5 @@
 from .pipeline import (
-    create_cbs_proj_pipeline,
-    create_fp_proj_pipeline,
-    create_fpecr_pipeline,
+    create_annual_projections_pipeline,
+    create_annual_results_pipeline,
     create_pipeline,
 )

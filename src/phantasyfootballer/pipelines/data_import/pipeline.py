@@ -35,12 +35,18 @@ def create_cbs_proj_pipeline(**kwargs):
     )
 
 
-def create_historical_yearly_pipeline(**kwargs):
+def create_annual_projections_pipeline(**kwargs):
+    return Pipeline(
+        [create_fp_proj_pipeline(), create_cbs_proj_pipeline(), average_stats_pipeline]
+    )
+
+
+def create_annual_results_pipeline(**kwargs):
     return Pipeline(
         [
-            node(common.concat_partitions, "historical_yearly_ext", "hist_raw"),
-            node(nfl_hist.process_data, "hist_raw", "hist_fixed"),
-            node(fixup_player_names, "hist_fixed", "historical_yearly_raw"),
+            node(common.concat_partitions, "results.annual.source", "results_raw"),
+            node(nfl_hist.process_data, "results_raw", "results_fixed"),
+            node(fixup_player_names, "results_fixed", "results.annual.raw"),
         ]
     )
 
@@ -50,12 +56,7 @@ def create_pipeline(**kwargs):
     the main data_import pipeline
     """
     return Pipeline(
-        [
-            create_historical_yearly_pipeline(),
-            create_fp_proj_pipeline(),
-            create_cbs_proj_pipeline(),
-            average_stats_pipeline,
-        ]
+        [create_annual_results_pipeline(), create_annual_projections_pipeline()]
     )
 
 

@@ -44,7 +44,7 @@ fp_ecr_raw:
 
 dp_ecr_local:
   <<: *csv
-  filepath: data/01_raw/dynasty_process_ecr.csv
+  filepath: data/01_raw/projected.annual/ecr/dynasty_process_ecr.csv
 
 projections.annual.fp-remote:
   <<: *remote_CSV
@@ -73,59 +73,59 @@ projections.annual:
 
 scoring.ppr:
   <<: *csv
-  filepath: data/03_primary/scoring_ppr.csv
+  filepath: data/03_primary/projected.annual/scoring_ppr.csv
   load_args:
     index_col: player
 
 scoring.half_ppr:
   <<: *csv
-  filepath: data/03_primary/scoring_half_ppr.csv
+  filepath: data/03_primary/projected.annual/scoring_half_ppr.csv
   load_args:
     index_col: player
 
 scoring.standard:
   <<: *csv
-  filepath: data/03_primary/scoring_std.csv
+  filepath: data/03_primary/projected.annual/scoring_std.csv
   load_args:
     index_col: player
 
 scoring.custom:
   <<: *csv
-  filepath: data/03_primary/scoring_custom.csv
+  filepath: data/03_primary/projected.annual/scoring_custom.csv
   load_args:
     index_col: player
 
-historical_yearly_ext:
+results.annual.source:
   type: "PartitionedDataSet"
   dataset: "pandas.CSVDataSet"
   path: data/00_external/yearly/
   filename_suffix: ".csv"
 
-historical_yearly_raw:
+results.annual.raw:
   <<: *csv
-  filepath: data/01_raw/historical.csv
+  filepath: data/01_raw/results.annual/2020.csv
 
 scoring.historical.half_ppr:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_half_ppr.csv
+  filepath: data/03_primary/results.annual/hist_scoring_half_ppr.csv
   load_args:
     index_col: player
 
 scoring.historical.ppr:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_ppr.csv
+  filepath: data/03_primary/results.annual/hist_scoring_ppr.csv
   load_args:
     index_col: player
 
 scoring.historical.standard:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_std.csv
+  filepath: data/03_primary/results.annual/hist_scoring_std.csv
   load_args:
     index_col: player
 
 scoring.historical.custom:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_custom.csv
+  filepath: data/03_primary/results.annual/hist_scoring_custom.csv
   load_args:
     index_col: player
 
