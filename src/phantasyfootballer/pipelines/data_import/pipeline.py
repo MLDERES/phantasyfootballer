@@ -35,6 +35,16 @@ def create_cbs_proj_pipeline(**kwargs):
     )
 
 
+def create_weekly_projections_pipeline(
+    start_date=None, end_date=None, **kwargs
+) -> Pipeline:
+    return Pipeline([])
+
+
+def create_weekly_results_pipeline(start_date, end_date, **kwargs) -> Pipeline:
+    return Pipeline([])
+
+
 def create_annual_projections_pipeline(**kwargs):
     return Pipeline(
         [create_fp_proj_pipeline(), create_cbs_proj_pipeline(), average_stats_pipeline]
@@ -51,12 +61,22 @@ def create_annual_results_pipeline(**kwargs):
     )
 
 
-def create_pipeline(**kwargs):
+def create_weekly_pipeline(start_date=None, end_date=None):
+    return Pipeline(
+        [create_weekly_projections_pipeline(), create_weekly_results_pipeline()]
+    )
+
+
+def create_pipeline(start_date=None, end_date=None, **kwargs):
     """
     the main data_import pipeline
     """
     return Pipeline(
-        [create_annual_results_pipeline(), create_annual_projections_pipeline()]
+        [
+            create_annual_results_pipeline(),
+            create_annual_projections_pipeline(),
+            create_weekly_projections_pipeline(),
+        ]
     )
 
 
