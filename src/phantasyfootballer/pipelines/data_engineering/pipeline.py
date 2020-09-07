@@ -12,7 +12,7 @@ from .nodes import (
     remaining_positional_value,
 )
 
-LOCAL_PROJECTIONS = ["fp_projections_local", "cbs_projections_local"]
+LOCAL_PROJECTIONS = ["projections.annual.fp-local", "projections.annual.cbs-local"]
 
 
 average_stats_pipeline = Pipeline(

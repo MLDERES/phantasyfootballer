@@ -11,13 +11,25 @@ def create_fpecr_pipeline(**kwargs):
 
 def create_fp_proj_pipeline(**kwargs):
     return Pipeline(
-        [node(fixup_player_names, "fp_projections_remote", "fp_projections_local")]
+        [
+            node(
+                fixup_player_names,
+                "projections.annual.fp-remote",
+                "projections.annual.fp-local",
+            )
+        ]
     )
 
 
 def create_cbs_proj_pipeline(**kwargs):
     return Pipeline(
-        [node(fixup_player_names, "cbs_projections_remote", "cbs_projections_local")]
+        [
+            node(
+                fixup_player_names,
+                "projections.annual.cbs-remote",
+                "projections.annual.cbs-local",
+            )
+        ]
     )
 
 

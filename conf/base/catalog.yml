@@ -46,25 +46,25 @@ dp_ecr_local:
   <<: *csv
   filepath: data/01_raw/dynasty_process_ecr.csv
 
-fp_projections_remote:
+projections.annual.fp-remote:
   <<: *remote_CSV
   data_source: 'phantasyfootballer.data_providers.fantasy_pros.fetch_projections'
-  local_filepath: data/01_raw/fantasy_pros_projection.csv
+  local_filepath: data/01_raw/projected.annual/sources/fantasy_pros.csv
 
-cbs_projections_remote:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
-  local_filepath: data/01_raw/cbs_sports_projection.csv
-
-
-fp_projections_local:
+projections.annual.fp-local:
   <<: *csv
-  filepath: data/01_raw/fantasy_pros_projection.csv
+  filepath: data/01_raw/projected.annual/sources/fantasy_pros.csv
   #versioned: True
 
-cbs_projections_local:
+
+projections.annual.cbs-remote:
+  <<: *remote_CSV
+  data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
+  local_filepath: data/01_raw/projected.annual/sources/cbs.csv
+
+projections.annual.cbs-local:
   <<: *csv
-  filepath: data/01_raw/cbs_sports_projection.csv
+  filepath: data/01_raw/projected.annual/sources/cbs.csv
   #versioned: True
 
 projections:
