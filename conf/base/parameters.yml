@@ -48,3 +48,6 @@ player_name_alias:
         - Mitch Trubisky
     Gardner Minshew:
         - Gardner Minshew II
+
+current_nfl_week: 99
+current_nfl_year: 2020

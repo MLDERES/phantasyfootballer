@@ -1,51 +1,141 @@
 # Data Import pipeline
 
-## Overview
+There are several pipelines that make up this major pipeline for all data imports including
 
-This modular pipeline gathers data from FantasyPros website and makes it available for analysis
+* [data_import_pipeline](#main)
+  * [results_pipeline](#results_pipeline)
+    * [annual_results_pipeline](#annual_results_pipeline)
+    * [weekly_results_pipeline](#weekly_results_pipeline)
+  * [projections_pipeline](#projections_pipeline)
+    * [annual_projections_pipeline](#annual_projections_pipeline)
+    * [weekly_projections_pipeline](#weekly_results_pipeline)
 
-## Pipeline inputs
+## <a name='main'></a>Overview
 
-### `example_iris_data`
+This pipeline runs each of the other pipelines in this package
+
+## <a name='results_pipeline'></a>Results Pipeline
+
+This pipeline runs both the weekly and annual results as two nodes with no explict link between them
+
+## <a name='annual_results_pipeline'></a>Annual Results Pipeline
+
+This pipeline concatenates all the annual results that are available together into a single file.  Additionally, if defined, it will grab the latest annual results if it is not available yet.
+
+### Pipeline Inputs
+
+#### `results.annual.raw`
+
+|      |                    |
+| ---- | ------------------ |
+| Type | csv file |
+| Description | Includes all the files that are in the `data/01_raw/results.annual` folder |
+
+#### `placeholder`
 
 |      |                    |
 | ---- | ------------------ |
 | Type | `pandas.DataFrame` |
-| Description | Input data to split into train and test sets |
+| Description | Data downloaded from some source |
 
-### `params:example_test_data_ratio`
+### Pipeline Outputs
 
-|      |                    |
-| ---- | ------------------ |
-| Type | `float` |
-| Description | The split ratio parameter that identifies what percentage of rows goes to the train set |
-
-## Pipeline outputs
-
-### `example_train_x`
+#### `results.annual.primary`
 
 |      |                    |
 | ---- | ------------------ |
-| Type | `pandas.DataFrame` |
-| Description | DataFrame containing train set features |
+| Type | csv file |
+| Description | A single file with all the annual results from every year that is available |
 
-### `example_train_y`
+## <a name='weekly_results_pipeline'></a>Weekly Results Pipeline
+
+This pipeline concatenates all the weekly results that are available together into a single place.  Additionally, if defined, it will grab the latest weekly results if it is not available yet.
+
+### Pipeline Inputs
+
+#### `results.weekly.raw`
 
 |      |                    |
 | ---- | ------------------ |
-| Type | `pandas.DataFrame` |
-| Description | DataFrame containing train set one-hot encoded target variable |
+| Type | csv file |
+| Description | Includes all the files that are in the `data/01_raw/results.weekly/<year>/` folder |
 
-### `example_test_x`
-
-|      |                    |
-| ---- | ------------------ |
-| Type | `pandas.DataFrame` |
-| Description | DataFrame containing test set features |
-
-### `example_test_y`
+#### `placeholder`
 
 |      |                    |
 | ---- | ------------------ |
 | Type | `pandas.DataFrame` |
-| Description | DataFrame containing test set one-hot encoded target variable |
+| Description | Data downloaded from some source that gives the weekly results |
+
+### Pipeline Outputs
+
+#### `results.weekly.primary`
+
+|      |                    |
+| ---- | ------------------ |
+| Type | csv file |
+| Description | A single file with all the weekly results from every year/week that is available |
+
+## <a name='projections_pipeline'></a>Projections Pipeline
+
+## <a name='annual_projections_pipeline'></a>Annual Projections Pipeline
+
+Gathers projections from several sources and averages them together to create an annual projection.  Useful primarily in the pre/off-season
+
+Run all of the configured projection sources (currently FantasyPros and CBS Sports), the output (or local version) of those files should be dumped into the `01_raw/projections.annual/sources` directory
+
+
+
+### Pipeline Inputs
+
+#### `projections.annual.cbs`
+
+|      |                    |
+| ---- | ------------------ |
+| Type | `csv file` |
+| Description | Go get the annual projections from [CBS Sports](https://www.cbssports.com/fantasy/football).  This is a cached reader, so if the file already exists, then just use that |
+
+
+#### `projections.annual.fp`
+
+|      |                    |
+| ---- | ------------------ |
+| Type | webpage |
+| Description | Go get the annual projections from [FantasyPros](http://www.fantasypros.com).  This is a cached reader, so if the file already exists, then just use that |
+
+
+### Pipeline Outputs
+
+#### `projections.annual.primary`
+|      |                    |
+| ---- | ------------------ |
+| Type | csv file |
+| Description | A single file with all the weekly results from every year/week that is available |
+
+
+## <a name='weekly_projections_pipeline'></a>Weekly Projections Pipeline
+
+
+### Pipeline Inputs
+
+#### `results.weekly.raw`
+|      |                    |
+| ---- | ------------------ |
+| Type | csv file |
+| Description | Includes all the files that are in the `data/01_raw/results.weekly/<year>/` folder |
+
+
+#### `placeholder`
+
+|      |                    |
+| ---- | ------------------ |
+| Type | `pandas.DataFrame` |
+| Description | Data downloaded from some source that gives the weekly results |
+
+### Pipeline Outputs
+
+#### `results.weekly.primary`
+|      |                    |
+| ---- | ------------------ |
+| Type | csv file |
+| Description | A single file with all the weekly results from every year/week that is available |

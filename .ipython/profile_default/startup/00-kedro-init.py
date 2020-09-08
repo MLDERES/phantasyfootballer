@@ -1,7 +1,6 @@
 import logging.config
 import sys
 from pathlib import Path
-
 from IPython.core.magic import needs_local_scope, register_line_magic
 
 # Find the project root (./../../../)

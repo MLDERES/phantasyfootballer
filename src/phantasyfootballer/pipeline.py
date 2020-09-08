@@ -1,31 +1,3 @@
-# Copyright 2020 QuantumBlack Visual Analytics Limited
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
-# NONINFRINGEMENT. IN NO EVENT WILL THE LICENSOR OR OTHER CONTRIBUTORS
-# BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN
-# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF, OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
-# The QuantumBlack Visual Analytics Limited ("QuantumBlack") name and logo
-# (either separately or in combination, "QuantumBlack Trademarks") are
-# trademarks of QuantumBlack. The License does not grant you any right or
-# license to the QuantumBlack Trademarks. You may not use the QuantumBlack
-# Trademarks or any confusingly similar mark as a trademark for your product,
-# or use the QuantumBlack Trademarks in any other manner that might cause
-# confusion in the marketplace, including but not limited to in advertising,
-# on websites, or on software.
-#
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """Construction of the master pipeline.
 """
 
@@ -33,19 +5,13 @@ import logging
 from typing import Dict
 
 from kedro.pipeline import Pipeline
+
 from phantasyfootballer.pipelines import data_engineering as de
 from phantasyfootballer.pipelines import data_import as di
 
 # from phantasyfootballer.pipelines import data_science as ds
 
-log = logging.getLogger(__name__)
-
-###########################################################################
-# Here you can find an example pipeline, made of two modular pipelines.
-#
-# Delete this when you start working on your own Kedro project as
-# well as pipelines/data_science AND pipelines/data_engineering
-# -------------------------------------------------------------------------
+log = logging.getLogger("phantasyfootballer")
 
 
 def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
@@ -58,23 +24,26 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
         A mapping from a pipeline name to a ``Pipeline`` object.
 
     """
-    data_import_pipeline = di.create_pipeline()
     data_engineering_pipeline = de.create_pipeline()
+    annual_results_import_pipeline = di.create_annual_results_pipeline()
+    annual_projections_import_pipeline = di.create_annual_projections_pipeline()
+    # weekly_projections_import_pipeline = di.create_weekly_projections_pipeline()
+    weekly_results_import_pipeline = di.create_weekly_results_pipeline()
     # data_science_pipeline = ds.create_pipeline()
-    fp_ecr_pipeline = di.create_fpecr_pipeline()
-    fp_proj_pipeline = di.create_fp_proj_pipeline()
-    cbs_proj_pipeline = di.create_cbs_proj_pipeline()
     # ds_pipeline = ds.create_pipeline()
 
     return {
-        "fp_ecr": fp_ecr_pipeline,
-        "fp_proj": fp_proj_pipeline,
-        "cbs_proj": cbs_proj_pipeline,
-        "data_import": fp_proj_pipeline + cbs_proj_pipeline,
+        "results.annual": annual_results_import_pipeline,
+        "projections.annual": annual_projections_import_pipeline,
+        "results.weekly": weekly_results_import_pipeline,
+        # TODO: #41 weekly_projections_pipeline
+        # #"projections.weekly": weekly_projections_import_pipeline,
         "de": data_engineering_pipeline,
-        "di": data_import_pipeline,
-        "__default__": fp_ecr_pipeline
-        + fp_proj_pipeline
-        + cbs_proj_pipeline
-        + data_engineering_pipeline,
+        "__default__": Pipeline(
+            [
+                annual_results_import_pipeline
+                + annual_projections_import_pipeline
+                + data_engineering_pipeline
+            ]
+        ),
     }

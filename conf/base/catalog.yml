@@ -9,6 +9,9 @@
 # https://kedro.readthedocs.io/en/stable/04_user_guide/04_data_catalog.html
 _csv: &csv
   type: pandas.CSVDataSet
+  filepath: data
+  load_args:
+    parse_dates: True
 
 _remote: &remote_CSV
   type: phantasyfootballer.io.CachedRemoteCSVDataSet
@@ -18,115 +21,110 @@ _remote: &remote_CSV
   expiration: 24H
   year: 2020
 
-pfr_rushing:
-  type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_rushing_data'
-  date_range_type : "year"
-  start_year : 2019
-
-pfr_passing:
-  type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_passing_data'
-  date_range_type : "year"
-  start_year : 2019
-
-pfr_receiving:
-  type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_receiving_data'
-  date_range_type : "year"
-  start_year : 2019
-
-fp_ecr_raw:
-  type: pandas.CSVDataSet
-  filepath: https://raw.githubusercontent.com/DynastyProcess/data/master/files/db_fpecr.csv
-  load_args:
-    parse_dates: True
-
 dp_ecr_local:
   <<: *csv
-  filepath: data/01_raw/dynasty_process_ecr.csv
+  filepath: data/01_raw/projected.annual/ecr/dynasty_process_ecr.csv
 
-fp_projections_remote:
+projections.annual.fp-remote:
   <<: *remote_CSV
   data_source: 'phantasyfootballer.data_providers.fantasy_pros.fetch_projections'
-  local_filepath: data/01_raw/fantasy_pros_projection.csv
+  local_filepath: data/01_raw/projected.annual/sources/fantasy_pros.csv
 
-cbs_projections_remote:
+projections.annual.fp-local:
+  <<: *csv
+  filepath: data/01_raw/projected.annual/sources/fantasy_pros.csv
+  #versioned: True
+
+projections.annual.cbs-remote:
   <<: *remote_CSV
   data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
-  local_filepath: data/01_raw/cbs_sports_projection.csv
+  local_filepath: data/01_raw/projected.annual/sources/cbs.csv
 
-
-fp_projections_local:
+projections.annual.cbs-local:
   <<: *csv
-  filepath: data/01_raw/fantasy_pros_projection.csv
+  filepath: data/01_raw/projected.annual/sources/cbs.csv
   #versioned: True
 
-cbs_projections_local:
+projections.annual:
   <<: *csv
-  filepath: data/01_raw/cbs_sports_projection.csv
-  #versioned: True
-
-projections:
-  <<: *csv
-  filepath: data/02_intermediate/projections.csv
+  filepath: data/01_raw/projected.annual/2020_projections.csv
   #versioned: True
 
 scoring.ppr:
   <<: *csv
-  filepath: data/03_primary/scoring_ppr.csv
+  filepath: data/03_primary/projected.annual/scoring_ppr.csv
   load_args:
     index_col: player
 
 scoring.half_ppr:
   <<: *csv
-  filepath: data/03_primary/scoring_half_ppr.csv
+  filepath: data/03_primary/projected.annual/scoring_half_ppr.csv
   load_args:
     index_col: player
 
 scoring.standard:
   <<: *csv
-  filepath: data/03_primary/scoring_std.csv
+  filepath: data/03_primary/projected.annual/scoring_std.csv
   load_args:
     index_col: player
 
 scoring.custom:
   <<: *csv
-  filepath: data/03_primary/scoring_custom.csv
+  filepath: data/03_primary/projected.annual/scoring_custom.csv
   load_args:
     index_col: player
 
-historical_yearly_ext:
+results.annual.source:
   type: "PartitionedDataSet"
   dataset: "pandas.CSVDataSet"
   path: data/00_external/yearly/
   filename_suffix: ".csv"
 
-historical_yearly_raw:
+results.annual.raw:
   <<: *csv
-  filepath: data/01_raw/historical.csv
+  filepath: data/01_raw/results.annual/2020.csv
+
+results.weekly.raw:
+  type: "PartitionedDataSet"
+  dataset: "pandas.CSVDataSet"
+  path: data/00_external/yearly/
+  filename_suffix: ".csv"
+
+results.weekly.remote:
+  <<: *remote_CSV
+  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
+  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
+
+results.weekly:
+  <<: *remote_CSV
+  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
+  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
+
 
 scoring.historical.half_ppr:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_half_ppr.csv
+  filepath: data/03_primary/results.annual/hist_scoring_half_ppr.csv
   load_args:
     index_col: player
 
 scoring.historical.ppr:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_ppr.csv
+  filepath: data/03_primary/results.annual/hist_scoring_ppr.csv
   load_args:
     index_col: player
 
 scoring.historical.standard:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_std.csv
+  filepath: data/03_primary/results.annual/hist_scoring_std.csv
   load_args:
     index_col: player
 
 scoring.historical.custom:
   <<: *csv
-  filepath: data/03_primary/hist_scoring_custom.csv
+  filepath: data/03_primary/results.annual/hist_scoring_custom.csv
   load_args:
     index_col: player
 
+annual_projections:
+  <<: *csv
+  filepath: data/02_intermediate/average.csv

@@ -35,7 +35,6 @@ Delete this when you start working on your own Kedro project.
 
 import logging
 from typing import Any, Dict
-
 import numpy as np
 import pandas as pd
 

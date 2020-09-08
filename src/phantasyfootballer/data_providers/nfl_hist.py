@@ -1,13 +1,7 @@
 import pandas as pd
-from phantasyfootballer.common import (
-    PLAYER_NAME,
-    POSITION,
-    SOURCE,
-    TEAM,
-    Stats,
-    map_data_columns,
-)
 
+from phantasyfootballer.common import map_data_columns
+from phantasyfootballer.settings import PLAYER_NAME, POSITION, SOURCE, TEAM, Stats
 
 ALL_COL_MAP = {
     "Player": PLAYER_NAME,

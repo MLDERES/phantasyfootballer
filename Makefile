@@ -25,22 +25,22 @@ notebook_convert:
 ## Clean up the raw data files - delete all files in 01_raw
 ## (data will need to be re-downloaded)
 clean-raw:
-	rm -fv data/01_raw/*
+	find data/01_raw -type f -name '*.csv' -delete
 
 ## Clean intermediate files - delete all files in 02_intermediate
 clean-intermediate:
-	rm -fv data/02_intermediate/*
+	find data/02_intermediate -type f -name '*.csv' -delete
 
 ## Clean primary data - delete all files in 03_primary
 clean-primary:
-	rm -fv data/03_primary/*
+	find data/03_primary -type f -name '*.csv' -delete
 
 ## Remove files associated with data engineering (primary/intermediate)
 clean-de: clean-primary clean-intermediate
 
 ## delete data features - delete all files in 04_feature
 clean-features:
-	rm -fv data/04_feature/*
+	find data/04_feature -type f -name '*.csv' -delete
 
 ## delete all generated data (features, primary, intermediate, raw)
 clean-data: clean-features clean-primary clean-intermediate clean-raw
@@ -67,6 +67,7 @@ pre-check: unittest
 	black .
 	flake8
 	mypy
+
 ## Update version for a patch (do this after pulling)
 patch: 
 	bump2version --allow-dirty --verbose patch

@@ -43,6 +43,4 @@ jobs:
     - name: Run flake8
       run: flake8
     - name: tests
-      run: |
-        pip install .[tests]
-        pytest
+      run: pytest
