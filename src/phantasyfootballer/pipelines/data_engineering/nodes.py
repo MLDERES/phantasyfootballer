@@ -1,18 +1,10 @@
 import logging
 from functools import partial, update_wrapper
 from typing import Any, Dict, List, Union
-
 import pandas as pd
-from phantasyfootballer.common import (
-    POSITION,
-    QB,
-    RB,
-    TE,
-    WR,
-    Stats,
-    get_config,
-    get_list,
-)
+
+from phantasyfootballer.common import get_config, get_list
+from phantasyfootballer.settings import POSITION, QB, RB, TE, WR, Stats
 
 logger = logging.getLogger("phantasyfootballer.data_engineering")
 DEBUG = logger.debug

@@ -1,12 +1,12 @@
 """Application entry point."""
-from pathlib import Path
-from typing import Dict
 import os
-from typing import Optional
+from pathlib import Path
+from typing import Dict, Optional
+
 from kedro.framework.context import KedroContext, load_package_context
 from kedro.pipeline import Pipeline
+
 from phantasyfootballer.pipeline import create_pipelines
-from phantasyfootballer.pipelines.full_pipeline import create_full_pipeline
 
 
 class ProjectContext(KedroContext):
@@ -29,7 +29,8 @@ class ProjectContext(KedroContext):
     def pipeline(self):
         """ Default pipeline for the PhantasyFootballer app
         """
-        return create_full_pipeline()
+        # return create_full_pipeline()
+        return super().pipeline
 
     def _get_pipelines(self) -> Dict[str, Pipeline]:
         # TODO: Here I can override how the pipelines are created, might be helpful to set boundaries on the data used

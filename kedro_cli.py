@@ -32,8 +32,8 @@ import os
 from itertools import chain
 from pathlib import Path
 from typing import Dict, Iterable, Tuple
-
 import click
+
 from kedro.framework.cli import main as kedro_main
 from kedro.framework.cli.catalog import catalog as catalog_group
 from kedro.framework.cli.jupyter import jupyter as jupyter_group

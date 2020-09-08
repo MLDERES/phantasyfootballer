@@ -25,3 +25,7 @@ def fetch_rushing_data(start_year):
 
 def fetch_receiving_data(start_year):
     return fetch_pfr_data_by_year(start_year, "receiving", attrs={"id": "receiving"})
+
+
+def fetch_weekly_results(start_date: None, end_date: None):
+    pass

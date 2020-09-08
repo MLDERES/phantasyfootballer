@@ -1,29 +1,22 @@
-from typing import Dict, Sequence, Callable, Any
-import pandas as pd
-from phantasyfootballer.common import (
-    PLAYER_NAME,
-    get_config,
-    MERGE_NAME,
-    Stats,
-    TEAM,
-    POSITION,
-    NFL_WEEK_ALL,
-)
-import string
 import logging
+import string
+from typing import Any, Callable, Dict
+import pandas as pd
+
+from phantasyfootballer.common import get_config
+from phantasyfootballer.settings import (
+    MERGE_NAME,
+    NFL_WEEK_ALL,
+    PLAYER_NAME,
+    POSITION,
+    TEAM,
+    Stats,
+)
 
 logger = logging.getLogger("phantasyfootballer.data_import")
 DEBUG = logger.debug
 INFO = logger.info
 WARN = logger.warn
-
-
-def pass_thru(input_df: pd.DataFrame) -> pd.DataFrame:
-    return input_df
-
-
-def noop(*data_frames: pd.DataFrame) -> Sequence[pd.DataFrame]:
-    return list(data_frames)
 
 
 def _get_player_names() -> Dict[str, str]:

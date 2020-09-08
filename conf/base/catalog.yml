@@ -9,6 +9,9 @@
 # https://kedro.readthedocs.io/en/stable/04_user_guide/04_data_catalog.html
 _csv: &csv
   type: pandas.CSVDataSet
+  filepath: data
+  load_args:
+    parse_dates: True
 
 _remote: &remote_CSV
   type: phantasyfootballer.io.CachedRemoteCSVDataSet
@@ -17,30 +20,6 @@ _remote: &remote_CSV
   # Examples: 5H, 6 M, 81D
   expiration: 24H
   year: 2020
-
-pfr_rushing:
-  type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_rushing_data'
-  date_range_type : "year"
-  start_year : 2019
-
-pfr_passing:
-  type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_passing_data'
-  date_range_type : "year"
-  start_year : 2019
-
-pfr_receiving:
-  type: phantasyfootballer.io.CSVRemoteDataSet
-  data_source : 'phantasyfootballer.data_providers.pro_fb_ref.fetch_receiving_data'
-  date_range_type : "year"
-  start_year : 2019
-
-fp_ecr_raw:
-  type: pandas.CSVDataSet
-  filepath: https://raw.githubusercontent.com/DynastyProcess/data/master/files/db_fpecr.csv
-  load_args:
-    parse_dates: True
 
 dp_ecr_local:
   <<: *csv
@@ -105,6 +84,23 @@ results.annual.raw:
   <<: *csv
   filepath: data/01_raw/results.annual/2020.csv
 
+results.weekly.raw:
+  type: "PartitionedDataSet"
+  dataset: "pandas.CSVDataSet"
+  path: data/00_external/yearly/
+  filename_suffix: ".csv"
+
+results.weekly.remote:
+  <<: *remote_CSV
+  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
+  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
+
+results.weekly:
+  <<: *remote_CSV
+  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
+  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
+
+
 scoring.historical.half_ppr:
   <<: *csv
   filepath: data/03_primary/results.annual/hist_scoring_half_ppr.csv
@@ -129,3 +125,6 @@ scoring.historical.custom:
   load_args:
     index_col: player
 
+annual_projections:
+  <<: *csv
+  filepath: data/02_intermediate/average.csv

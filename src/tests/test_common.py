@@ -1,5 +1,6 @@
-import pytest
 import pandas as pd
+import pytest
+
 from phantasyfootballer.io.CachedRemoteCSVDataSet import CachedRemoteCSVDataSet as cds
 
 

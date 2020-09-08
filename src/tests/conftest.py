@@ -1,11 +1,17 @@
 from pathlib import Path
-
 import pandas as pd
 import pytest
-from phantasyfootballer.common import PLAYER_NAME
+
+from phantasyfootballer.run import ProjectContext
+from phantasyfootballer.settings import BASE_DIR, PLAYER_NAME
 
 TEST_FOLDER = Path(__file__).cwd() / "src/tests"
 DATA_FOLDER = TEST_FOLDER / "mock_data"
+
+
+@pytest.fixture(scope="module")
+def project_context():
+    return ProjectContext(BASE_DIR)
 
 
 @pytest.fixture(scope="module")

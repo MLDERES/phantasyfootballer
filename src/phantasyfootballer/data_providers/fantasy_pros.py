@@ -1,16 +1,15 @@
 from urllib.parse import urljoin
-
 import pandas as pd
 import requests
-from phantasyfootballer.common import (
+
+from phantasyfootballer.common import Stats, map_data_columns
+from phantasyfootballer.settings import (
     DATA_DIR,
     PLAYER_NAME,
     POSITION,
     QB,
     SOURCE,
     TEAM,
-    Stats,
-    map_data_columns,
 )
 
 FP_URL = "https://www.fantasypros.com/nfl/projections/"

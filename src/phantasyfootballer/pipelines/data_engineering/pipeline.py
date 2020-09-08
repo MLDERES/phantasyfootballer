@@ -1,6 +1,6 @@
-import phantasyfootballer.common as common
 from kedro.pipeline import Pipeline, node, pipeline
 
+from phantasyfootballer.common_nodes import combine_data_horizontal
 from .nodes import (
     calculate_player_rank,
     calculate_projected_points,
@@ -10,7 +10,6 @@ from .nodes import (
     percent_typical,
     remaining_positional_value,
 )
-
 
 """
     This pipeline needs to do the following
@@ -98,7 +97,7 @@ ranking_pipeline = Pipeline(
             name="remaining_val_node",
         ),
         node(
-            common.combine_data_horizontal,
+            combine_data_horizontal,
             [
                 "percent_mean_data",
                 "percent_typical_data",
@@ -139,17 +138,16 @@ full_custom_pipeline = pipeline(
     namespace="custom",
 )
 
-final_scoring_ranking_pipeline = (
-    score_ppr_pipeline
-    + score_half_ppr_pipeline
-    + score_std_pipeline
-    + score_std_pipeline
-    + full_ppr_pipeline
-    + full_half_ppr_pipeline
-    + full_standard_pipeline
-    + full_standard_pipeline
-)
-
 
 def create_pipeline():
+    final_scoring_ranking_pipeline = (
+        score_ppr_pipeline
+        + score_half_ppr_pipeline
+        + score_std_pipeline
+        + score_std_pipeline
+        + full_ppr_pipeline
+        + full_half_ppr_pipeline
+        + full_standard_pipeline
+        + full_standard_pipeline
+    )
     return Pipeline([final_scoring_ranking_pipeline])
