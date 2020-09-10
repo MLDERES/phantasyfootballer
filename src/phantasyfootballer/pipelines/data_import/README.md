@@ -2,41 +2,34 @@
 
 There are several pipelines that make up this major pipeline for all data imports including
 
-* [data_import_pipeline](#main)
-  * [results_pipeline](#results_pipeline)
-    * [annual_results_pipeline](#annual_results_pipeline)
+* [data_import_pipeline](#overview)
+  * [results_pipeline](#Results\ Pipeline)
+    * [annual_results_pipeline](#Annual\ Results\ Pipeline)
     * [weekly_results_pipeline](#weekly_results_pipeline)
   * [projections_pipeline](#projections_pipeline)
     * [annual_projections_pipeline](#annual_projections_pipeline)
     * [weekly_projections_pipeline](#weekly_results_pipeline)
 
-## <a name='main'></a>Overview
+## Overview
 
 This pipeline runs each of the other pipelines in this package
 
-## <a name='results_pipeline'></a>Results Pipeline
+## Results Pipeline
 
 This pipeline runs both the weekly and annual results as two nodes with no explict link between them
 
-## <a name='annual_results_pipeline'></a>Annual Results Pipeline
+## Annual Results Pipeline
 
 This pipeline concatenates all the annual results that are available together into a single file.  Additionally, if defined, it will grab the latest annual results if it is not available yet.
 
 ### Pipeline Inputs
 
-#### `results.annual.raw`
+#### `results.annual.source`
 
 |      |                    |
 | ---- | ------------------ |
-| Type | csv file |
-| Description | Includes all the files that are in the `data/01_raw/results.annual` folder |
-
-#### `placeholder`
-
-|      |                    |
-| ---- | ------------------ |
-| Type | `pandas.DataFrame` |
-| Description | Data downloaded from some source |
+| Type | partitioned dataset |
+| Description | Includes all the files that are in the `data/01_raw/results.annual/sources` folder |
 
 ### Pipeline Outputs
 

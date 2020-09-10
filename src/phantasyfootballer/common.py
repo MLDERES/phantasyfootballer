@@ -2,14 +2,46 @@ import logging
 from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 from pandas.core.dtypes.inference import is_list_like
-
+import datetime
 from kedro.config import TemplatedConfigLoader
 
-from .settings import BASE_DIR, KEEPER_COLUMNS, PLAYER_NAME, TEAM, Stats
+from .settings import BASE_DIR, KEEPER_COLUMNS, PLAYER_NAME, TEAM, Stats, NFL_WEEK_ALL
+from functools import cached_property
 
 logger = logging.getLogger("phantasyfootballer")
 DEBUG = logger.debug
 INFO = logger.info
+
+
+class NFLDate(object):
+
+    # Which week of the NFL are we dealing with (-4 <= x <= 21)
+    def __init__(self, target_date: Union[str, datetime.date] = datetime.date.today()):
+        # TODO: Handle the case where the string passed is not in the correct format
+        self._date = (
+            target_date
+            if isinstance(target_date, datetime.date)
+            else NFLDate.__parse_date(target_date)
+        )
+        self.week = NFL_WEEK_ALL
+        self.year = 2020
+
+    # Week =
+    # Year =
+    # IsPreSeason
+    # IsPlayoffs
+    # WeekStart
+
+    @cached_property
+    def __nfl_week_config(self):
+        DEBUG("Loading NFL Week Config")
+        return get_config("season_dates")
+
+    @classmethod
+    def __parse_date(cls, d: str = None):
+        return (
+            datetime.datetime.today() if d is None else datetime.date.fromisoformat(d)
+        )
 
 
 def get_list(item: Union[Any, List[Any]], errors="ignore"):

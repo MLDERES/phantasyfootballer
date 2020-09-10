@@ -73,6 +73,16 @@ loggers:
         handlers: [journal_file_handler]
         propagate: no
 
+    phantasyfootballer.data_import:
+        level: DEBUG
+        handlers: [console2]
+        propagate: no
+
+    phantasyfootballer:
+        level: DEBUG
+        handlers: [console2]
+        propagate: no
+
     data_engineering.node:
         level: DEBUG
         handlers: [console2]

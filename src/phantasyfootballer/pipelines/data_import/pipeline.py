@@ -112,7 +112,7 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
         [
             node(
                 concat_partitions,
-                "results.weekly.raw",
+                "results.weekly.source.local",
                 outputs="combined_weekly_results",
             ),
             node(
@@ -128,7 +128,7 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
             node(
                 split_year_from_week,
                 inputs="combined_weekly_results_b",
-                outputs="results.weekly.primary",
+                outputs="results.weekly",
             ),
         ]
     )

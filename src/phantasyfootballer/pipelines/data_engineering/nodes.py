@@ -18,16 +18,11 @@ def _craft_scoring_dict(scheme: str) -> Dict[str, Any]:
     """
     Look up the scoring system in the scoring.yml file
     """
-    # conf_paths = [BASE_DIR/"conf/base", BASE_DIR/"conf/local"]
-    # conf_loader = ConfigLoader(conf_paths)
-    # conf_scoring = conf_loader.get("scoring*")
     conf_scoring = get_config("scoring*")
     return conf_scoring[scheme]
 
 
 def _fetch_scoring_schemes() -> List[str]:
-    # conf_paths = ["conf/base", "conf/local"]
-    # conf_loader = ConfigLoader(conf_paths)
     conf_scoring = get_config("scoring*")
     return list(conf_scoring.keys())
 

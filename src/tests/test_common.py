@@ -2,6 +2,7 @@ import pandas as pd
 import pytest
 
 from phantasyfootballer.io.CachedRemoteCSVDataSet import CachedRemoteCSVDataSet as cds
+from phantasyfootballer.common import NFLDate
 
 
 def test_combine_data_horizontal():
@@ -26,3 +27,14 @@ expiration_testdata = [
 def test_calculate_expiration(test_input, expected):
     result = cds._calculate_expiration_hours(test_input)
     assert result == expected
+
+
+nfl_testdates = [("2020-09-09", 2020, 1), ("2020-10-10", 2020, 5)]
+
+
+@pytest.mark.parametrize("test_input, expected_year, expected_week", nfl_testdates)
+def test_nfldate(test_input, expected_year, expected_week):
+    result = NFLDate(test_input)
+    result_year, result_week = result.week, result.year
+    assert result_year == expected_year
+    assert result_week == expected_week
