@@ -25,31 +25,6 @@ dp_ecr_local:
   <<: *csv
   filepath: data/01_raw/projected.annual/ecr/dynasty_process_ecr.csv
 
-projections.annual.fp-remote:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.fantasy_pros.fetch_projections'
-  local_filepath: data/01_raw/projected.annual/sources/fantasy_pros.csv
-
-projections.annual.fp-local:
-  <<: *csv
-  filepath: data/01_raw/projected.annual/sources/fantasy_pros.csv
-  #versioned: True
-
-projections.annual.cbs-remote:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.cbs_sports.fetch_projections'
-  local_filepath: data/01_raw/projected.annual/sources/cbs.csv
-
-projections.annual.cbs-local:
-  <<: *csv
-  filepath: data/01_raw/projected.annual/sources/cbs.csv
-  #versioned: True
-
-projections.annual:
-  <<: *csv
-  filepath: data/01_raw/projected.annual/2020_projections.csv
-  #versioned: True
-
 scoring.ppr:
   <<: *csv
   filepath: data/03_primary/projected.annual/scoring_ppr.csv
@@ -73,33 +48,6 @@ scoring.custom:
   filepath: data/03_primary/projected.annual/scoring_custom.csv
   load_args:
     index_col: player
-
-results.annual.source:
-  type: "PartitionedDataSet"
-  dataset: "pandas.CSVDataSet"
-  path: data/00_external/yearly/
-  filename_suffix: ".csv"
-
-results.annual.raw:
-  <<: *csv
-  filepath: data/01_raw/results.annual/2020.csv
-
-results.weekly.raw:
-  type: "PartitionedDataSet"
-  dataset: "pandas.CSVDataSet"
-  path: data/00_external/yearly/
-  filename_suffix: ".csv"
-
-results.weekly.remote:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
-  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
-
-results.weekly:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
-  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
-
 
 scoring.historical.half_ppr:
   <<: *csv
