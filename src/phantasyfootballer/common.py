@@ -4,44 +4,61 @@ import pandas as pd
 from pandas.core.dtypes.inference import is_list_like
 import datetime
 from kedro.config import TemplatedConfigLoader
+from dateutil.rrule import rrule, MO, WEEKLY, TU
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
+from datetime import date
 
 from .settings import BASE_DIR, KEEPER_COLUMNS, PLAYER_NAME, TEAM, Stats, NFL_WEEK_ALL
-from functools import cached_property
 
 logger = logging.getLogger("phantasyfootballer")
 DEBUG = logger.debug
 INFO = logger.info
 
+MAR = 3
+SEP = 9
+
 
 class NFLDate(object):
+
+    week = NFL_WEEK_ALL
+    year = 2020
 
     # Which week of the NFL are we dealing with (-4 <= x <= 21)
     def __init__(self, target_date: Union[str, datetime.date] = datetime.date.today()):
         # TODO: Handle the case where the string passed is not in the correct format
-        self._date = (
+        d = (
             target_date
             if isinstance(target_date, datetime.date)
             else NFLDate.__parse_date(target_date)
         )
-        self.week = NFL_WEEK_ALL
-        self.year = 2020
+        DEBUG(f"{d=}")
+        # If it is after March we are in the new NFL Year otherwise, we are in the old year
+        self.year = d.year if d.month > MAR else d.year - 1
+        DEBUG(f"{self.year=}")
+        fdos = NFLDate.__first_day_of_season(self.year)
+        DEBUG("{fdos=}")
+        # We are before the season
+        if d < fdos:
+            weeks_before_season = rrule(
+                WEEKLY, dtstart=d, until=fdos, byweekday=TU
+            ).count()
+            self.week = -5 if weeks_before_season > 4 else -(5 - weeks_before_season)
+        else:
+            self.week = rrule(WEEKLY, dtstart=fdos, until=d, byweekday=TU).count()
 
-    # Week =
-    # Year =
-    # IsPreSeason
-    # IsPlayoffs
-    # WeekStart
+        if self.week <= -5 or self.week > 22:
+            self.week = 0
 
-    @cached_property
-    def __nfl_week_config(self):
-        DEBUG("Loading NFL Week Config")
-        return get_config("season_dates")
+    @staticmethod
+    def __first_day_of_season(season_year) -> date:
+        return rrule(WEEKLY, dtstart=date(season_year, SEP, 1), byweekday=MO(1))[
+            0
+        ] + relativedelta(days=1)
 
-    @classmethod
-    def __parse_date(cls, d: str = None):
-        return (
-            datetime.datetime.today() if d is None else datetime.date.fromisoformat(d)
-        )
+    @staticmethod
+    def __parse_date(d: str = None):
+        return datetime.datetime.today() if d is None else parse(d)
 
 
 def get_list(item: Union[Any, List[Any]], errors="ignore"):
@@ -133,3 +150,8 @@ def reorder_columns(data: pd.DataFrame, fixed_columns: Union[str, Any]) -> pd.Da
 
 # def create_empty_pipline():
 #     return Pipeline([node(noop, None, )])
+
+if __name__ == "__main__":
+    w = NFLDate("2020-Oct-10")
+    print(w.week)
+    print(w.year)
