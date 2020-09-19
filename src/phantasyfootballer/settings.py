@@ -8,9 +8,12 @@ PROJECTIONS = "fp_projection"
 
 PLAYER_NAME = "player"
 TEAM = "team"
+OPPONENT = "opp_team"
 POSITION = "position"
 SOURCE = "source"
 MERGE_NAME = "pname_merge"
+HOME_TEAM = "home"
+AWAY_TEAM = "away"
 
 # When this value is the NFL week, that means it's for the entire year
 NFL_WEEK_ALL = 99
@@ -71,6 +74,9 @@ class Stats:
     AGE = "age"  # player age
     GAMES = "games"  # number of games played
     GAMES_STARTED = "gs"  # number of games a player started
+    PT2_CONV_RUSH = "2pt_Rush"  # 2 point conversion rushing
+    PT2_CONV_RCV = "2pt_Rec"  # 2 point conversion receiving
+    PT2_CONV_PASS = "2pt_Pass"
 
     VALUE_STATS = [
         POS_RANK,

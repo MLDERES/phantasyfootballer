@@ -1,15 +1,16 @@
+import datetime
 import logging
+from datetime import date
 from typing import Any, Dict, List, Optional, Union
 import pandas as pd
-from pandas.core.dtypes.inference import is_list_like
-import datetime
-from kedro.config import TemplatedConfigLoader
-from dateutil.rrule import rrule, MO, WEEKLY, TU
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
-from datetime import date
+from dateutil.rrule import MO, TU, WEEKLY, rrule
+from pandas.core.dtypes.inference import is_list_like
 
-from .settings import BASE_DIR, KEEPER_COLUMNS, PLAYER_NAME, TEAM, Stats, NFL_WEEK_ALL
+from kedro.config import TemplatedConfigLoader
+
+from .settings import BASE_DIR, KEEPER_COLUMNS, NFL_WEEK_ALL, PLAYER_NAME, TEAM, Stats
 
 logger = logging.getLogger("phantasyfootballer")
 DEBUG = logger.debug

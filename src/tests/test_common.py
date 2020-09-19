@@ -1,8 +1,8 @@
 import pandas as pd
 import pytest
 
-from phantasyfootballer.io.CachedRemoteCSVDataSet import CachedRemoteCSVDataSet as cds
 from phantasyfootballer.common import NFLDate
+from phantasyfootballer.io.CachedRemoteCSVDataSet import CachedRemoteCSVDataSet as cds
 
 
 def test_combine_data_horizontal():

@@ -28,7 +28,7 @@
 """phantasyfootballer
 """
 
-__version__ = "0.4.0"
+__version__ = "0.4.1-dev0"
 from .common import *
-from .settings import *
 from .common_nodes import *
+from .settings import *
