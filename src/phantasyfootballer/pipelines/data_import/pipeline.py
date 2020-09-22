@@ -106,10 +106,11 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
         - remap the names on the columns we do want
     fixup the player_names
     Add into the exisiting annual.results file for downstream processing
-    # TODO: This is going to need to be done as an incremental dataset I think, if we don't have the results we'll have to go get them
     """
+    # TODO: This is going to need to be done as an incremental dataset I think, if we don't have the results we'll have to go get them
     return Pipeline(
         [
+            # Get the data from the external source
             node(
                 concat_partitions,
                 "results.weekly.source.local",
@@ -132,6 +133,52 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
             ),
         ]
     )
+
+    # def create_weekly_results_pipeline2(start_date=None, end_date=None, **kwargs):
+    #     """
+    #     Gather the weekly results from the local and remote into a single sourc
+
+    #     Load unprocessed partitions concat together the partitions,
+    #         this takes care of setting the year column in the data on load
+    #     Process the data
+    #         - set the data source
+    #         - remove unwanted columns
+    #         - remap the names on the columns we do want
+    #     fixup the player_names
+    #     Add into the exisiting annual.results file for downstream processing
+    #     """
+    #     # TODO: This is going to need to be done as an incremental dataset I think, if we don't have the results we'll have to go get them
+    #     return Pipeline(
+    #         [
+    #             # Get the data from the external source
+    #             # Save a copy of the data into the proper directory
+    #             #
+    #             node(
+    #                 concat_partitions,
+    #                 "results.weekly.source.local",
+    #                 outputs="combined_weekly_results",
+    #             ),
+    #             node(
+    #                 nfl_hist.process_data,
+    #                 inputs="combined_weekly_results",
+    #                 outputs="combined_weekly_results_a",
+    #             ),
+    #             node(
+    #                 fixup_player_names,
+    #                 inputs="combined_weekly_results_a",
+    #                 outputs="combined_weekly_results_b",
+    #             ),
+    #             node(
+    #                 # Using the partition key to set the p
+    #                 split_year_from_week,
+    #                 inputs="combined_weekly_results_b",
+    #                 outputs="results.weekly",
+    #             ),
+    #             # Now there is a single file from the data I've manually collected
+    #             # Need to combine with the data that is in the new format
+    #             # Or maybe I don't bother to put the files together before fixing them up.
+    #         ]
+    #     )
 
 
 def create_annual_results_pipeline(**kwargs):

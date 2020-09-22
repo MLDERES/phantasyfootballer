@@ -15,8 +15,6 @@ MERGE_NAME = "pname_merge"
 HOME_TEAM = "home"
 AWAY_TEAM = "away"
 
-# When this value is the NFL week, that means it's for the entire year
-NFL_WEEK_ALL = 99
 
 # Positions
 QB = "QB"

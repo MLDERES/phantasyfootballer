@@ -2,7 +2,8 @@ import logging
 from typing import Any, Callable, Dict, Sequence, Union
 import pandas as pd
 
-from .settings import NFL_WEEK_ALL, Stats
+from .settings import Stats
+from .common import NFL_SEASON
 
 logger = logging.getLogger("phantasyfootballer")
 DEBUG = logger.debug
@@ -98,7 +99,7 @@ def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.Dat
         partition_data = partition_load_func()  # load the actual partition data
         # BUG: Assuming that the partition key is on year, though we know this may not be the case:
         partition_data[Stats.YEAR] = partition_key
-        partition_data[Stats.NFL_WEEK] = NFL_WEEK_ALL
+        partition_data[Stats.NFL_WEEK] = NFL_SEASON
         # concat with existing result
         result = pd.concat([result, partition_data], ignore_index=True, sort=True)
     return result

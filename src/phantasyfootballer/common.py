@@ -10,7 +10,7 @@ from pandas.core.dtypes.inference import is_list_like
 
 from kedro.config import TemplatedConfigLoader
 
-from .settings import BASE_DIR, KEEPER_COLUMNS, NFL_WEEK_ALL, PLAYER_NAME, TEAM, Stats
+from .settings import BASE_DIR, KEEPER_COLUMNS, PLAYER_NAME, TEAM, Stats
 
 logger = logging.getLogger("phantasyfootballer")
 DEBUG = logger.debug
@@ -19,10 +19,16 @@ INFO = logger.info
 MAR = 3
 SEP = 9
 
+# Use when the desire is for every week in the season
+NFL_ALL_WEEKS = 99
+# Use when the desire is for season information
+NFL_SEASON = 0
+EARLIEST_NFL_YEAR = 1999
+
 
 class NFLDate(object):
 
-    week = NFL_WEEK_ALL
+    week = 1
     year = 2020
 
     # Which week of the NFL are we dealing with (-4 <= x <= 21)
@@ -60,6 +66,9 @@ class NFLDate(object):
     @staticmethod
     def __parse_date(d: str = None):
         return datetime.datetime.today() if d is None else parse(d)
+
+    def total_weeks(self) -> int:
+        return 17 if (self.year <= 2020) else 18
 
 
 def get_list(item: Union[Any, List[Any]], errors="ignore"):

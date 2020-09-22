@@ -12,7 +12,8 @@ from phantasyfootballer.pipelines.data_import.nodes import (
     fixup_player_names,
     split_year_from_week,
 )
-from phantasyfootballer.settings import MERGE_NAME, NFL_WEEK_ALL, PLAYER_NAME, Stats
+from phantasyfootballer.settings import MERGE_NAME, PLAYER_NAME, Stats
+from phantasyfootballer.common import NFL_SEASON
 
 
 @pytest.fixture
@@ -71,7 +72,7 @@ class Test_Nodes:
         test_frame = pd.DataFrame(
             {
                 Stats.YEAR: ["1999/week1", "2010/week10"],
-                Stats.NFL_WEEK: [NFL_WEEK_ALL, NFL_WEEK_ALL],
+                Stats.NFL_WEEK: [NFL_SEASON, NFL_SEASON],
             }
         )
         result = split_year_from_week(test_frame)

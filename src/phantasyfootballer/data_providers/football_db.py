@@ -5,7 +5,12 @@ from datetime import date
 import furl
 import pandas as pd
 
-from phantasyfootballer.common import map_data_columns
+from phantasyfootballer.common import (
+    map_data_columns,
+    NFL_ALL_WEEKS,
+    NFL_SEASON,
+    NFLDate,
+)
 from phantasyfootballer.settings import (
     AWAY_TEAM,
     DATA_DIR,
@@ -45,14 +50,19 @@ QB_COL_MAP = FLEX_COL_MAP = {
 }
 
 
-def get_stats(year: int = CURRENT_YEAR, week: int = 0) -> pd.DataFrame:
-    week = "all" if week == 0 else week
-    # Case matters for some reason with this provider
-    df_qb = get_stats_for_position("QB", year, week)
-    df_rb = get_stats_for_position("RB", year, week)
-    df_wr = get_stats_for_position("WR", year, week)
-    df_te = get_stats_for_position("TE", year, week)
-    df_all = pd.concat([df_rb, df_wr, df_te, df_qb])
+def get_annual_stats(year: int = CURRENT_YEAR) -> pd.DataFrame:
+    return get_stats(year, week=NFL_SEASON)
+
+
+def get_stats(year: int = CURRENT_YEAR, week: int = NFL_SEASON) -> pd.DataFrame:
+    week = "all" if week == NFL_SEASON else week
+    if week == NFL_SEASON:
+        df_all = _get_weekly_stats(year, week="all")
+    elif week == NFL_ALL_WEEKS:
+        total_weeks = NFLDate(year, week).total_weeks
+        df_all = pd.concat([_get_weekly_stats(year, w) for w in total_weeks])
+    else:
+        df_all = _get_weekly_stats(year, week=week)
 
     # Make sure the the columns are correct and consistent
     df_all = map_data_columns(df_all, FLEX_COL_MAP)
@@ -66,6 +76,15 @@ def get_stats(year: int = CURRENT_YEAR, week: int = 0) -> pd.DataFrame:
         df[[AWAY_TEAM, HOME_TEAM]] = df.Game.str.split("@", expand=True)
 
     return df_all
+
+
+def _get_weekly_stats(year: int, week: str) -> pd.DataFrame:
+    # Case matters for some reason with this provider
+    df_qb = get_stats_for_position("QB", year, week)
+    df_rb = get_stats_for_position("RB", year, week)
+    df_wr = get_stats_for_position("WR", year, week)
+    df_te = get_stats_for_position("TE", year, week)
+    return pd.concat([df_rb, df_wr, df_te, df_qb])
 
 
 def get_stats_for_position(position: str, year: int, week: int) -> pd.DataFrame:
