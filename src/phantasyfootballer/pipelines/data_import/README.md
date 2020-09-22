@@ -22,6 +22,13 @@ This pipeline runs both the weekly and annual results as two nodes with no expli
 
 This pipeline concatenates all the annual results that are available together into a single file.  Additionally, if defined, it will grab the latest annual results if it is not available yet.
 
+results.annual.source => cached_stats (results.annual.local) 
+                                                              > results.annual.primary
+                                      results.annual.remote 
+
+results.annual.source => (local files with history)
+results.annual.remote => (lookup for season long stats + cached stats)
+
 ### Pipeline Inputs
 
 #### `results.annual.source`

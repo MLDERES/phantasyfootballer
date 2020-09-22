@@ -32,10 +32,11 @@ results.weekly.source.local:
   path: data/00_external/weekly/
   filename_suffix: ".csv"
 
-results.weekly.remote:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
-  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
+results.weekly.current:
+  type: "CSVIncrementalDataSet"
+  data_source: 'phantasyfootballer.data_providers.football_db.get_stats'
+  local_filepath: data/01_raw/results.weekly/sources/
+  save_filepath: data/01_raw/results.weekly
 
 results.weekly:
   <<: *remote_CSV
@@ -43,6 +44,18 @@ results.weekly:
   local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
 
 
+results.weekly.remote:
+  type: "CSVCombineWeekly"
+  dataset: "pandas.CSVDataSet"
+  filename_suffix: ".csv"
+  remote_data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
+  filepath_arg: data/01_raw/results.weekly
+  date_range_type: past_weeks
+
+
+
+results.weekly:
+  
 ##
 # Projections Pipeline
 ##
