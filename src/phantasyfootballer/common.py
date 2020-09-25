@@ -12,7 +12,8 @@ from kedro.config import TemplatedConfigLoader
 
 from .settings import BASE_DIR, KEEPER_COLUMNS, PLAYER_NAME, TEAM, Stats
 
-logger = logging.getLogger("phantasyfootballer")
+logging.basicConfig(force=True)
+logger = logging.getLogger(__name__)
 DEBUG = logger.debug
 INFO = logger.info
 
@@ -32,9 +33,19 @@ class NFLDate(object):
     year = 2020
 
     # Which week of the NFL are we dealing with (-4 <= x <= 21)
-    def __init__(self, target_date: Union[str, datetime.date] = datetime.date.today()):
+    def __init__(
+        self, target_date: Union[str, datetime.date] = None, year=None, week=0,
+    ):
         # TODO: Handle the case where the string passed is not in the correct format
-        d = (
+        assert (
+            target_date is not None or year is not None
+        ), "One of target_date or year must be specified"
+        if year is not None:
+            self.year = int(year)
+            self.week = week if week < self.total_weeks else 0
+            return
+
+        d: datetime.date = (
             target_date
             if isinstance(target_date, datetime.date)
             else NFLDate.__parse_date(target_date)
@@ -44,7 +55,7 @@ class NFLDate(object):
         self.year = d.year if d.month > MAR else d.year - 1
         DEBUG(f"{self.year=}")
         fdos = NFLDate.__first_day_of_season(self.year)
-        DEBUG("{fdos=}")
+        DEBUG("{fdos=} {type(fdos)=}")
         # We are before the season
         if d < fdos:
             weeks_before_season = rrule(
@@ -58,17 +69,85 @@ class NFLDate(object):
             self.week = 0
 
     @staticmethod
-    def __first_day_of_season(season_year) -> date:
-        return rrule(WEEKLY, dtstart=date(season_year, SEP, 1), byweekday=MO(1))[
-            0
-        ] + relativedelta(days=1)
+    def __first_day_of_season(season_year) -> datetime.date:
+        return (
+            rrule(WEEKLY, dtstart=date(season_year, SEP, 1), byweekday=MO(1))[0]
+            + relativedelta(days=1)
+        ).date()
 
     @staticmethod
-    def __parse_date(d: str = None):
-        return datetime.datetime.today() if d is None else parse(d)
+    def __parse_date(d: str = None) -> date:
+        return datetime.date.today() if d is None else parse(d).date()
 
+    @property
     def total_weeks(self) -> int:
         return 17 if (self.year <= 2020) else 18
+
+    @staticmethod
+    def next_week(current_nfldate):
+        if current_nfldate.week >= current_nfldate.total_weeks:
+            new_week = 1
+            new_season = current_nfldate.year + 1
+        elif current_nfldate.week == NFL_SEASON:
+            new_week = NFL_SEASON
+            new_season = current_nfldate.year + 1
+        else:
+            new_week = current_nfldate.week + 1
+            new_season = current_nfldate.year
+        return NFLDate(year=new_season, week=new_week)
+
+    @staticmethod
+    def prev_week(current_nfldate):
+        if current_nfldate.week == NFL_SEASON:
+            new_week = NFL_SEASON
+            new_season = current_nfldate.year - 1
+        elif current_nfldate.week == 1:
+            last_season = NFLDate(year=current_nfldate.year - 1, week=0)
+            new_week = last_season.total_weeks
+            new_season = current_nfldate.year - 1
+        else:
+            new_week = current_nfldate.week - 1
+            new_season = current_nfldate.year
+        return NFLDate(year=new_season, week=new_week)
+
+    # def prev(current_nfldate):
+    #     if self.week == 1:
+    #         new_week = self.total_weeks
+    #         new_season = self.year-1
+    #     else:
+    #         new_week = self.week-1
+    #         new_season = self.year
+    #     return NFLWeek(new_season, new_week)
+
+
+class NFLSeason(NFLDate):
+    def __init__(self, year: Union[int, str]):
+        self.year = int(year)
+        self.week = NFL_SEASON
+
+
+class NFLWeek(NFLDate):
+    def __init__(self, year: Union[int, str], week: Union[int, str]):
+        self.year = int(year)
+        self.week = NFL_SEASON
+
+    def next(self):
+        if self.week == self.total_weeks:
+            new_week = 1
+            new_season = self.year + 1
+        else:
+            new_week = self.week + 1
+            new_season = self.year
+        return NFLWeek(new_season, new_week)
+
+    def prev(self):
+        if self.week == 1:
+            new_week = self.total_weeks
+            new_season = self.year - 1
+        else:
+            new_week = self.week - 1
+            new_season = self.year
+        return NFLWeek(new_season, new_week)
 
 
 def get_list(item: Union[Any, List[Any]], errors="ignore"):

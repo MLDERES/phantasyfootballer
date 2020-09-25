@@ -22,12 +22,6 @@ This pipeline runs both the weekly and annual results as two nodes with no expli
 
 This pipeline concatenates all the annual results that are available together into a single file.  Additionally, if defined, it will grab the latest annual results if it is not available yet.
 
-results.annual.source => cached_stats (results.annual.local) 
-                                                              > results.annual.primary
-                                      results.annual.remote 
-
-results.annual.source => (local files with history)
-results.annual.remote => (lookup for season long stats + cached stats)
 
 ### Pipeline Inputs
 
@@ -51,6 +45,18 @@ results.annual.remote => (lookup for season long stats + cached stats)
 
 This pipeline concatenates all the weekly results that are available together into a single place.  Additionally, if defined, it will grab the latest weekly results if it is not available yet.
 
+The files are stored in `01_raw/results.weekly/<year>/<week><week number>.csv` such as `data/01_raw/results.weekly/2019/week1.csv`
+
+This catalog item will go to a remote source to get the data if the weeks requested are not available
+
+results.weekly.raw => results.weekly 
+
+The steps in this pipeline include, 
+  - Gather up all the files that are available, when the latest data isn't available then go get it first
+  - Combine all the files together, ensuring that the week number and year are set
+  - Return a dataset with all the data
+
+
 ### Pipeline Inputs
 
 #### `results.weekly.raw`
@@ -69,7 +75,7 @@ This pipeline concatenates all the weekly results that are available together in
 
 ### Pipeline Outputs
 
-#### `results.weekly.primary`
+#### `results.weekly`
 
 |      |                    |
 | ---- | ------------------ |

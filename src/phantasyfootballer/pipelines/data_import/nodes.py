@@ -121,3 +121,23 @@ def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.Dat
         # concat with existing result
         result = pd.concat([result, partition_data], ignore_index=True, sort=True)
     return result
+
+
+def find_missing_data(
+    partitioned_input: Dict[str, Callable[[], Any]]
+) -> Dict[str, Callable[[], Any]]:
+    """
+    Given the list of partitions, build a list of files that aren't accounted for
+
+    Parameter
+    ---------
+      partitioned_input - dict(str, function)
+            A dictionary with partition ids as keys and load functions as values.
+
+    #TODO: #46 Missing data only looks for weekly data
+    """
+    # updated_partitions = partitioned_input.dee
+    # for partition_key, _ in sorted(partitioned_input.items()):
+
+    # return
+    pass

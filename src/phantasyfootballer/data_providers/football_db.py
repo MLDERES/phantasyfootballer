@@ -9,7 +9,7 @@ from phantasyfootballer.common import (
     map_data_columns,
     NFL_ALL_WEEKS,
     NFL_SEASON,
-    NFLDate,
+    NFLSeason,
 )
 from phantasyfootballer.settings import (
     AWAY_TEAM,
@@ -55,12 +55,13 @@ def get_annual_stats(year: int = CURRENT_YEAR) -> pd.DataFrame:
 
 
 def get_stats(year: int = CURRENT_YEAR, week: int = NFL_SEASON) -> pd.DataFrame:
-    week = "all" if week == NFL_SEASON else week
     if week == NFL_SEASON:
         df_all = _get_weekly_stats(year, week="all")
     elif week == NFL_ALL_WEEKS:
-        total_weeks = NFLDate(year, week).total_weeks
-        df_all = pd.concat([_get_weekly_stats(year, w) for w in total_weeks])
+        total_weeks = NFLSeason(year).total_weeks
+        df_all = pd.concat(
+            [_get_weekly_stats(year, w) for w in range(1, total_weeks + 1)]
+        )
     else:
         df_all = _get_weekly_stats(year, week=week)
 
@@ -102,5 +103,6 @@ def get_stats_for_position(position: str, year: int, week: int) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    df = get_stats(year=2020, week=0)
-    df.to_csv(DATA_DIR / "fbdb.csv")
+    df = get_stats_for_position("QB", 2020, 2)
+    # df = get_stats(year=2020, week=0)
+    df.to_csv(DATA_DIR / "2020_week2_fbdb.csv")
