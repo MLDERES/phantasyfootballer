@@ -89,3 +89,17 @@ class TestNFL_Date:
         prev_expected = NFLDate(year=expected_prev[0], week=expected_prev[1])
         assert prev_week.year == prev_expected.year
         assert prev_week.week == prev_expected.week
+
+    @pytest.mark.parametrize(
+        "test_input, expected, expected_next, expected_prev", nfl_next_dates
+    )
+    def test_nfldate_cmp(self, test_input, expected, expected_next, expected_prev):
+        base_date = NFLDate(test_input)
+        this_week = NFLDate(year=expected[0], week=expected[1])
+        next_week = NFLDate(year=expected_next[0], week=expected_next[1])
+        last_week = NFLDate(year=expected_prev[0], week=expected_prev[1])
+        assert base_date == this_week, "failed eq"
+        assert base_date < next_week, "failed lt"
+        assert base_date <= next_week, "failed lte"
+        assert base_date > last_week, "failed gt"
+        assert base_date >= last_week, "failed gte"

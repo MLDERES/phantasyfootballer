@@ -42,7 +42,7 @@ class NFLDate(object):
         ), "One of target_date or year must be specified"
         if year is not None:
             self.year = int(year)
-            self.week = week if week < self.total_weeks else 0
+            self.week = week if week <= self.total_weeks else 0
             return
 
         d: datetime.date = (
@@ -110,14 +110,31 @@ class NFLDate(object):
             new_season = current_nfldate.year
         return NFLDate(year=new_season, week=new_week)
 
-    # def prev(current_nfldate):
-    #     if self.week == 1:
-    #         new_week = self.total_weeks
-    #         new_season = self.year-1
-    #     else:
-    #         new_week = self.week-1
-    #         new_season = self.year
-    #     return NFLWeek(new_season, new_week)
+    def __lt__(self, other):
+        return (
+            self.year == other.year and self.week < other.week
+        ) or self.year < other.year
+
+    def __gt__(self, other):
+        return (
+            self.year == other.year and self.week > other.week
+        ) or self.year > other.year
+
+    def __le__(self, other):
+        return (
+            self.year == other.year and self.week <= other.week
+        ) or self.year < other.year
+
+    def __ge__(self, other):
+        return (
+            self.year == other.year and self.week >= other.week
+        ) or self.year > other.year
+
+    def __eq__(self, other):
+        return self.year == other.year and self.week == other.week
+
+    def __ne__(self, other):
+        return self.year != other.year or self.week != other.week
 
 
 class NFLSeason(NFLDate):
