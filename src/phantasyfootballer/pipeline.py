@@ -26,9 +26,11 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
     """
     data_engineering_pipeline = de.create_pipeline()
     annual_results_import_pipeline = di.create_annual_results_pipeline()
+    weekly_results_import_pipeline = di.create_weekly_results_pipeline()
+
     annual_projections_import_pipeline = di.create_annual_projections_pipeline()
     # weekly_projections_import_pipeline = di.create_weekly_projections_pipeline()
-    weekly_results_import_pipeline = di.create_weekly_results_pipeline()
+
     # data_science_pipeline = ds.create_pipeline()
     # ds_pipeline = ds.create_pipeline()
 

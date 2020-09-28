@@ -25,6 +25,12 @@ dp_ecr_local:
   <<: *csv
   filepath: data/01_raw/projected.annual/ecr/dynasty_process_ecr.csv
 
+results.weekly:
+  <<: *csv
+  filepath: data/02_intermediate/results_by_week.csv
+  load_args:
+    index_col: player
+
 scoring.ppr:
   <<: *csv
   filepath: data/03_primary/projected.annual/scoring_ppr.csv

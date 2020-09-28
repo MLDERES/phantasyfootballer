@@ -46,7 +46,7 @@ results.weekly.raw:
   filename_suffix: ".csv"
   remote_data_source: 'phantasyfootballer.data_providers.football_db.get_stats'
   date_range_type: past_weeks
-
+  
 results.season.raw:
   type: phantasyfootballer.io.RemotePartitionedDataSet
   dataset: pandas.CSVDataSet
@@ -54,8 +54,7 @@ results.season.raw:
   filename_suffix: ".csv"
   remote_data_source: 'phantasyfootballer.data_providers.football_db.get_stats'
   date_range_type: past_seasons
-
- 
+   
 ##
 # Projections Pipeline
 ##
