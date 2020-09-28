@@ -103,14 +103,17 @@ class RemotePartitionedDataSet(PartitionedDataSet):
         existing_partitions = {_ for _ in partitions.keys()}
         seasons_requested = self._gen_requested_partitions(self._date_range)
         missing_partitions = set(seasons_requested.keys()) - existing_partitions
+        # If we have found any missing data then go get it, otherwise assume we are good
+        if len(missing_partitions) > 0:
+            missing_years = list({seasons_requested[y][0] for y in missing_partitions})
+            missing_weeks = list({seasons_requested[w][1] for w in missing_partitions})
+            missing_data = self._get_missing_data(missing_years, missing_weeks)
+            self._stash_missing_data(missing_data)
 
-        missing_years = list({seasons_requested[y][0] for y in missing_partitions})
-        missing_weeks = list({seasons_requested[w][1] for w in missing_partitions})
-        missing_data = self._get_missing_data(missing_years, missing_weeks)
-        self._stash_missing_data(missing_data)
+            # This is a hack - requring a second reload of the data, but it might be worth it
+            super()._invalidate_caches()
+            partitions = super()._load()
 
-        # This is a hack - requring a second reload of the data, but it might be worth it
-        partitions = super()._load()
         return partitions
 
     def _gen_requested_partitions(
@@ -119,34 +122,30 @@ class RemotePartitionedDataSet(PartitionedDataSet):
         """
         Create a partition key and tuple combination of year, week based on the date range
         """
+        partitions = {}
         start_year, end_year = (
             date_range["start_date"]["year"],
             date_range["end_date"]["year"],
         )
-        start_year, end_year = min(start_year, end_year), max(start_year, end_year)
         start_week, end_week = (
             date_range["start_date"]["week"],
             date_range["end_date"]["week"],
         )
         start_week, end_week = min(start_week, end_week), max(start_week, end_week)
+        start_year, end_year = min(start_year, end_year), max(start_year, end_year)
+
         if start_week == NFL_SEASON:
-            retVal = {f"{y}": (y, NFL_SEASON) for y in range(start_year, end_year + 1)}
-        else:
-            retVal = {
-                f"{y}/week{w}": (y, w)
-                for y in range(start_year, end_year + 1)
-                for w in range(start_week, end_week + 1)
+            partitions = {
+                f"{y}": (y, NFL_SEASON) for y in range(start_year, end_year + 1)
             }
-            # Since we are crossing years, we need to add in weeks between the end of one year and the begining of the next
-            if start_year != end_year:
-                retVal.update(
-                    {
-                        f"{y}/week{w}": (y, w)
-                        for y in range(start_year + 1, end_year + 1)
-                        for w in range(1, end_week)
-                    }
-                )
-        return retVal
+        else:
+            nfl_week = NFLDate(year=start_year, week=start_week)
+            end_nfl_week = NFLDate(year=end_year, week=end_week)
+            while nfl_week <= end_nfl_week:
+                partition_key = f"{nfl_week.year}/week{nfl_week.week}"
+                partitions[partition_key] = (nfl_week.year, nfl_week.week)
+                nfl_week = NFLDate.next_week(nfl_week)
+        return partitions
 
     def _get_missing_data(self, years: List[int], weeks: List[int]) -> Dict[str, Any]:
         """
@@ -172,11 +171,20 @@ class RemotePartitionedDataSet(PartitionedDataSet):
         return missing_data
 
     def _stash_missing_data(self, data: Dict[str, Any]) -> None:
+        """
+        Write the missing data (which we collected) to the proper folder
+
+        Parameters
+        ----------
+        data - {partition, partition_data}
+            Containd the partition (the path to where the file should be saved) and the actual data to be preserved
+
+        Returns
+        -------
+        None
+        """
         for partition_id, part_data in sorted(data.items()):
-            # NEXT: need to decide if we have a directory and a filename
-            #       If it has a directory, then we need to ensure the dir is there
-            #       then we can start dumping the files in there
-            if part_data:
+            if part_data is not None:
                 path = Path(super()._partition_to_path(partition_id))
                 DEBUG(f"stash missing data on {path}")
                 path.parent.mkdir(parents=True, exist_ok=True)
