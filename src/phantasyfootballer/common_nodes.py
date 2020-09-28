@@ -109,5 +109,11 @@ def pass_thru(input_df: pd.DataFrame) -> pd.DataFrame:
     return input_df
 
 
+def drop_unknown_columns(input_df: pd.DataFrame) -> pd.DataFrame:
+    return input_df.drop(
+        columns=[c for c in input_df.columns if "Unnamed:" in c], errors="ignore"
+    )
+
+
 def noop(*data_frames: pd.DataFrame) -> Sequence[pd.DataFrame]:
     return list(data_frames)

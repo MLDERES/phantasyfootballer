@@ -45,6 +45,7 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
             [
                 annual_results_import_pipeline
                 + annual_projections_import_pipeline
+                + weekly_results_import_pipeline
                 + data_engineering_pipeline
             ]
         ),

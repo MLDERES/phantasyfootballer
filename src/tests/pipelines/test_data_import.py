@@ -14,18 +14,12 @@ from phantasyfootballer.pipelines.data_import.nodes import (
 )
 from phantasyfootballer.settings import MERGE_NAME, PLAYER_NAME, Stats
 from phantasyfootballer.common import NFL_SEASON
+from phantasyfootballer.common_nodes import drop_unknown_columns
 
 
 @pytest.fixture
 def mergename_test_data():
-    return [
-        ("Billy Van Heusen", "billyvanheusen"),
-        ("R. Jay Soward", "rjaysoward"),
-        ("Brad St. Louis", "bradstlouis"),
-        ("Chris Fuamatu-Ma'afala", "chrisfuamatumaafala"),
-        ("Donnie Joe Morris", "donniejoemorris"),
-        ("Christian McCaffery", "christianmccaffery"),
-    ]
+    return
 
 
 class Test_Nodes:
@@ -63,7 +57,17 @@ class Test_Nodes:
         result = fixup_player_names(test_frame)
         pdt.assert_frame_equal(result, expected_frame)
 
-    @pytest.mark.parametrize("test_input, expected", mergename_test_data)
+    @pytest.mark.parametrize(
+        "test_input, expected",
+        [
+            ("Billy Van Heusen", "billyvanheusen"),
+            ("R. Jay Soward", "rjaysoward"),
+            ("Brad St. Louis", "bradstlouis"),
+            ("Chris Fuamatu-Ma'afala", "chrisfuamatumaafala"),
+            ("Donnie Joe Morris", "donniejoemorris"),
+            ("Christian McCaffery", "christianmccaffery"),
+        ],
+    )
     def test_player_mergename(self, test_input, expected):
         result = _create_player_merge_name(test_input)
         assert result == expected
@@ -92,6 +96,11 @@ class Test_Nodes:
     def test_create_partitions(self, partitioned_data_pandas):
         average_stats_by_player(partitioned_data_pandas)
         pass
+
+    def test_drop_unknown_columns(self):
+        df = pd.DataFrame({"Unnamed: 0": range(5), "A": range(5)})
+        result_df = drop_unknown_columns(df)
+        pdt.assert_frame_equal(result_df, pd.DataFrame({"A": range(5)}))
 
 
 class Test_Pipelines:

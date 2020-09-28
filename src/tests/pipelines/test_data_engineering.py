@@ -18,11 +18,13 @@ def catalog():
     return catalog
 
 
+@pytest.mark.skip(reason="Not ready to commit yet")
 def test_craft_scoring_scheme(self):
     ppr_dict = _craft_scoring_dict("full_ppr")
     assert ppr_dict[Stats.RCV_REC] == 1
 
 
+@pytest.mark.skip(reason="Not ready to commit yet")
 def test_fetch_scoring_schemes(self):
     result = _fetch_scoring_schemes()
     assert "standard" in result

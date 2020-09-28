@@ -79,21 +79,9 @@ def create_annual_projections_pipeline(**kwargs):
     )
 
 
-# TODO: Create Weekly Projections Pipeline
-# def create_weekly_projections_pipeline(
-#     start_date=None, end_date=None, **kwargs
-# ) -> Pipeline:
-#     """ Combine together all the weekly projection sources into a single weekly projection
-
-#     This only works for the current year, which is assumed
-#     """
-#     # TODO: Combine weekly projections into a single result
-#     raise NotImplementedError
-
-
-##
-# Results pipelines
-##
+#######
+# Results Pipelines
+#######
 def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
     """
     Gather the weekly results from the local and remote into a single sourc
@@ -107,7 +95,6 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
     fixup the player_names
     Add into the exisiting annual.results file for downstream processing
     """
-    # TODO: This is going to need to be done as an incremental dataset I think, if we don't have the results we'll have to go get them
     return Pipeline(
         [
             node(

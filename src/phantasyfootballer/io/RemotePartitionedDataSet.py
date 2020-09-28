@@ -75,6 +75,7 @@ class RemotePartitionedDataSet(PartitionedDataSet):
             dataset=dataset,
             filepath_arg=filepath_arg,
             filename_suffix=filename_suffix,
+            load_args=load_args,
         )
 
         self._validate_date_range_type(date_range_type)

@@ -30,6 +30,8 @@ results.weekly:
   filepath: data/02_intermediate/results_by_week.csv
   load_args:
     index_col: player
+  save_args:
+    index: False
 
 scoring.ppr:
   <<: *csv
