@@ -33,6 +33,15 @@ results.weekly:
   save_args:
     index: False
 
+results.season:
+  <<: *csv
+  filepath: data/02_intermediate/results_by_season.csv
+  load_args:
+    index_col: player
+  save_args:
+    index: False
+
+
 scoring.ppr:
   <<: *csv
   filepath: data/03_primary/projected.annual/scoring_ppr.csv

@@ -35,7 +35,7 @@ def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
     # ds_pipeline = ds.create_pipeline()
 
     return {
-        "results.annual": annual_results_import_pipeline,
+        "results.season": annual_results_import_pipeline,
         "projections.annual": annual_projections_import_pipeline,
         "results.weekly": weekly_results_import_pipeline,
         # TODO: #41 weekly_projections_pipeline
