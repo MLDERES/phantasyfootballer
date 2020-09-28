@@ -3,10 +3,9 @@ import string
 from typing import Any, Callable, Dict
 import pandas as pd
 
-from phantasyfootballer.common import get_config
+from phantasyfootballer.common import get_config, NFL_ALL_WEEKS
 from phantasyfootballer.settings import (
     MERGE_NAME,
-    NFL_WEEK_ALL,
     PLAYER_NAME,
     POSITION,
     TEAM,
@@ -118,7 +117,27 @@ def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.Dat
         partition_data = partition_load_func()  # load the actual partition data
         # BUG: Assuming that the partition key is on year, though we know this may not be the case:
         partition_data[Stats.YEAR] = partition_key
-        partition_data[Stats.NFL_WEEK] = NFL_WEEK_ALL
+        partition_data[Stats.NFL_WEEK] = NFL_ALL_WEEKS
         # concat with existing result
         result = pd.concat([result, partition_data], ignore_index=True, sort=True)
     return result
+
+
+def find_missing_data(
+    partitioned_input: Dict[str, Callable[[], Any]]
+) -> Dict[str, Callable[[], Any]]:
+    """
+    Given the list of partitions, build a list of files that aren't accounted for
+
+    Parameter
+    ---------
+      partitioned_input - dict(str, function)
+            A dictionary with partition ids as keys and load functions as values.
+
+    #TODO: #46 Missing data only looks for weekly data
+    """
+    # updated_partitions = partitioned_input.dee
+    # for partition_key, _ in sorted(partitioned_input.items()):
+
+    # return
+    pass

@@ -63,6 +63,8 @@ package: clean
 	kedro package
 
 ## Do all the pre-checks
+pre-checks: pre-check
+
 pre-check: unittest
 	black .
 	flake8
@@ -78,7 +80,7 @@ build: pre-check
 
 ## Update version that will be released (takes off the dev tag, do this before pushing)
 release: 
-	bump2version --allow-dirty --verbose --tag release
+	bump2version --verbose release
 
 ## Print the current version
 current-version:

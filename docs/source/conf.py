@@ -15,11 +15,11 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import re
-from recommonmark.transform import AutoStructify
 
 from kedro.framework.cli.utils import find_stylesheets  # noqa: F401
 
 from phantasyfootballer import __version__ as release
+from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 

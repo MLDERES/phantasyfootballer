@@ -4,7 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
         {
             "name": "Python: Current File",
             "type": "python",
@@ -24,7 +30,9 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/phantasyfootballer/run.py",
-            "args": ["--pipeline de"],
+            "args": [
+                "--pipeline de"
+            ],
             "console": "integratedTerminal",
         },
         {
@@ -32,7 +40,9 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/phantasyfootballer/run.py",
-            "args": ["--pipeline cbs_proj"],
+            "args": [
+                "--pipeline cbs_proj"
+            ],
             "console": "integratedTerminal",
         },
         {

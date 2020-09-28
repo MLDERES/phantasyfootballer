@@ -106,19 +106,21 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
         - remap the names on the columns we do want
     fixup the player_names
     Add into the exisiting annual.results file for downstream processing
-    # TODO: This is going to need to be done as an incremental dataset I think, if we don't have the results we'll have to go get them
     """
+    # TODO: This is going to need to be done as an incremental dataset I think, if we don't have the results we'll have to go get them
     return Pipeline(
         [
+            # Get the data from the external source
+            # Starting with all the existing data, make a list of the ones that are missing
             node(
-                concat_partitions,
-                "results.weekly.source.local",
-                outputs="combined_weekly_results",
+                pass_thru,
+                inputs="results.weekly.raw",
+                outputs=["results.weekly.missing", "results.weekly.raw"],
             ),
             node(
-                nfl_hist.process_data,
-                inputs="combined_weekly_results",
-                outputs="combined_weekly_results_a",
+                concat_partitions,
+                inputs="results.weekly.raw",
+                outputs="combined_weekly_results",
             ),
             node(
                 fixup_player_names,

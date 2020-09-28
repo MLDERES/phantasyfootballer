@@ -32,21 +32,33 @@ results.weekly.source.local:
   path: data/00_external/weekly/
   filename_suffix: ".csv"
 
-results.weekly.remote:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
-  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
+# results.weekly:
+#   <<: *remote_CSV
+#   data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
+#   local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
 
-results.weekly:
-  <<: *remote_CSV
-  data_source: 'phantasyfootballer.data_providers.pro_fb_ref.fetch_weekly_results'
-  local_filepath: data/01_raw/results.weekly/sources/pro_results.csv
+# This is the data source that acts like a partitioned data source, but it will fill gaps
+#  based on the date range type
+results.weekly.raw:
+  type: phantasyfootballer.io.RemotePartitionedDataSet
+  dataset: pandas.CSVDataSet
+  path: data/01_raw/results.weekly
+  filename_suffix: ".csv"
+  remote_data_source: 'phantasyfootballer.data_providers.football_db.get_stats'
+  date_range_type: past_weeks
 
+results.season.raw:
+  type: phantasyfootballer.io.RemotePartitionedDataSet
+  dataset: pandas.CSVDataSet
+  path: data/01_raw/results.weekly
+  filename_suffix: ".csv"
+  remote_data_source: 'phantasyfootballer.data_providers.football_db.get_stats'
+  date_range_type: past_seasons
 
+ 
 ##
 # Projections Pipeline
 ##
-
 projections.annual.fp-remote:
   <<: *remote_CSV
   data_source: 'phantasyfootballer.data_providers.fantasy_pros.fetch_projections'
