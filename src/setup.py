@@ -20,7 +20,7 @@
 from setuptools import find_packages, setup
 
 entry_point = "phantasyfootballer = phantasyfootballer.run:run_package"
-VERSION = "0.4.1"
+VERSION = "0.4.2-dev0"
 
 # get the dependencies and installs
 with open("requirements.txt", "r", encoding="utf-8") as f:
@@ -42,8 +42,8 @@ setup(
     extras_require={
         "docs": [
             "sphinx>=1.6.3, <2.0",
-            "sphinx_rtd_theme==0.4.1",
-            "nbsphinx==0.4.1",
+            "sphinx_rtd_theme==0.4.2-dev0",
+            "nbsphinx==0.4.2-dev0",
             "nbstripout==0.3.3",
             "recommonmark==0.5.0",
             "sphinx-autodoc-typehints==1.6.0",
