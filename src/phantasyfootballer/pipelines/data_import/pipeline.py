@@ -124,6 +124,6 @@ def create_annual_results_pipeline(**kwargs):
         [
             node(concat_partitions, "results.season.raw", "results_raw"),
             node(nfl_hist.process_data, "results_raw", "results_fixed"),
-            node(fixup_player_names, "results_fixed", "results.annual.raw"),
+            node(fixup_player_names, "results_fixed", "results.season"),
         ]
     )

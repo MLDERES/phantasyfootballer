@@ -20,16 +20,14 @@ MODULE_SEPARATOR = "."
 NFL_TODAY = NFLDate(date.today())
 CURRENT_NFL_WEEK = NFL_TODAY.week
 CURRENT_NFL_YEAR = NFL_TODAY.year
-NEXT_NFL_YEAR = NFL_TODAY.year + 1
-PREV_NFL_YEAR = NFL_TODAY.year - 1
-PREV_NFL_WEEK = NFLDate.prev_week(NFL_TODAY).week
-NEXT_NFL_WEEK = NFLDate.next_week(NFL_TODAY).week
+PREV_NFL_WEEK = NFLDate.prev_week(NFL_TODAY)
+NEXT_NFL_WEEK = NFLDate.next_week(NFL_TODAY)
 LAST_WEEK_SEASON = NFL_TODAY.total_weeks
 
 DATE_RANGE_TYPE = {
     "future_seasons": {
         "start_date": {"week": NFL_SEASON, "year": CURRENT_NFL_YEAR},
-        "end_date": {"week": NFL_SEASON, "year": NEXT_NFL_YEAR},
+        "end_date": {"week": NFL_SEASON, "year": CURRENT_NFL_YEAR + 1},
     },
     "future_weeks": {
         "start_date": {"week": CURRENT_NFL_WEEK, "year": CURRENT_NFL_YEAR},
@@ -37,10 +35,7 @@ DATE_RANGE_TYPE = {
     },
     "past_weeks": {
         "start_date": {"week": 1, "year": EARLIEST_NFL_YEAR},
-        "end_date": {
-            "week": NFLDate.prev_week(NFL_TODAY).week,
-            "year": NFLDate.prev_week(NFL_TODAY).year,
-        },
+        "end_date": {"week": PREV_NFL_WEEK.week, "year": PREV_NFL_WEEK.year},
     },
     "past_seasons": {
         "start_date": {"week": NFL_SEASON, "year": EARLIEST_NFL_YEAR},
