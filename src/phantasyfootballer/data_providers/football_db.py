@@ -55,6 +55,7 @@ def get_annual_stats(year: int = CURRENT_YEAR) -> pd.DataFrame:
 
 
 def get_stats(year: int = CURRENT_YEAR, week: int = NFL_SEASON) -> pd.DataFrame:
+    INFO(f"{DATA_SOURCE}: get_stats for {year=} {week=}")
     if week == NFL_SEASON:
         df_all = _get_weekly_stats(year, week="all")
     elif week == NFL_ALL_WEEKS:
@@ -81,6 +82,7 @@ def get_stats(year: int = CURRENT_YEAR, week: int = NFL_SEASON) -> pd.DataFrame:
 
 def _get_weekly_stats(year: int, week: str) -> pd.DataFrame:
     # Case matters for some reason with this provider
+    DEBUG(f"{DATA_SOURCE}: get_weeekly_stats for {year=} {week=}")
     df_qb = get_stats_for_position("QB", year, week)
     df_rb = get_stats_for_position("RB", year, week)
     df_wr = get_stats_for_position("WR", year, week)

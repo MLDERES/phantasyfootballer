@@ -149,14 +149,12 @@ class TestDataCatalog:
         [
             (date_range_future_weeks, "2020/week11"),
             (date_range_future_weeks, "2021/week10"),
-            pytest.param(
-                date_range_future_weeks,
-                "2021",
-                marks=pytest.mark.xfail(reason="passing season to a week range"),
-            ),
             (date_range_future_seasons, "2020"),
             (date_range_future_seasons, "2021"),
             (date_range_future_seasons, "2025"),
+            (date_range_past_seasons, "2018"),
+            (date_range_past_weeks, "2019/week10"),
+            (date_range_past_weeks, "2019/week9"),
             pytest.param(
                 date_range_future_seasons,
                 "2026",
@@ -169,9 +167,18 @@ class TestDataCatalog:
                     reason="passing a week, expecting season partition"
                 ),
             ),
-            (date_range_past_seasons, "2018"),
-            (date_range_past_weeks, "2019/week10"),
-            (date_range_past_weeks, "2019/week9"),
+            pytest.param(
+                date_range_past_seasons,
+                "2020",
+                marks=pytest.mark.xfail(
+                    reason="the current year, expecting it not to be a valid season partition"
+                ),
+            ),
+            pytest.param(
+                date_range_future_weeks,
+                "2021",
+                marks=pytest.mark.xfail(reason="passing season to a week range"),
+            ),
         ],
     )
     def test_gen_requested_partitions(self, dataset, date_range, expected_partition):

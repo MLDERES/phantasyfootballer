@@ -30,8 +30,23 @@ results.weekly:
   filepath: data/02_intermediate/results_by_week.csv
   load_args:
     index_col: player
+    dtype: 
+      nfl_week: int
+      year: int
   save_args:
     index: False
+
+results.season:
+  <<: *csv
+  filepath: data/02_intermediate/results_by_season.csv
+  load_args:
+    index_col: player
+    dtype: 
+      nfl_week: int
+      year: int
+  save_args:
+    index: False
+
 
 scoring.ppr:
   <<: *csv

@@ -102,7 +102,7 @@ def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.Dat
         partition_data[Stats.NFL_WEEK] = NFL_SEASON
         # concat with existing result
         result = pd.concat([result, partition_data], ignore_index=True, sort=True)
-    return result
+    return drop_unknown_columns(result)
 
 
 def pass_thru(input_df: pd.DataFrame) -> pd.DataFrame:

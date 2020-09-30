@@ -20,16 +20,14 @@ MODULE_SEPARATOR = "."
 NFL_TODAY = NFLDate(date.today())
 CURRENT_NFL_WEEK = NFL_TODAY.week
 CURRENT_NFL_YEAR = NFL_TODAY.year
-NEXT_NFL_YEAR = NFL_TODAY.year + 1
-PREV_NFL_YEAR = NFL_TODAY.year - 1
-PREV_NFL_WEEK = NFLDate.prev_week(NFL_TODAY).week
-NEXT_NFL_WEEK = NFLDate.next_week(NFL_TODAY).week
+PREV_NFL_WEEK = NFLDate.prev_week(NFL_TODAY)
+NEXT_NFL_WEEK = NFLDate.next_week(NFL_TODAY)
 LAST_WEEK_SEASON = NFL_TODAY.total_weeks
 
 DATE_RANGE_TYPE = {
     "future_seasons": {
         "start_date": {"week": NFL_SEASON, "year": CURRENT_NFL_YEAR},
-        "end_date": {"week": NFL_SEASON, "year": NEXT_NFL_YEAR},
+        "end_date": {"week": NFL_SEASON, "year": CURRENT_NFL_YEAR + 1},
     },
     "future_weeks": {
         "start_date": {"week": CURRENT_NFL_WEEK, "year": CURRENT_NFL_YEAR},
@@ -37,10 +35,7 @@ DATE_RANGE_TYPE = {
     },
     "past_weeks": {
         "start_date": {"week": 1, "year": EARLIEST_NFL_YEAR},
-        "end_date": {
-            "week": NFLDate.prev_week(NFL_TODAY).week,
-            "year": NFLDate.prev_week(NFL_TODAY).year,
-        },
+        "end_date": {"week": PREV_NFL_WEEK.week, "year": PREV_NFL_WEEK.year},
     },
     "past_seasons": {
         "start_date": {"week": NFL_SEASON, "year": EARLIEST_NFL_YEAR},
@@ -83,10 +78,12 @@ class RemotePartitionedDataSet(PartitionedDataSet):
             {} if date_range_type is None else DATE_RANGE_TYPE[date_range_type]
         )
 
+        DEBUG(f"Initializing RemotePartitionedDataSet with {self._date_range=}")
+
         if callable(remote_data_source):
             self._remote_data_source = remote_data_source
         else:
-            DEBUG(f"CSVCombineWeekly: string {remote_data_source=}")
+            DEBUG(f"RemotePartitionedDataSet: string {remote_data_source=}")
             path_parts = remote_data_source.split(MODULE_SEPARATOR)
             function_name = path_parts[-1]
             module_path = MODULE_SEPARATOR.join(path_parts[:-1])
@@ -102,10 +99,9 @@ class RemotePartitionedDataSet(PartitionedDataSet):
         requested data.  If the dates requested aren't available, then we'll go to the web and pick them up
         """
         partitions = super()._load()
-        DEBUG(f"Found {len(partitions)} partitions in")
-        # DEBUG(f'Some of the partitions {[x,y for x, y in partitions]}')
+        DEBUG(f"Found {len(partitions)} partitions in {self._path}")
         if not partitions:
-            raise DataSetError("No partitions found in `{}`".format(self._path))
+            raise DataSetError(f"No partitions found in `{self._path}`")
 
         # The partitions we have
         existing_partitions = {_ for _ in partitions.keys()}
@@ -113,6 +109,7 @@ class RemotePartitionedDataSet(PartitionedDataSet):
         missing_partitions = set(seasons_requested.keys()) - existing_partitions
         # If we have found any missing data then go get it, otherwise assume we are good
         if len(missing_partitions) > 0:
+            DEBUG(f"Found {len(missing_partitions)} partitions missing")
             missing_years = list({seasons_requested[y][0] for y in missing_partitions})
             missing_weeks = list({seasons_requested[w][1] for w in missing_partitions})
             missing_data = self._get_missing_data(missing_years, missing_weeks)
@@ -121,6 +118,8 @@ class RemotePartitionedDataSet(PartitionedDataSet):
             # This is a hack - requring a second reload of the data, but it might be worth it
             super()._invalidate_caches()
             partitions = super()._load()
+        else:
+            DEBUG("No missing partitions")
 
         return partitions
 
