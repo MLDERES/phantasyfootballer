@@ -19,3 +19,4 @@ seaborn
 matplotlib
 pre-commit
 bump2version
+furl
