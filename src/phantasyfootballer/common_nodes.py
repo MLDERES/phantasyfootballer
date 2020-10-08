@@ -97,12 +97,33 @@ def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.Dat
 
     for partition_key, partition_load_func in sorted(partitioned_input.items()):
         partition_data = partition_load_func()  # load the actual partition data
-        # BUG: Assuming that the partition key is on year, though we know this may not be the case:
-        partition_data[Stats.YEAR] = partition_key
-        partition_data[Stats.NFL_WEEK] = NFL_SEASON
+        (nfl_week, nfl_year) = _get_nfl_data_from_partition_key(partition_key)
+        partition_data[Stats.YEAR] = nfl_year
+        partition_data[Stats.NFL_WEEK] = nfl_week
         # concat with existing result
         result = pd.concat([result, partition_data], ignore_index=True, sort=True)
     return drop_unknown_columns(result)
+
+
+def _get_nfl_data_from_partition_key(partition_key: str):
+    """
+    Get the nfl year and week from the partition, regardless if the week if specified or not
+
+    Args:
+        partition_key (str): a key used to identify the partition
+
+    Returns:
+        (int, int): (nfl_year, nfl_week)
+    """
+
+    parts = partition_key.rstrip(".csv").split("/")
+    if len(parts) > 1:
+        year = int(parts[0])
+        week = int(parts[1].strip("week"))
+    else:
+        year = int(parts[0])
+        week = NFL_SEASON
+    return (year, week)
 
 
 def pass_thru(input_df: pd.DataFrame) -> pd.DataFrame:

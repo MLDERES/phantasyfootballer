@@ -1,9 +1,9 @@
 import logging
 import string
-from typing import Any, Callable, Dict
+from typing import Dict
 import pandas as pd
 
-from phantasyfootballer.common import get_config, NFL_ALL_WEEKS
+from phantasyfootballer.common import get_config
 from phantasyfootballer.settings import (
     MERGE_NAME,
     PLAYER_NAME,
@@ -94,30 +94,3 @@ def average_stats_by_player(*dataframes: pd.DataFrame) -> pd.DataFrame:
         drop=True
     )
     return df_all
-
-
-def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.DataFrame:
-    """Concatenate input partitions into one pandas DataFrame.
-
-    Parameters
-    ----------
-        partitioned_input - dict(str, function)
-            A dictionary with partition ids as keys and load functions as values.
-        nfl_year: int, None
-            If specified, the year will be populated with this value and the partition key will be assumed to be the week
-            If not specified (None), it will be assumed that the partition key is actually the year
-
-    Returns
-    -------
-        Pandas DataFrame representing a concatenation of all loaded partitions.
-    """
-    result = pd.DataFrame()
-
-    for partition_key, partition_load_func in sorted(partitioned_input.items()):
-        partition_data = partition_load_func()  # load the actual partition data
-        # BUG: Assuming that the partition key is on year, though we know this may not be the case:
-        partition_data[Stats.YEAR] = partition_key
-        partition_data[Stats.NFL_WEEK] = NFL_ALL_WEEKS
-        # concat with existing result
-        result = pd.concat([result, partition_data], ignore_index=True, sort=True)
-    return result
