@@ -1,8 +1,9 @@
 import pandas as pd
 import pytest
 
-from phantasyfootballer.common import NFLDate
+from phantasyfootballer.common import NFLDate, NFL_SEASON
 from phantasyfootballer.io.CachedRemoteCSVDataSet import CachedRemoteCSVDataSet as cds
+from phantasyfootballer.common_nodes import _get_nfl_data_from_partition_key
 
 
 def test_combine_data_horizontal():
@@ -27,6 +28,14 @@ expiration_testdata = [
 def test_calculate_expiration(test_input, expected):
     result = cds._calculate_expiration_hours(test_input)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "test_input, expected",
+    [("2020/week1.csv", (2020, 1)), ("2020.csv", (2020, NFL_SEASON))],
+)
+def test_get_parts_from_pid(test_input, expected):
+    assert _get_nfl_data_from_partition_key(test_input) == expected
 
 
 class TestNFL_Date:
