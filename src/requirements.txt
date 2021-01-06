@@ -4,7 +4,7 @@
 #
 #    pip-compile /workspaces/phantasyfootballer/src/requirements.in
 #
-anyconfig==0.9.11         # via kedro
+anyconfig==0.10.0         # via kedro
 appdirs==1.4.4            # via black, virtualenv
 argon2-cffi==20.1.0       # via notebook
 arrow==0.15.8             # via jinja2-time
@@ -74,7 +74,7 @@ parso==0.7.1              # via jedi
 pathspec==0.8.0           # via black
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
-pillow==7.2.0             # via matplotlib
+pillow==8.1.0             # via matplotlib
 pip-tools==5.3.1          # via kedro
 pluggy==0.13.1            # via kedro, pytest
 poyo==0.5.0               # via cookiecutter
