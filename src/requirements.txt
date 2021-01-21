@@ -96,7 +96,7 @@ pytest==5.4.3             # via -r /workspaces/phantasyfootballer/src/requiremen
 python-dateutil==2.8.1    # via arrow, jupyter-client, matplotlib, pandas
 python-json-logger==0.1.11  # via kedro
 pytz==2020.1              # via pandas
-pyyaml==5.3.1             # via kedro, pre-commit
+pyyaml==5.4             # via kedro, pre-commit
 pyzmq==19.0.2             # via jupyter-client, notebook, qtconsole
 qtconsole==4.7.5          # via jupyter
 qtpy==1.9.0               # via qtconsole
