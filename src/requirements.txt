@@ -54,7 +54,7 @@ jupyterlab-launcher==0.10.5  # via jupyterlab
 jupyterlab==0.31.1        # via -r /workspaces/phantasyfootballer/src/requirements.in
 kedro[pandas.parquetdataset]==0.16.4  # via -r /workspaces/phantasyfootballer/src/requirements.in
 kiwisolver==1.2.0         # via matplotlib
-lxml==4.5.2               # via -r /workspaces/phantasyfootballer/src/requirements.in
+lxml==4.6.3               # via -r /workspaces/phantasyfootballer/src/requirements.in
 markupsafe==1.1.1         # via jinja2
 matplotlib==3.3.1         # via -r /workspaces/phantasyfootballer/src/requirements.in, seaborn
 mccabe==0.6.1             # via flake8
