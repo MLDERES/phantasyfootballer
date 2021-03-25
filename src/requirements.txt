@@ -87,7 +87,7 @@ pyarrow==0.17.1           # via kedro
 pycodestyle==2.6.0        # via flake8
 pycparser==2.20           # via cffi
 pyflakes==2.2.0           # via flake8
-pygments==2.6.1           # via ipython, jupyter-console, nbconvert, qtconsole
+pygments==2.7.4           # via ipython, jupyter-console, nbconvert, qtconsole
 pyparsing==2.4.7          # via matplotlib, packaging
 pyrsistent==0.16.0        # via jsonschema
 pytest-cov==2.10.1        # via -r /workspaces/phantasyfootballer/src/requirements.in
