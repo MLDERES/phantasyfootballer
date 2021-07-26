@@ -114,7 +114,7 @@ toposort==1.5             # via kedro
 tornado==6.0.4            # via ipykernel, jupyter-client, notebook, terminado
 traitlets==4.3.3          # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, nbconvert, nbformat, notebook, qtconsole
 typed-ast==1.4.1          # via black
-urllib3==1.25.10          # via requests
+urllib3==1.26.5          # via requests
 virtualenv==20.0.31       # via pre-commit
 wcwidth==0.2.5            # via prompt-toolkit, pytest
 webencodings==0.5.1       # via bleach, html5lib
