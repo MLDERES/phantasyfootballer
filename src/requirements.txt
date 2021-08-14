@@ -4,7 +4,7 @@
 #
 #    pip-compile /workspaces/phantasyfootballer/src/requirements.in
 #
-anyconfig==0.9.11         # via kedro
+anyconfig==0.10.0         # via kedro
 appdirs==1.4.4            # via black, virtualenv
 argon2-cffi==20.1.0       # via notebook
 arrow==0.15.8             # via jinja2-time
@@ -43,7 +43,7 @@ ipywidgets==7.5.1         # via jupyter
 isort==4.3.21             # via -r /workspaces/phantasyfootballer/src/requirements.in
 jedi==0.17.2              # via ipython
 jinja2-time==0.2.0        # via cookiecutter
-jinja2==2.11.2            # via cookiecutter, jinja2-time, nbconvert, notebook
+jinja2==2.11.3            # via cookiecutter, jinja2-time, nbconvert, notebook
 jmespath==0.10.0          # via kedro
 jsonschema==3.2.0         # via jupyterlab-launcher, nbformat
 jupyter-client==5.3.5     # via -r /workspaces/phantasyfootballer/src/requirements.in, ipykernel, jupyter-console, kedro, notebook, qtconsole
@@ -74,7 +74,7 @@ parso==0.7.1              # via jedi
 pathspec==0.8.0           # via black
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
-pillow==7.2.0             # via matplotlib
+pillow==8.1.0             # via matplotlib
 pip-tools==5.3.1          # via kedro
 pluggy==0.13.1            # via kedro, pytest
 poyo==0.5.0               # via cookiecutter
@@ -82,7 +82,7 @@ pre-commit==2.7.1         # via -r /workspaces/phantasyfootballer/src/requiremen
 prometheus-client==0.8.0  # via notebook
 prompt-toolkit==3.0.6     # via ipython, jupyter-console
 ptyprocess==0.6.0         # via pexpect, terminado
-py==1.9.0                 # via pytest
+py==1.10.0                 # via pytest
 pyarrow==0.17.1           # via kedro
 pycodestyle==2.6.0        # via flake8
 pycparser==2.20           # via cffi
@@ -96,7 +96,7 @@ pytest==5.4.3             # via -r /workspaces/phantasyfootballer/src/requiremen
 python-dateutil==2.8.1    # via arrow, jupyter-client, matplotlib, pandas
 python-json-logger==0.1.11  # via kedro
 pytz==2020.1              # via pandas
-pyyaml==5.3.1             # via kedro, pre-commit
+pyyaml==5.4             # via kedro, pre-commit
 pyzmq==19.0.2             # via jupyter-client, notebook, qtconsole
 qtconsole==4.7.5          # via jupyter
 qtpy==1.9.0               # via qtconsole
