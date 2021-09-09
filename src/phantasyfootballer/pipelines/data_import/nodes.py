@@ -32,7 +32,12 @@ _player_names = _get_player_names()
 
 
 def _replace_player_name(name: str) -> str:
-    return _player_names.get(name, name).rstrip(" Jr.").rstrip(" III").rstrip(" ")
+    suffixes_to_remove = [" Jr.", " III", " ", " II", " Sr."]
+    name = _player_names.get(name, name)
+    for _ in suffixes_to_remove:
+        if name.endswith(_):
+            name = name[: -len(_)]
+    return name
 
 
 def _create_player_merge_name(name: str) -> str:

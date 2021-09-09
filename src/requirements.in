@@ -20,3 +20,4 @@ matplotlib
 pre-commit
 bump2version
 furl
+piptools>=5.5

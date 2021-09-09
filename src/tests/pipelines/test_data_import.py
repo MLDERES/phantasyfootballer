@@ -26,6 +26,8 @@ class Test_Nodes:
     def test_replace_player_name(self):
         assert _replace_player_name("Gardner Minshew II") == "Gardner Minshew"
         assert _replace_player_name("Michael D") == "Michael D"
+        assert _replace_player_name("Derrick Carr") == "Derrick Carr"
+        assert _replace_player_name("T. Bridgewater") == "T. Bridgewater"
 
     def test_fixup_player_name(self):
         test_frame = pd.DataFrame(
@@ -35,6 +37,8 @@ class Test_Nodes:
                     "Michael D",
                     "Benny Still Jr.",
                     "Michael Pittman Jr.",
+                    "Derrick Carr",
+                    "T. Bridgewater",
                 ]
             }
         )
@@ -45,12 +49,16 @@ class Test_Nodes:
                     "Michael D",
                     "Benny Still",
                     "Michael Pittman",
+                    "Derrick Carr",
+                    "T. Bridgewater",
                 ],
                 MERGE_NAME: [
                     "gardnerminshew",
                     "michaeld",
                     "bennystill",
                     "michaelpittman",
+                    "derrickcarr",
+                    "tbridgewater",
                 ],
             }
         )
