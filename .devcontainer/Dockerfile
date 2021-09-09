@@ -11,7 +11,8 @@ RUN pip3 install jupyter_contrib_nbextensions \
 COPY src/requirements.txt /tmp/pip-tmp/
 RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
     && rm -rf /tmp/pip-tmp
-
+# RUN pip3 install kedro
+# RUN kedro install --build-reqs
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update \
