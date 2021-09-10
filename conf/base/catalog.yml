@@ -25,7 +25,8 @@ dp_ecr_local:
   <<: *csv
   filepath: data/01_raw/projected.annual/ecr/dynasty_process_ecr.csv
 
-results.weekly:
+# This is defined to allow a more friendly catalog (see stats.weekly)
+_results.weekly: &results_weekly
   <<: *csv
   filepath: data/02_intermediate/results_by_week.csv
   load_args:
@@ -36,7 +37,14 @@ results.weekly:
   save_args:
     index: False
 
-results.season:
+results.weekly:
+  <<: *results_weekly
+
+stats.weekly:
+  <<: *results_weekly
+
+# This is defined to allow a more friendly catalog (see stats.season)
+_results.season: &results_season
   <<: *csv
   filepath: data/02_intermediate/results_by_season.csv
   load_args:
@@ -46,6 +54,12 @@ results.season:
       year: int
   save_args:
     index: False
+
+results.season:
+  <<: *results_season
+
+stats.season: 
+  <<: *results_season
 
 
 scoring.ppr:

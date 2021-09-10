@@ -68,6 +68,7 @@ class Stats:
     # The percent points left after this player is taken
     OVR_VALUE_REM = "overall_value_left"
     YEAR = "year"  # for historical data
+    NFL_YEAR = "year"  #
     NFL_WEEK = "nfl_week"  # a given nfl week
     AGE = "age"  # player age
     GAMES = "games"  # number of games played

@@ -126,9 +126,9 @@ class TestDataCatalog:
     @pytest.mark.parametrize(
         "remote_part_dataset, partition",
         [
-            ("future_seasons", "2020"),
+            # ("future_seasons", "2020"),
             ("past_seasons", "2019"),
-            ("future_weeks", "2020/week11"),
+            # ("future_weeks", "2020/week11"),
             ("past_weeks", "2019/week5"),
             pytest.param(
                 "future_weeks",

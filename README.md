@@ -17,5 +17,11 @@ As such, this project is not completely packaged so it is meant to be run as a p
 
 ## Running the code
 
+## Data Catalog
 
+This section describes the data that is available for analysis.  Each of these tags are stored in the data catalog
 
+|Catalog Id|Description|
+|---------------|------------------------------------------------|
+|**stats.weekly**| Outcomes from every week of every season up to the present
+|**stats.season**| Outcomes from each season total up to the last completed season

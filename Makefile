@@ -63,8 +63,9 @@ package: clean
 	kedro package
 
 ## Do all the pre-checks
-pre-checks: pre-check
+pre-reqs: pre-check
 
+### Do the pre-checks
 pre-check: unittest
 	black .
 	flake8

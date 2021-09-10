@@ -4,7 +4,7 @@ ipython~=7.0
 isort>=4.3.21, <5.0
 jupyter~=1.0
 jupyter_client~=5.1
-jupyterlab==0.31.1
+jupyterlab
 kedro[pandas.CSVDataSet]==0.16.4
 kedro[pandas.ParquetDataSet]
 nbstripout==0.3.3
@@ -12,7 +12,7 @@ pytest-cov~=2.5
 pytest-mock>=1.7.1, <2.0
 pytest~=5.0
 wheel==0.32.2
-lxml
+lxml>=4.6.3
 html5lib
 BeautifulSoup4
 seaborn
@@ -20,4 +20,8 @@ matplotlib
 pre-commit
 bump2version
 furl
-piptools>=5.5
+pip-tools
+types-python-dateutil
+bleach>=3.3.0
+pillow
+pygments>=2.7.4

@@ -9,7 +9,7 @@ conf/local/**
 conf/**/*credentials*
 
 # ignore everything in the following folders
-data/**
+# data/**
 logs/**
 
 # except their sub-folders
@@ -19,8 +19,8 @@ logs/**
 # also keep all .gitkeep files
 !.gitkeep
 
-# also keep the example dataset
-!data/01_raw/iris.csv
+# also keep intermediate data for now
+!data/02_intermediate
 
 
 ##########################

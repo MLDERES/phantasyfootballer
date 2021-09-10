@@ -1,10 +1,15 @@
 import logging
-
 from kedro.pipeline import Pipeline, node
 
 import phantasyfootballer.data_providers.nfl_hist as nfl_hist
 from phantasyfootballer.common_nodes import concat_partitions, pass_thru
-from .nodes import average_stats_by_player, fixup_player_names, split_year_from_week
+from .nodes import (
+    average_stats_by_player,
+    consolidate_player_positions,
+    fixup_player_names,
+    preferred_column_order,
+)
+
 
 LOCAL_PROJECTIONS = ["projections.annual.fp-local", "projections.annual.cbs-local"]
 
@@ -108,10 +113,20 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
                 outputs="combined_weekly_results_b",
             ),
             node(
-                split_year_from_week,
+                consolidate_player_positions,
                 inputs="combined_weekly_results_b",
-                outputs="results.weekly",
+                outputs="combined_weekly_results_c",
             ),
+            node(
+                func=preferred_column_order,
+                inputs="combined_weekly_results_c",
+                outputs="results.weekly",
+            )
+            # node(
+            #     split_year_from_week,
+            #     inputs="combined_weekly_results_b",
+            #     outputs="results.weekly",
+            # ),
         ]
     )
 
@@ -123,7 +138,12 @@ def create_annual_results_pipeline(**kwargs):
     return Pipeline(
         [
             node(concat_partitions, "results.season.raw", "results_raw"),
-            node(nfl_hist.process_data, "results_raw", "results_fixed"),
-            node(fixup_player_names, "results_fixed", "results.season"),
+            node(nfl_hist.process_data, "results_raw", "combined_annual_results"),
+            node(
+                consolidate_player_positions,
+                inputs="combined_annual_results",
+                outputs="combined_annual_results_b",
+            ),
+            node(fixup_player_names, "combined_annual_results_b", "results.season"),
         ]
     )
