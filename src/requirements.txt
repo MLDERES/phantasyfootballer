@@ -4,7 +4,7 @@
 #
 #    pip-compile /workspaces/phantasyfootballer/src/requirements.in
 #
-anyconfig==0.10.0
+anyconfig==0.9.11
     # via kedro
 appdirs==1.4.4
     # via
@@ -27,8 +27,10 @@ binaryornot==0.4.4
     # via cookiecutter
 black==v19.10b0
     # via -r /workspaces/phantasyfootballer/src/requirements.in
-bleach==3.1.5
-    # via nbconvert
+bleach==4.1.0
+    # via
+    #   -r /workspaces/phantasyfootballer/src/requirements.in
+    #   nbconvert
 bump2version==1.0.0
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 cachetools==4.1.1
@@ -146,11 +148,11 @@ jupyterlab==0.31.1
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 jupyterlab-launcher==0.10.5
     # via jupyterlab
-kedro[pandas.csvdataset]==0.16.4
+kedro[pandas.parquetdataset]==0.16.4
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 kiwisolver==1.2.0
     # via matplotlib
-lxml==4.5.2
+lxml==4.6.3
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 markupsafe==1.1.1
     # via jinja2
@@ -212,9 +214,13 @@ pexpect==4.8.0
 pickleshare==0.7.5
     # via ipython
 pillow==8.1.0
-    # via matplotlib
+    # via
+    #   -r /workspaces/phantasyfootballer/src/requirements.in
+    #   matplotlib
 pip-tools==5.3.1
-    # via kedro
+    # via
+    #   -r /workspaces/phantasyfootballer/src/requirements.in
+    #   kedro
 pluggy==0.13.1
     # via
     #   kedro
@@ -243,8 +249,9 @@ pycparser==2.20
     # via cffi
 pyflakes==2.2.0
     # via flake8
-pygments==2.6.1
+pygments==2.10.0
     # via
+    #   -r /workspaces/phantasyfootballer/src/requirements.in
     #   ipython
     #   jupyter-console
     #   nbconvert
@@ -343,6 +350,8 @@ traitlets==4.3.3
     #   qtconsole
 typed-ast==1.4.1
     # via black
+types-python-dateutil==2.8.0
+    # via -r /workspaces/phantasyfootballer/src/requirements.in
 urllib3==1.25.10
     # via requests
 virtualenv==20.0.31
@@ -361,6 +370,7 @@ whichcraft==0.6.1
     # via cookiecutter
 widgetsnbextension==3.5.1
     # via ipywidgets
+
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
