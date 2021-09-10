@@ -100,6 +100,91 @@ def average_stats_by_player(*dataframes: pd.DataFrame) -> pd.DataFrame:
     return df_all
 
 
+def consolidate_player_positions(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Some of the older data gives players two positions or combination positions,
+    for consistency, we want to ensure that players are only QB, RB, TE, WR, DST
+
+    Args:
+        df (pd.DataFrame): The dataset with the players in their raw positions
+
+    Returns:
+        pd.DataFrame: Our standardized positions
+    """
+    position_map = {
+        "QB/P": "QB",
+        "FB": "RB",
+        "WR/K": "WR",
+        "HB": "RB",
+        "FL": "WR",
+        "SE": "WR",
+        "FL": "WR",
+        "ZR": "WR",
+        "XR": "WR",
+        "RB/K": "RB",
+        "WR/T": "WR",
+        "Z": "WR",
+        "KR/W": "WR",
+        "RB/F": "WR",
+        "X": "WR",
+        "WR/R": "WR",
+        "RB-K": "RB",
+        "WR-K": "WR",
+        "PR/W": "WR",
+        "HB-K": "RB",
+        "XWR": "WR",
+        "FB/T": "RB",
+        "TE-L": "TE",
+        "WR-P": "WR",
+        "TE/F": "TE",
+        "TE/L": "TE",
+        "XTE": "TE",
+        "P-QB": "QB",
+        "FB-R": "FB",
+        "FB/R": "RB",
+        "QB/W": "WR",
+        "WR/P": "WR",
+        "HB/K": "RB",
+        "CB/W": "WR",
+        "X-WR": "WR",
+        "WR/D": "WR",
+        "TR": "TE",
+        "QB3": "QB",
+        "RB/KR": "RB",
+        "H-B": "RB",
+        "RB-KR": "RB",
+        "WR-KR": "WR",
+        "QB-WR": "WR",
+        "TE/LS": "TE",
+        "3QB": "QB",
+        "QB/WR": "WR",
+        "#3 QB": "QB",
+        "TB": "TE",
+        "TE/W": "TE",
+        "LWR": "WR",
+        "RWR": "WR",
+        "RB-F": "RB",
+        "FB-T": "TE",
+        "FB": "RB",
+        "HB/F": "RB",
+        "WR W": "WR",
+        "WR-R": "WR",
+        "QB-W": "WR",
+        "KR-R": "RB",
+        "TE-F": "TE",
+        "0": "WR",
+        "WC": "WR",
+        "WR/RS": "WR",
+        "WR/PR": "WR",
+        "FB/DL": "RB",
+        "FB/TE": "TE",
+        "FB/RB": "RB",
+    }
+    df[POSITION] = df[POSITION].replace(to_replace=position_map, value=None)
+    df = df.query('position in ["QB","RB","TE","WR","DST"]')
+    return df
+
+
 def preferred_column_order(df: pd.DataFrame) -> pd.DataFrame:
     df_r = reorder_columns(df, [Stats.NFL_YEAR, Stats.NFL_WEEK, PLAYER_NAME])
     return df_r
