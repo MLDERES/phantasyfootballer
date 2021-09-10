@@ -85,7 +85,7 @@ identify==1.4.28
     # via pre-commit
 idna==2.10
     # via requests
-ipykernel==5.3.4
+ipykernel
     # via
     #   ipywidgets
     #   jupyter
@@ -331,7 +331,7 @@ toml==0.10.1
     #   pre-commit
 toposort==1.5
     # via kedro
-tornado==6.0.4
+tornado
     # via
     #   ipykernel
     #   jupyter-client
