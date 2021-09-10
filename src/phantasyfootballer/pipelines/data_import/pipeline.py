@@ -4,7 +4,8 @@ from kedro.pipeline import Pipeline, node
 
 import phantasyfootballer.data_providers.nfl_hist as nfl_hist
 from phantasyfootballer.common_nodes import concat_partitions, pass_thru
-from .nodes import average_stats_by_player, fixup_player_names
+from .nodes import average_stats_by_player, fixup_player_names, preferred_column_order
+
 
 LOCAL_PROJECTIONS = ["projections.annual.fp-local", "projections.annual.cbs-local"]
 
@@ -105,8 +106,13 @@ def create_weekly_results_pipeline(start_date=None, end_date=None, **kwargs):
             node(
                 fixup_player_names,
                 inputs="combined_weekly_results",
-                outputs="results.weekly",
+                outputs="combined_weekly_results_b",
             ),
+            node(
+                func=preferred_column_order,
+                inputs="combined_weekly_results_b",
+                outputs="results.weekly",
+            )
             # node(
             #     split_year_from_week,
             #     inputs="combined_weekly_results_b",

@@ -2,8 +2,7 @@ import logging
 import string
 from typing import Dict
 import pandas as pd
-
-from phantasyfootballer.common import get_config
+from phantasyfootballer.common import get_config, reorder_columns
 from phantasyfootballer.settings import (
     MERGE_NAME,
     PLAYER_NAME,
@@ -99,3 +98,8 @@ def average_stats_by_player(*dataframes: pd.DataFrame) -> pd.DataFrame:
         drop=True
     )
     return df_all
+
+
+def preferred_column_order(df: pd.DataFrame) -> pd.DataFrame:
+    df_r = reorder_columns(df, [Stats.NFL_YEAR, Stats.NFL_WEEK, PLAYER_NAME])
+    return df_r
