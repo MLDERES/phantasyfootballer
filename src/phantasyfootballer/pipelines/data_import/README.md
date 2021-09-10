@@ -2,23 +2,23 @@
 
 There are several pipelines that make up this major pipeline for all data imports including
 
-* [data_import_pipeline](#overview)
-  * [results_pipeline](#Results\ Pipeline)
-    * [annual_results_pipeline](#Annual\ Results\ Pipeline)
-    * [weekly_results_pipeline](#weekly_results_pipeline)
-  * [projections_pipeline](#projections_pipeline)
-    * [annual_projections_pipeline](#annual_projections_pipeline)
+* [Data Import Pipeline](#overview)
+  * [Results Pipeline](#results_pipeline)
+    * [Annual Results Pipeline](#annual_results_pipeline)
+    * [Weekly Results Pipeline](#weekly_results_pipeline)
+  * [Projections Pipeline](#projections_pipeline)
+    * [Annual Projections Pipeline](#annual_projections_pipeline)
     * [weekly_projections_pipeline](#weekly_results_pipeline)
 
 ## Overview
 
 This pipeline runs each of the other pipelines in this package
 
-## Results Pipeline
+## <a name='results_pipeline'></a>Results Pipeline
 
 This pipeline runs both the weekly and annual results as two nodes with no explict link between them
 
-## Annual Results Pipeline
+## <a name='annual_results_pipeline'></a>Annual Results Pipeline
 
 This pipeline concatenates all the annual results that are available together into a single file.  Additionally, if defined, it will grab the latest annual results if it is not available yet.
 
