@@ -97,7 +97,7 @@ def concat_partitions(partitioned_input: Dict[str, Callable[[], Any]]) -> pd.Dat
 
     for partition_key, partition_load_func in sorted(partitioned_input.items()):
         partition_data = partition_load_func()  # load the actual partition data
-        (nfl_week, nfl_year) = _get_nfl_data_from_partition_key(partition_key)
+        (nfl_year, nfl_week) = _get_nfl_data_from_partition_key(partition_key)
         partition_data[Stats.YEAR] = nfl_year
         partition_data[Stats.NFL_WEEK] = nfl_week
         # concat with existing result

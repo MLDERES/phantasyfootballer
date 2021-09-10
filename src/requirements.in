@@ -21,3 +21,4 @@ pre-commit
 bump2version
 furl
 piptools>=5.5
+types-python-dateutil

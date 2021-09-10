@@ -1,9 +1,9 @@
 # Data from The Football Database
 import logging
 import re
-from datetime import date
 import furl
 import pandas as pd
+import requests
 
 from phantasyfootballer.common import (
     map_data_columns,
@@ -24,11 +24,12 @@ from phantasyfootballer.settings import (
 BASE_URL = "https://www.footballdb.com/fantasy-football/index.html"
 DATA_SOURCE = "football_db"
 
-CURRENT_YEAR = date.year
+CURRENT_YEAR = 2021
 
 logger = logging.getLogger("phantasyfootballer")
 DEBUG = logger.debug
 INFO = logger.info
+ERROR = logger.error
 
 QB_COL_MAP = FLEX_COL_MAP = {
     "Player": PLAYER_NAME,
@@ -80,7 +81,7 @@ def get_stats(year: int = CURRENT_YEAR, week: int = NFL_SEASON) -> pd.DataFrame:
     return df_all
 
 
-def _get_weekly_stats(year: int, week: str) -> pd.DataFrame:
+def _get_weekly_stats(year: int, week) -> pd.DataFrame:
     # Case matters for some reason with this provider
     DEBUG(f"{DATA_SOURCE}: get_weeekly_stats for {year=} {week=}")
     df_qb = get_stats_for_position("QB", year, week)
@@ -90,18 +91,33 @@ def _get_weekly_stats(year: int, week: str) -> pd.DataFrame:
     return pd.concat([df_rb, df_wr, df_te, df_qb])
 
 
-def get_stats_for_position(position: str, year: int, week: int) -> pd.DataFrame:
+def get_stats_for_position(position: str, year: int, week) -> pd.DataFrame:
     params = {"pos": position, "yr": year, "wk": week}
     f = furl.furl(BASE_URL)
     f.args = params
     DEBUG(f"Getting info for {position=} {year=} {week=} {f.url=}")
-    df = pd.read_html(
-        f.url,
-        header=1,
-        converters={"Player": lambda x: re.match(r".*(?=[A-Z]\.)", x)[0]},
-    )[0]
+    results = None
+    try:
+        results = requests.get(
+            f.url,
+            headers={
+                "User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36 Edg/93.0.961.38"
+            },
+        ).text
+    except Exception as e:
+        ERROR(f"Unable to get data from {DATA_SOURCE}.  Requested URL: {f.url}")
+        ERROR(e)
+    df = pd.read_html(results, header=1, converters={"Player": _player_converter})[
+        0
+    ]  # type: ignore
+
     df[POSITION] = position
     return df
+
+
+def _player_converter(x: str) -> str:
+    m = re.match(r".*(?=[A-Z]\.)", x)
+    return m[0] if m else x
 
 
 if __name__ == "__main__":

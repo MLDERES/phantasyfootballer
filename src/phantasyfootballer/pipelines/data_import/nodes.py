@@ -16,6 +16,7 @@ logger = logging.getLogger("phantasyfootballer.data_import")
 DEBUG = logger.debug
 INFO = logger.info
 WARN = logger.warn
+ERROR = logger.error
 
 
 def _get_player_names() -> Dict[str, str]:
@@ -45,7 +46,6 @@ def _create_player_merge_name(name: str) -> str:
     Create a common name for merging on
     """
     return "".join([_ for _ in name.lower() if _ in string.ascii_lowercase])
-    # return _player_names.get(name, name).rstrip(" Jr.").rstrip(" III").rstrip(" ")
 
 
 def fixup_player_names(data: pd.DataFrame) -> pd.DataFrame:
