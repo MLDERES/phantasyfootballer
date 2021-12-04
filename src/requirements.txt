@@ -4,7 +4,7 @@
 #
 #    pip-compile /workspaces/phantasyfootballer/src/requirements.in
 #
-anyconfig==0.9.11
+anyconfig==0.10.0
     # via kedro
 appdirs==1.4.4
     # via
@@ -147,7 +147,7 @@ jupyter-core==4.6.3
     #   nbformat
     #   notebook
     #   qtconsole
-jupyterlab==0.31.1
+jupyterlab==1.2.1
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 jupyterlab-launcher==0.10.5
     # via jupyterlab
@@ -187,7 +187,7 @@ nbstripout==0.3.3
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 nodeenv==1.5.0
     # via pre-commit
-notebook==6.1.3
+notebook==6.4.1
     # via
     #   jupyter
     #   jupyterlab
@@ -220,7 +220,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==8.1.0
+pillow==8.3.2
     # via
     #   -r /workspaces/phantasyfootballer/src/requirements.in
     #   matplotlib
@@ -360,7 +360,7 @@ typed-ast==1.4.1
     # via black
 types-python-dateutil==2.8.0
     # via -r /workspaces/phantasyfootballer/src/requirements.in
-urllib3==1.25.10
+urllib3==1.26.5
     # via requests
 virtualenv==20.0.31
     # via pre-commit
