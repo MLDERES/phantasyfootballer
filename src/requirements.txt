@@ -155,7 +155,7 @@ kedro[pandas.csvdataset]==0.16.4
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 kiwisolver==1.2.0
     # via matplotlib
-lxml==4.6.3
+lxml==4.6.5
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 markupsafe==1.1.1
     # via jinja2
