@@ -193,7 +193,7 @@ notebook==6.1.3
     #   jupyterlab
     #   jupyterlab-launcher
     #   widgetsnbextension
-numpy==1.19.1
+numpy==1.22.0rc1
     # via
     #   matplotlib
     #   pandas
