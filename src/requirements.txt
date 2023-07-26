@@ -35,7 +35,7 @@ bump2version==1.0.0
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 cachetools==4.1.1
     # via kedro
-certifi==2020.6.20
+certifi==2023.7.22
     # via
     #   matplotlib
     #   requests
