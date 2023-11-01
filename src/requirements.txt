@@ -338,7 +338,7 @@ toml==0.10.1
     #   pre-commit
 toposort==1.5
     # via kedro
-tornado==6.1
+tornado==6.3.3
     # via
     #   ipykernel
     #   jupyter-client
