@@ -248,7 +248,7 @@ ptyprocess==0.6.0
     #   terminado
 py==1.10.0
     # via pytest
-pyarrow==0.17.1
+pyarrow==14.0.1
     # via kedro
 pycodestyle==2.6.0
     # via flake8
