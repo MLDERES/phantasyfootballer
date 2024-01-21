@@ -147,7 +147,7 @@ jupyter-core==4.6.3
     #   nbformat
     #   notebook
     #   qtconsole
-jupyterlab==0.31.1
+jupyterlab==3.6.7
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 jupyterlab-launcher==0.10.5
     # via jupyterlab
@@ -220,7 +220,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==8.1.0
+pillow==10.2.0
     # via
     #   -r /workspaces/phantasyfootballer/src/requirements.in
     #   matplotlib
