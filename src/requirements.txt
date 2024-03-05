@@ -151,7 +151,7 @@ jupyterlab==0.31.1
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 jupyterlab-launcher==0.10.5
     # via jupyterlab
-kedro[pandas.csvdataset]==0.16.4
+kedro==0.19.3
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 kiwisolver==1.2.0
     # via matplotlib
