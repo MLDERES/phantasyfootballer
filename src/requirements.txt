@@ -85,7 +85,7 @@ html5lib==1.1
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 identify==1.4.28
     # via pre-commit
-idna==2.10
+idna==3.7
     # via requests
 ipykernel==6.4.1
     # via
