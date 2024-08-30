@@ -147,7 +147,7 @@ jupyter-core==4.6.3
     #   nbformat
     #   notebook
     #   qtconsole
-jupyterlab==0.31.1
+jupyterlab==3.6.8
     # via -r /workspaces/phantasyfootballer/src/requirements.in
 jupyterlab-launcher==0.10.5
     # via jupyterlab
